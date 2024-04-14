@@ -15,6 +15,7 @@
     <color name="icon_secondary">#00A136</color>
     <!-- text -->
     <color name="text_primary">#00A136</color>
+    <color name="text_secondary">#00755D</color>
     <!-- bottom navigation -->
     <color name="bottom_nav_primary">#00A136</color>
     <color name="bottom_nav_secondary">#FFFF</color>
