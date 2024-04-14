@@ -3,4 +3,4 @@ Existing music streaming platforms often overwhelm users with vast libraries and
 
 Surmaiya offers a solution by providing a deeply personalized and genre-focused music experience. Unlike other platforms, we allow users to categorize music with genres allowing users to explore the details of their preferred sounds
 
-![SurmaiyaLogo](https://drive.google.com/file/d/1Ydmk76NlwZy9mS8-My5JQoyiWj6wBgFO/view?usp=sharing)
+![SurmaiyaLogo](https://imgur.com/a/ZYoUe71)
