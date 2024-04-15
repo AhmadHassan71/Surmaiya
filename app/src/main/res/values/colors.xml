@@ -30,6 +30,7 @@
     <color name="closed_player">#550A1C</color>
     <color name="open_player_end_gradient">#F88703</color>
     <color name="open_player_start_gradient">#FFB800</color>
+
     <!-- album -->
     <color name="album_start_gradient">#FFD600</color>
     <color name="album_end_gradient">#17151C</color>

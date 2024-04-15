@@ -1,4 +1,4 @@
 package com.smd.surmaiya.itemClasses
-data class RecentlyPlayedSong(
+data class Song(
     val songCoverImageResource: Int, val songName: String, val artistName: String
 )

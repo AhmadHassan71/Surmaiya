@@ -1,6 +1,8 @@
 package com.smd.surmaiya.activities
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,19 +13,37 @@ import com.smd.surmaiya.adapters.RecentlyPlayedAdapter
 import com.smd.surmaiya.adapters.TopGenresAdapter
 import com.smd.surmaiya.itemClasses.ListItem
 import com.smd.surmaiya.itemClasses.Playlist
-import com.smd.surmaiya.itemClasses.RecentlyPlayedSong
+import com.smd.surmaiya.itemClasses.Song
 import com.smd.surmaiya.itemClasses.TopGenres
 import com.smd.surmaiya.R
+import com.smd.surmaiya.adapters.TopSongsAdapter
 
 class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home) // Assuming you have a layout with RecyclerView
+
         prepareRecentlyPlayed()
+
         prepareTopGenres()
+
         prepareYourPlaylists()
+
         prepareTopAlbums()
+
         prepareTopPlaylists()
+
+        val topGenresTextView = findViewById<TextView>(R.id.topGenresTextView)
+        topGenresTextView.setOnClickListener {
+            val intent = Intent(this, MonthlyRankingActivity::class.java)
+            startActivity(intent)
+        }
+
+        val topPlaylistTextView = findViewById<TextView>(R.id.topPlaylistsTextView)
+        topPlaylistTextView.setOnClickListener {
+            val intent = Intent(this, PopularPlaylistsActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 
@@ -39,10 +59,10 @@ class HomeActivity : AppCompatActivity() {
     private fun preparePlaylistData(): List<Playlist> {
         val playlists = mutableListOf<Playlist>()
         // Add your playlists here
-        playlists.add(Playlist(R.drawable.playlist, "Playlist Name"))
-        playlists.add(Playlist(R.drawable.playlist, "Playlist Name"))
-        playlists.add(Playlist(R.drawable.playlist, "Playlist Name"))
-        playlists.add(Playlist(R.drawable.playlist, "Playlist Name"))
+        playlists.add(Playlist(R.drawable.playlist, "Playlist Name", 80))
+        playlists.add(Playlist(R.drawable.playlist, "Playlist Name", 80))
+        playlists.add(Playlist(R.drawable.playlist, "Playlist Name", 80))
+        playlists.add(Playlist(R.drawable.playlist, "Playlist Name", 80 ))
 
         // ... add more playlists
         return playlists
@@ -107,11 +127,11 @@ class HomeActivity : AppCompatActivity() {
         recyclerView.adapter = songAdapter
     }
 
-    private fun prepareSongData(): List<RecentlyPlayedSong> {
-        val songs = mutableListOf<RecentlyPlayedSong>()
-        songs.add(RecentlyPlayedSong(R.drawable.album, "Dawn FM", "Weekend"))
-        songs.add(RecentlyPlayedSong(R.drawable.album, "Dawn FM", "Weekend"))
-        songs.add(RecentlyPlayedSong(R.drawable.album, "Dawn FM", "Weekend"))
+    private fun prepareSongData(): List<Song> {
+        val songs = mutableListOf<Song>()
+        songs.add(Song(R.drawable.album, "Dawn FM", "Weekend"))
+        songs.add(Song(R.drawable.album, "Dawn FM", "Weekend"))
+        songs.add(Song(R.drawable.album, "Dawn FM", "Weekend"))
 
         return songs
     }
