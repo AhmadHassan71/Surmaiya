@@ -2,6 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
     <!-- login and main pages -->
     <color name="home_gradient_start">#FFD600</color>
     <color name="home_gradient_end">#5C15E3BE</color>

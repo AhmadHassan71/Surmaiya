@@ -12,13 +12,43 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home) // Assuming you have a layout with RecyclerView
         prepareRecentlyPlayed()
         prepareTopGenres()
+        prepareTopAlbums()
+        prepareTopPlaylists()
 
     }
+
+    private fun prepareTopAlbums() {
+        val recyclerView: RecyclerView =
+            findViewById(R.id.topAlbumsRecyclerView) // Find your RecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+
+        val listData = prepareListData() // Replace with your data loading logic
+        val listItemAdapter = ListItemAdapter(listData)
+        recyclerView.adapter = listItemAdapter
+    }
+
+    private fun prepareTopPlaylists(){
+        val recyclerView: RecyclerView = findViewById(R.id.topPlaylistsRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        val listData = prepareListData()
+        val listItemAdapter = ListItemAdapter(listData)
+        recyclerView.adapter = listItemAdapter
+    }
+
+    private fun prepareListData(): List<ListItem> {
+        val listItems = mutableListOf<ListItem>()
+        // Add your list items here
+        listItems.add(ListItem(R.drawable.playlist, "Primary Text", "Secondary Text"))
+        // ... add more list items
+        return listItems
+    }
+
 
     private fun prepareTopGenres() {
         val recyclerView: RecyclerView = findViewById(R.id.topGenresRecyclerView)
 
-        val layoutManager = GridLayoutManager(this, 3, GridLayoutManager.HORIZONTAL, false)
+        val layoutManager = GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = layoutManager
 
         val genreDataList = prepareGenreData()
@@ -30,6 +60,9 @@ class HomeActivity : AppCompatActivity() {
         val genres = mutableListOf<TopGenres>()
         genres.add(TopGenres(R.drawable.genre_image, "Rock"))
         genres.add(TopGenres(R.drawable.genre_image, "Pop"))
+        genres.add(TopGenres(R.drawable.genre_image, "Metal"))
+        genres.add(TopGenres(R.drawable.genre_image, "R&B"))
+
         return genres
     }
 
