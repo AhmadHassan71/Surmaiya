@@ -1,7 +1,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
-	android:id="@+id/linearLayout4"
+	
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:background="@drawable/yellow_gradient_background"
@@ -9,16 +9,16 @@
 	android:clipToPadding="false">
 
 	<androidx.constraintlayout.widget.ConstraintLayout
-		android:layout_width="match_parent"
-		android:layout_height="54dp"
+		android:layout_width="413dp"
+		android:layout_height="63dp"
 		android:background="@color/icon_secondary"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintStart_toStartOf="parent">
 
 		<TextView
-			android:id="@+id/search"
-			android:layout_width="38dp"
-			android:layout_height="15dp"
+
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
 			android:layout_alignParentLeft="true"
 			android:layout_alignParentTop="true"
 			android:layout_marginStart="168dp"
@@ -31,7 +31,7 @@
 			app:layout_constraintStart_toStartOf="parent" />
 
 		<ImageView
-			android:id="@+id/imageView3"
+
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="24dp"
@@ -41,9 +41,9 @@
 			app:srcCompat="@drawable/home" />
 
 		<TextView
-			android:id="@+id/home"
-			android:layout_width="33dp"
-			android:layout_height="11dp"
+
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
 			android:layout_alignParentLeft="true"
 			android:layout_alignParentTop="true"
 			android:layout_marginStart="16dp"
@@ -56,7 +56,7 @@
 			app:layout_constraintStart_toStartOf="parent" />
 
 		<ImageView
-			android:id="@+id/imageView7"
+
 			android:layout_width="21dp"
 			android:layout_height="26dp"
 			android:layout_marginStart="168dp"
@@ -66,19 +66,19 @@
 			app:srcCompat="@drawable/search" />
 
 		<ImageView
-			android:id="@+id/imageView9"
+
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="8dp"
-			android:layout_marginEnd="68dp"
+			android:layout_marginEnd="80dp"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintTop_toTopOf="parent"
 			app:srcCompat="@drawable/your_lib" />
 
 		<TextView
-			android:id="@+id/your_lib"
-			android:layout_width="72dp"
-			android:layout_height="11dp"
+
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
 			android:layout_alignParentLeft="true"
 			android:layout_alignParentTop="true"
 			android:layout_marginStart="296dp"
@@ -103,7 +103,7 @@
 		app:layout_constraintTop_toTopOf="parent">
 
 		<TextView
-			android:id="@+id/search"
+			
 			android:layout_width="38dp"
 			android:layout_height="15dp"
 			android:layout_alignParentLeft="true"
@@ -118,7 +118,7 @@
 			app:layout_constraintStart_toStartOf="parent" />
 
 		<ImageView
-			android:id="@+id/imageView3"
+			
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="24dp"
@@ -128,7 +128,7 @@
 			app:srcCompat="@drawable/home" />
 
 		<TextView
-			android:id="@+id/home"
+			
 			android:layout_width="33dp"
 			android:layout_height="11dp"
 			android:layout_alignParentLeft="true"
@@ -143,7 +143,7 @@
 			app:layout_constraintStart_toStartOf="parent" />
 
 		<ImageView
-			android:id="@+id/imageView7"
+			
 			android:layout_width="21dp"
 			android:layout_height="26dp"
 			android:layout_marginStart="168dp"
@@ -153,7 +153,7 @@
 			app:srcCompat="@drawable/search" />
 
 		<ImageView
-			android:id="@+id/imageView9"
+			
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="8dp"
@@ -163,7 +163,7 @@
 			app:srcCompat="@drawable/your_lib" />
 
 		<TextView
-			android:id="@+id/your_lib"
+			
 			android:layout_width="72dp"
 			android:layout_height="11dp"
 			android:layout_alignParentLeft="true"
@@ -180,37 +180,8 @@
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 
-	<Button
-
-		android:layout_width="85dp"
-		android:layout_height="31dp"
-		android:layout_marginEnd="56dp"
-		android:layout_marginBottom="124dp"
-		android:background="@drawable/green_round"
-
-		android:text="Create"
-		android:textAllCaps="false"
-		android:textColor="@color/white"
-		android:textSize="14dp"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintEnd_toEndOf="parent" />
-
-	<Button
-
-		android:layout_width="72dp"
-		android:layout_height="32dp"
-		android:layout_marginStart="56dp"
-		android:layout_marginBottom="124dp"
-		android:background="@drawable/cancel_background"
-		android:text="Cancel"
-		android:textAllCaps="false"
-		android:textColor="@color/white"
-		android:textSize="14sp"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintStart_toStartOf="parent" />
-
 	<ScrollView
-		android:id="@+id/scrollView5"
+
 
 		android:layout_width="443dp"
 		android:layout_height="607dp"
@@ -337,14 +308,14 @@
 				android:textColor="#8A9A9D"
 				android:textSize="16sp" />
 
-			<Vi
+			<View
 
 				android:layout_width="266dp"
 				android:layout_height="1dp"
 				android:layout_marginHorizontal="63dp"
 				android:layout_marginBottom="43dp"
 				android:background="#FF8A9A9D"
-				android:orientation="vertical"></Vi>
+				android:orientation="vertical"></View>
 
 			<TextView
 				android:layout_width="wrap_content"
@@ -353,17 +324,48 @@
 				android:text="Music File"
 				android:textColor="#FFFFFF"
 				android:textSize="20sp" />
+
+			<ImageView
+
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				android:layout_marginStart="151dp"
+				app:srcCompat="@drawable/add_song"
+				app:tint="@color/icon_secondary" />
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal">
+
+				<Button
+
+					android:layout_width="72dp"
+					android:layout_height="32dp"
+					android:layout_marginStart="50dp"
+					android:layout_marginEnd="150dp"
+					android:background="@drawable/cancel_background"
+					android:text="Cancel"
+
+					android:textAllCaps="false"
+					android:textColor="@color/white"
+					android:textSize="14sp"
+					tools:layout_editor_absoluteX="-34dp"
+					tools:layout_editor_absoluteY="779dp" />
+
+				<Button
+					android:layout_width="85dp"
+					android:layout_height="31dp"
+					android:background="@drawable/green_round"
+					android:layout_marginTop="10dp"
+					android:text="Create"
+					android:textAllCaps="false"
+					android:textColor="@color/white"
+					android:textSize="14dp" />
+
+			</LinearLayout>
 		</LinearLayout>
 	</ScrollView>
 
-	<ImageView
-		android:id="@+id/imageView13"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginStart="151dp"
-		android:layout_marginTop="628dp"
-		android:tint="@color/icon_secondary"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent"
-		app:srcCompat="@drawable/add_song" />
 </androidx.constraintlayout.widget.ConstraintLayout>

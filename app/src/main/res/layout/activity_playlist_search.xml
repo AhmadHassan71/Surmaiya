@@ -6,27 +6,17 @@
     android:layout_height="match_parent">
 
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:layout_width="35dp"
-        android:layout_height="34dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="539dp"
-        android:scaleType="fitXY"
-        android:src="@mipmap/your_library"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="54dp"
+        android:layout_width="414dp"
+        android:layout_height="58dp"
         android:background="@color/icon_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:id="@+id/search"
-            android:layout_width="33dp"
-            android:layout_height="11dp"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="168dp"
@@ -39,7 +29,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView3"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -49,9 +39,9 @@
             app:srcCompat="@drawable/home" />
 
         <TextView
-            android:id="@+id/home"
-            android:layout_width="33dp"
-            android:layout_height="11dp"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="16dp"
@@ -64,7 +54,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView7"
+
             android:layout_width="21dp"
             android:layout_height="26dp"
             android:layout_marginStart="168dp"
@@ -74,23 +64,23 @@
             app:srcCompat="@drawable/search" />
 
         <ImageView
-            android:id="@+id/imageView9"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="68dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="80dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/your_lib" />
 
         <TextView
-            android:id="@+id/your_lib"
-            android:layout_width="72dp"
-            android:layout_height="11dp"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="296dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="12dp"
             android:gravity="center_horizontal|top"
             android:text=" Your Library"
             android:textColor="@color/white"
@@ -102,8 +92,8 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="410dp"
+        android:layout_height="75dp"
         android:layout_marginBottom="55dp"
         android:clipChildren="false"
         android:clipToPadding="false"
@@ -119,8 +109,8 @@
 
         <LinearLayout
 
-            android:layout_width="428dp"
-            android:layout_height="62dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginStart="0dp"
             android:layout_marginTop="0dp"
             android:background="@drawable/maroon_background"
@@ -214,15 +204,371 @@
 
             </LinearLayout>
 
-            <LinearLayout
-
-                android:layout_width="213dp"
-                android:layout_height="3dp"
-                android:background="@drawable/progress"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                android:orientation="vertical"></LinearLayout>
         </LinearLayout>
+
+        <View
+
+            android:layout_width="428dp"
+            android:layout_height="3dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="67dp"
+            android:layout_marginEnd="0dp"
+            android:background="@drawable/maroon_shadow"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="vertical" />
+
+        <View
+
+            android:layout_width="213dp"
+            android:layout_height="3dp"
+            android:layout_marginTop="67dp"
+            android:background="@drawable/progress"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="vertical" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="408dp"
+        android:layout_height="728dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="716dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/left_arrow"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageView10"
+                    android:layout_width="10dp"
+                    android:layout_height="2dp"
+                    android:layout_marginStart="107dp"
+                    android:layout_marginTop="588dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/grey_circle" />
+
+                <ImageView
+                    android:id="@+id/imageView14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="517dp"
+                    android:layout_marginEnd="27dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/play_button" />
+
+                <LinearLayout
+                    android:layout_width="412dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="72dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <LinearLayout
+                        android:layout_width="323dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="19dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="12dp"
+                        android:background="@drawable/search_background"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="11dp">
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginEnd="21dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/search_black" />
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:text="Search"
+                            android:textColor="#131313"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/filter" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/likes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="580dp"
+                    android:text="1,629,592 likes "
+                    android:textColor="#000000"
+                    android:textSize="13sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="35dp"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="56dp"
+                    android:layout_marginTop="536dp"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/singer2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/rwky2d1ghf98"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="21dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="509dp"
+                    android:text="New and approved indie pop. Cover: No Rome"
+                    android:textColor="#000000"
+                    android:textSize="13sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/rlr4i59gvu7p"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="190dp"
+                    android:layout_marginStart="170dp"
+                    android:layout_marginTop="469dp"
+                    android:text="Idc"
+                    android:textColor="#00755D"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/r5e31ubxxy7v"
+                    android:layout_width="234dp"
+                    android:layout_height="238dp"
+                    android:layout_marginStart="74dp"
+                    android:layout_marginTop="207dp"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/current_favourites"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/cr5" />
+
+                <TextView
+                    android:id="@+id/duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="136dp"
+                    android:layout_marginTop="580dp"
+                    android:text="6h 48m"
+                    android:textColor="#000000"
+                    android:textSize="13sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="19dp"
+                    android:layout_marginHorizontal="23dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="609dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/heart_empty"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="19dp"
+                    android:layout_marginHorizontal="23dp"
+                    android:layout_marginStart="72dp"
+                    android:layout_marginTop="608dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/options"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="19dp"
+                    android:layout_marginHorizontal="23dp"
+                    android:layout_marginStart="44dp"
+                    android:layout_marginTop="608dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/download"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="19dp"
+                    android:layout_marginHorizontal="23dp"
+                    android:layout_marginStart="100dp"
+                    android:layout_marginTop="608dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/plus"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <LinearLayout
+                    android:layout_width="370dp"
+                    android:layout_height="44dp"
+                    android:layout_marginHorizontal="23dp"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginTop="648dp"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="49dp"
+                        android:layout_marginEnd="10dp"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/easy" />
+
+                    <LinearLayout
+                        android:layout_width="270dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:layout_weight="1"
+                        android:clipChildren="false"
+                        android:clipToPadding="false"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="1dp"
+                            android:layout_marginBottom="5dp"
+                            android:text="Easy"
+                            android:textColor="#000000"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Troye Sivan"
+                            android:textColor="#00A136"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/options" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="370dp"
+                    android:layout_height="44dp"
+                    android:layout_marginHorizontal="23dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="704dp"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="49dp"
+                        android:layout_marginEnd="10dp"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/nirvana" />
+
+                    <LinearLayout
+                        android:layout_width="270dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:layout_weight="1"
+                        android:clipChildren="false"
+                        android:clipToPadding="false"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="1dp"
+                            android:layout_marginBottom="5dp"
+                            android:text="Nirvana"
+                            android:textColor="#000000"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="mehro"
+                            android:textColor="#00A136"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/options" />
+                </LinearLayout>
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="35dp"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="539dp"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/your_library"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_marginBottom="55dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="vertical" />
 
         <LinearLayout
 
@@ -237,299 +583,4 @@
             android:orientation="vertical"></LinearLayout>
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="370dp"
-        android:layout_height="44dp"
-        android:layout_marginHorizontal="23dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="704dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="49dp"
-            android:layout_marginEnd="10dp"
-            android:scaleType="fitXY"
-            android:src="@mipmap/nirvana" />
-
-        <LinearLayout
-            android:layout_width="270dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="1"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="1dp"
-                android:layout_marginBottom="5dp"
-                android:text="Nirvana"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="mehro"
-                android:textColor="#00A136"
-                android:textSize="13sp" />
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="wrap_content"
-            android:scaleType="fitXY"
-            android:src="@drawable/options" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="370dp"
-        android:layout_height="44dp"
-        android:layout_marginHorizontal="23dp"
-        android:layout_marginStart="23dp"
-        android:layout_marginTop="648dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="49dp"
-            android:layout_marginEnd="10dp"
-            android:scaleType="fitXY"
-            android:src="@mipmap/easy" />
-
-        <LinearLayout
-            android:layout_width="270dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="1"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="1dp"
-                android:layout_marginBottom="5dp"
-                android:text="Easy"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Troye Sivan"
-                android:textColor="#00A136"
-                android:textSize="13sp" />
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="wrap_content"
-            android:scaleType="fitXY"
-            android:src="@drawable/options" />
-    </LinearLayout>
-
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="19dp"
-        android:layout_marginHorizontal="23dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="608dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/plus"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="19dp"
-        android:layout_marginHorizontal="23dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="608dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/download"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="19dp"
-        android:layout_marginHorizontal="23dp"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="608dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/options"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="19dp"
-        android:layout_marginHorizontal="23dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="609dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/heart_empty"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/duration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="580dp"
-        android:text="6h 48m"
-        android:textColor="#000000"
-        android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/likes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="580dp"
-        android:text="1,629,592 likes "
-        android:textColor="#000000"
-        android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:layout_width="35dp"
-        android:layout_height="34dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="536dp"
-        android:scaleType="fitXY"
-        android:src="@mipmap/singer2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/rwky2d1ghf98"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="21dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="509dp"
-        android:text="New and approved indie pop. Cover: No Rome"
-        android:textColor="#000000"
-        android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/rlr4i59gvu7p"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="190dp"
-        android:layout_marginStart="170dp"
-        android:layout_marginTop="469dp"
-        android:text="Idc"
-        android:textColor="#00755D"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/r5e31ubxxy7v"
-        android:layout_width="234dp"
-        android:layout_height="238dp"
-        android:layout_marginStart="74dp"
-        android:layout_marginTop="207dp"
-        android:scaleType="fitXY"
-        android:src="@mipmap/current_favourites"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/cr5" />
-
-    <LinearLayout
-        android:layout_width="412dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="72dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:layout_width="323dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="19dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="12dp"
-            android:background="@drawable/search_background"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingHorizontal="15dp"
-            android:paddingVertical="11dp">
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginEnd="21dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/search_black" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@null"
-                android:text="Search"
-                android:textColor="#131313"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/filter" />
-    </LinearLayout>
-
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/left_arrow"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="588dp"
-        app:layout_constraintStart_toEndOf="@id/likes"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/grey_circle" />
-
-    <ImageView
-        android:id="@+id/imageView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="517dp"
-        android:layout_marginEnd="27dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/play_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>

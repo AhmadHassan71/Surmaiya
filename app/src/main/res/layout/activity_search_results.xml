@@ -6,16 +6,16 @@
 	android:layout_height="match_parent">
 
 	<androidx.constraintlayout.widget.ConstraintLayout
-		android:layout_width="match_parent"
-		android:layout_height="54dp"
+		android:layout_width="413dp"
+		android:layout_height="63dp"
 		android:background="@color/icon_secondary"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintStart_toStartOf="parent">
 
 		<TextView
-			android:id="@+id/search"
-			android:layout_width="33dp"
-			android:layout_height="11dp"
+
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
 			android:layout_alignParentLeft="true"
 			android:layout_alignParentTop="true"
 			android:layout_marginStart="168dp"
@@ -28,7 +28,7 @@
 			app:layout_constraintStart_toStartOf="parent" />
 
 		<ImageView
-			android:id="@+id/imageView3"
+
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="24dp"
@@ -38,9 +38,9 @@
 			app:srcCompat="@drawable/home" />
 
 		<TextView
-			android:id="@+id/home"
-			android:layout_width="33dp"
-			android:layout_height="11dp"
+
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
 			android:layout_alignParentLeft="true"
 			android:layout_alignParentTop="true"
 			android:layout_marginStart="16dp"
@@ -53,7 +53,7 @@
 			app:layout_constraintStart_toStartOf="parent" />
 
 		<ImageView
-			android:id="@+id/imageView7"
+
 			android:layout_width="21dp"
 			android:layout_height="26dp"
 			android:layout_marginStart="168dp"
@@ -63,23 +63,23 @@
 			app:srcCompat="@drawable/search" />
 
 		<ImageView
-			android:id="@+id/imageView9"
+
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="8dp"
-			android:layout_marginEnd="68dp"
+			android:layout_marginEnd="80dp"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintTop_toTopOf="parent"
 			app:srcCompat="@drawable/your_lib" />
 
 		<TextView
-			android:id="@+id/your_lib"
-			android:layout_width="72dp"
-			android:layout_height="11dp"
+
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
 			android:layout_alignParentLeft="true"
 			android:layout_alignParentTop="true"
 			android:layout_marginStart="296dp"
-			android:layout_marginBottom="8dp"
+			android:layout_marginBottom="12dp"
 			android:gravity="center_horizontal|top"
 			android:text=" Your Library"
 			android:textColor="@color/white"
@@ -91,8 +91,8 @@
 	</androidx.constraintlayout.widget.ConstraintLayout>
 
 	<RelativeLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
+		android:layout_width="410dp"
+		android:layout_height="75dp"
 		android:layout_marginBottom="55dp"
 		android:clipChildren="false"
 		android:clipToPadding="false"
@@ -109,7 +109,7 @@
 		<LinearLayout
 
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
+			android:layout_height="match_parent"
 			android:layout_marginStart="0dp"
 			android:layout_marginTop="0dp"
 			android:background="@drawable/maroon_background"
@@ -120,7 +120,7 @@
 
 			<LinearLayout
 
-				android:layout_width="444dp"
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="6dp"
 				android:layout_marginBottom="9dp"
@@ -149,7 +149,7 @@
 
 					<TextView
 
-						android:layout_width="238dp"
+						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:layout_marginBottom="8dp"
 						android:text="From Me to You - Mono / Remastered"
@@ -203,27 +203,29 @@
 
 			</LinearLayout>
 
-			<LinearLayout
-
-				android:layout_width="213dp"
-				android:layout_height="3dp"
-				android:background="@drawable/progress"
-				android:clipChildren="false"
-				android:clipToPadding="false"
-				android:orientation="vertical"></LinearLayout>
 		</LinearLayout>
 
-		<LinearLayout
+		<View
 
 			android:layout_width="428dp"
 			android:layout_height="3dp"
 			android:layout_alignParentRight="true"
-			android:layout_marginTop="55dp"
+			android:layout_marginTop="67dp"
 			android:layout_marginEnd="0dp"
 			android:background="@drawable/maroon_shadow"
 			android:clipChildren="false"
 			android:clipToPadding="false"
-			android:orientation="vertical"></LinearLayout>
+			android:orientation="vertical" />
+
+		<View
+
+			android:layout_width="213dp"
+			android:layout_height="3dp"
+			android:layout_marginTop="67dp"
+			android:background="@drawable/progress"
+			android:clipChildren="false"
+			android:clipToPadding="false"
+			android:orientation="vertical" />
 	</RelativeLayout>
 
 	<ScrollView

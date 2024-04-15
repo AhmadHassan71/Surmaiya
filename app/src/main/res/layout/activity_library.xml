@@ -17,8 +17,8 @@
 
     <TextView
         android:id="@+id/r4awqdxw2d7x2"
-        android:layout_width="65dp"
-        android:layout_height="43dp"
+        android:layout_width="132dp"
+        android:layout_height="22dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="192dp"
         android:text="Recently Played"
@@ -150,7 +150,7 @@
         android:id="@+id/imageView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="205dp"
+        android:layout_marginTop="200dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
