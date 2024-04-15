@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="cr27_5">
+		<item name="cornerSize">27.5dp</item>
+    </style>
+    <style name="cr26">
+		<item name="cornerSize">26dp</item>
+    </style>
+    <style name="cr52_5">
+		<item name="cornerSize">52.5dp</item>
+    </style>
+    <style name="cr34">
+		<item name="cornerSize">34dp</item>
+    </style>
+    <style name="cr5">
+		<item name="cornerSize">5dp</item>
+    </style>
+    <style name="cr56">
+		<item name="cornerSize">56dp</item>
+    </style>
+    <style name="cr7">
+		<item name="cornerSize">7dp</item>
+    </style>
+
+    <style name="cr15">
+        <item name="cornerSize">15dp</item>
+    </style>
+</resources>

@@ -1,0 +1,277 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/linearLayout3"
+	android:layout_width="match_parent"
+
+	android:layout_height="match_parent"
+	android:background="@drawable/yellow_gradient_background">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="413dp"
+		android:layout_height="63dp"
+		android:background="@color/icon_secondary"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toStartOf="parent">
+
+		<TextView
+
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentTop="true"
+			android:layout_marginStart="168dp"
+			android:layout_marginBottom="8dp"
+			android:gravity="center_horizontal|top"
+			android:text=" Search"
+			android:textColor="@color/white"
+			android:textSize="10sp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent" />
+
+		<ImageView
+
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="24dp"
+			android:layout_marginTop="12dp"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:srcCompat="@drawable/home1" />
+
+		<TextView
+
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentTop="true"
+			android:layout_marginStart="16dp"
+			android:layout_marginBottom="8dp"
+			android:gravity="center_horizontal|top"
+			android:text=" Home"
+			android:textColor="@color/white"
+			android:textSize="10sp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent" />
+
+		<ImageView
+
+			android:layout_width="21dp"
+			android:layout_height="26dp"
+			android:layout_marginStart="168dp"
+			android:layout_marginTop="8dp"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:srcCompat="@drawable/search1" />
+
+		<ImageView
+
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="8dp"
+			android:layout_marginEnd="80dp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:srcCompat="@drawable/your_lib" />
+
+		<TextView
+
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentTop="true"
+			android:layout_marginStart="296dp"
+			android:layout_marginBottom="12dp"
+			android:gravity="center_horizontal|top"
+			android:text=" Your Library"
+			android:textColor="@color/white"
+			android:textSize="10sp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent" />
+
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+	<ScrollView
+		android:id="@+id/scrollView4"
+
+		android:layout_width="418dp"
+		android:layout_height="858dp"
+		android:fillViewport="true"
+		android:paddingHorizontal="22dp"
+		android:paddingTop="40dp"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical">
+
+			<LinearLayout
+
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="57dp"
+				android:orientation="horizontal">
+
+				<ImageView
+
+					android:layout_width="60dp"
+					android:layout_height="match_parent"
+					android:layout_marginEnd="110dp"
+					android:scaleType="fitXY"
+					android:src="@drawable/left_arrow" />
+
+				<TextView
+
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="6dp"
+					android:layout_weight="1"
+					android:text="Album"
+					android:textColor="#00A136"
+					android:textSize="32sp" />
+			</LinearLayout>
+
+			<TextView
+
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="10dp"
+				android:text="The Core"
+				android:textColor="#00A136"
+				android:textSize="32sp"
+				android:textStyle="bold" />
+
+			<com.google.android.material.imageview.ShapeableImageView
+
+				android:layout_width="match_parent"
+				android:layout_height="337dp"
+				android:layout_marginBottom="32dp"
+				android:scaleType="fitXY"
+				android:src="@mipmap/album_cover"
+				app:shapeAppearanceOverlay="@style/cr15" />
+
+			<LinearLayout
+
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="13dp"
+				android:background="@drawable/album_song_background"
+				android:elevation="4dp"
+				android:gravity="center_vertical"
+				android:orientation="horizontal"
+				android:paddingHorizontal="27dp"
+				android:paddingVertical="5dp">
+
+				<ImageView
+
+					android:layout_width="42dp"
+					android:layout_height="39dp"
+					android:layout_marginEnd="15dp"
+					android:scaleType="fitXY"
+					android:src="@mipmap/singer2" />
+
+				<TextView
+
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="Beartooth"
+					android:textColor="#FFFFFF"
+					android:textSize="20sp" />
+			</LinearLayout>
+
+			<LinearLayout
+
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="13dp"
+				android:background="@drawable/album_song_background"
+				android:elevation="4dp"
+				android:gravity="center_vertical"
+				android:orientation="horizontal"
+				android:paddingHorizontal="27dp"
+				android:paddingVertical="5dp">
+
+				<ImageView
+
+					android:layout_width="42dp"
+					android:layout_height="39dp"
+					android:layout_marginEnd="16dp"
+					android:scaleType="fitXY"
+					android:src="@mipmap/song4" />
+
+				<TextView
+
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="Spiritbox"
+					android:textColor="#FFFFFF"
+					android:textSize="20sp" />
+			</LinearLayout>
+
+			<LinearLayout
+
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="13dp"
+				android:background="@drawable/album_song_background"
+				android:elevation="4dp"
+				android:gravity="center_vertical"
+				android:orientation="horizontal"
+				android:paddingHorizontal="27dp"
+				android:paddingVertical="5dp">
+
+				<ImageView
+
+					android:layout_width="42dp"
+					android:layout_height="39dp"
+					android:layout_marginEnd="15dp"
+					android:scaleType="fitXY"
+					android:src="@mipmap/lib" />
+
+				<TextView
+
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="Memphis May Fire"
+					android:textColor="#FFFFFF"
+					android:textSize="20sp" />
+			</LinearLayout>
+
+			<LinearLayout
+
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="@drawable/album_song_background"
+				android:elevation="4dp"
+				android:gravity="center_vertical"
+				android:orientation="horizontal"
+				android:paddingHorizontal="23dp"
+				android:paddingVertical="5dp">
+
+				<ImageView
+
+					android:layout_width="42dp"
+					android:layout_height="39dp"
+					android:layout_marginEnd="14dp"
+					android:scaleType="fitXY"
+					android:src="@mipmap/song2" />
+
+				<TextView
+
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="Bring Me The Horizon "
+					android:textColor="#FFFFFF"
+					android:textSize="20sp" />
+			</LinearLayout>
+		</LinearLayout>
+	</ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
