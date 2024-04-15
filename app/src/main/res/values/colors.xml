@@ -13,6 +13,10 @@
     <color name="splash_primary">#F4CD00</color>
     <color name="icon_primary">#FFFF</color>
     <color name="icon_secondary">#00A136</color>
+
+    <!-- Genre Background -->
+    <color name="genre_background">#636060</color>
+
     <!-- text -->
     <color name="text_primary">#00A136</color>
     <color name="text_secondary">#00755D</color>
