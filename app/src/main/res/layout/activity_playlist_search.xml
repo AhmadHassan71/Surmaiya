@@ -36,7 +36,7 @@
             android:layout_marginTop="12dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/home" />
+            app:srcCompat="@drawable/home1" />
 
         <TextView
 
@@ -61,7 +61,7 @@
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/search" />
+            app:srcCompat="@drawable/search1" />
 
         <ImageView
 
@@ -408,7 +408,7 @@
                     android:layout_marginStart="72dp"
                     android:layout_marginTop="608dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/options"
+                    android:src="@drawable/options1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -484,7 +484,7 @@
                         android:layout_width="18dp"
                         android:layout_height="wrap_content"
                         android:scaleType="fitXY"
-                        android:src="@drawable/options" />
+                        android:src="@drawable/options1" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -537,7 +537,7 @@
                         android:layout_width="18dp"
                         android:layout_height="wrap_content"
                         android:scaleType="fitXY"
-                        android:src="@drawable/options" />
+                        android:src="@drawable/options1" />
                 </LinearLayout>
 
                 <com.google.android.material.imageview.ShapeableImageView

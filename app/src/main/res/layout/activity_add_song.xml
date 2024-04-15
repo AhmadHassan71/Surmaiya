@@ -38,7 +38,7 @@
 			android:layout_marginTop="12dp"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent"
-			app:srcCompat="@drawable/home" />
+			app:srcCompat="@drawable/home1" />
 
 		<TextView
 
@@ -63,7 +63,7 @@
 			android:layout_marginTop="8dp"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent"
-			app:srcCompat="@drawable/search" />
+			app:srcCompat="@drawable/search1" />
 
 		<ImageView
 
@@ -125,7 +125,7 @@
 			android:layout_marginTop="12dp"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent"
-			app:srcCompat="@drawable/home" />
+			app:srcCompat="@drawable/home1" />
 
 		<TextView
 			
@@ -150,7 +150,7 @@
 			android:layout_marginTop="8dp"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent"
-			app:srcCompat="@drawable/search" />
+			app:srcCompat="@drawable/search1" />
 
 		<ImageView
 			
