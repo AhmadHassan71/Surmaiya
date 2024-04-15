@@ -6,6 +6,91 @@
     android:background="@drawable/yellow_gradient_background"
     android:orientation="vertical">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:background="@color/icon_secondary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/search"
+            android:layout_width="38dp"
+            android:layout_height="15dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="168dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_horizontal|top"
+            android:text=" Search"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/home" />
+
+        <TextView
+            android:id="@+id/home"
+            android:layout_width="33dp"
+            android:layout_height="11dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_horizontal|top"
+            android:text=" Home"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="21dp"
+            android:layout_height="26dp"
+            android:layout_marginStart="168dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/search" />
+
+        <ImageView
+            android:id="@+id/imageView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="68dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/your_lib" />
+
+        <TextView
+            android:id="@+id/your_lib"
+            android:layout_width="72dp"
+            android:layout_height="11dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="308dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_horizontal|top"
+            android:text=" Your Library"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/r5e31ubxxy7v"
         android:layout_width="234dp"
@@ -23,7 +108,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="104dp"
         android:layout_marginTop="416dp"
-        android:text="New Playlist"
+        android:text="Edit Playlist"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -91,7 +176,7 @@
         android:layout_height="24dp"
 
         android:layout_marginStart="52dp"
-        android:layout_marginBottom="244dp"
+        android:layout_marginBottom="232dp"
         android:background="@drawable/dropdown_back"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -123,28 +208,25 @@
 
     <Button
 
-        android:layout_width="90dp"
+        android:layout_width="84dp"
         android:layout_height="30dp"
-        android:layout_marginTop="669dp"
-        android:layout_marginEnd="104dp"
-        android:layout_marginBottom="174dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="168dp"
         android:background="@drawable/green_round"
+
         android:text="Create"
         android:textAllCaps="false"
-
         android:textColor="@color/white"
         android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.555" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
 
         android:layout_width="72dp"
         android:layout_height="32dp"
         android:layout_marginStart="52dp"
-        android:layout_marginBottom="180dp"
+        android:layout_marginBottom="168dp"
         android:background="@drawable/cancel_background"
         android:text="Cancel"
         android:textAllCaps="false"

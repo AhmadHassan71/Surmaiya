@@ -9,4 +9,5 @@
     <style name="Theme.App.Starting" parent="Base.Theme.Surmaiya">
         <item name="android:windowBackground">@color/splash_primary</item>
     </style>
+
 </resources>

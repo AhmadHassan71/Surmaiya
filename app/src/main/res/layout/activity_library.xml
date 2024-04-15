@@ -42,10 +42,10 @@
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="36dp"
-        android:layout_height="28dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="76dp"
+        android:layout_width="43dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="72dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/your_library" />
@@ -227,7 +227,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="9dp"
-                android:text="Lolo Zouaï"
+                android:text="Lana Del Rey"
                 android:textColor="#090707"
                 android:textSize="15sp" />
 
@@ -264,7 +264,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="9dp"
-                android:text="Lolo Zouaï"
+                android:text="Front Left"
                 android:textColor="#090707"
                 android:textSize="15sp" />
 
@@ -301,7 +301,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="9dp"
-                android:text="Lolo Zouaï"
+                android:text="Marvin Gaye"
                 android:textColor="#090707"
                 android:textSize="15sp" />
 
@@ -338,7 +338,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="9dp"
-                android:text="Lolo Zouaï"
+                android:text="Les"
                 android:textColor="#090707"
                 android:textSize="15sp" />
 
@@ -360,8 +360,8 @@
 
         <TextView
             android:id="@+id/search"
-            android:layout_width="33dp"
-            android:layout_height="11dp"
+            android:layout_width="38dp"
+            android:layout_height="15dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="168dp"
@@ -424,8 +424,8 @@
             android:layout_height="11dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="296dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="300dp"
+            android:layout_marginBottom="12dp"
             android:gravity="center_horizontal|top"
             android:text=" Your Library"
             android:textColor="@color/white"
