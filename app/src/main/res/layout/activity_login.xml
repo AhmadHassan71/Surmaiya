@@ -65,7 +65,7 @@
         app:layout_constraintStart_toStartOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
     <EditText
-        android:id="@+id/passwordEditText"
+        android:id="@+id/countryEditText"
         android:layout_width="300dp"
         android:layout_height="40dp"
         android:background="@drawable/edittext_stroke"
@@ -91,8 +91,8 @@
         android:layout_height="22dp"
         android:layout_marginTop="12dp"
         android:buttonTint="@color/text_secondary"
-        app:layout_constraintStart_toStartOf="@+id/passwordEditText"
-        app:layout_constraintTop_toBottomOf="@+id/passwordEditText" />
+        app:layout_constraintStart_toStartOf="@+id/countryEditText"
+        app:layout_constraintTop_toBottomOf="@+id/countryEditText" />
 
     <TextView
         android:id="@+id/textView2"
@@ -120,8 +120,8 @@
         android:text="Login"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/passwordEditText"
-        app:layout_constraintStart_toStartOf="@+id/passwordEditText"
+        app:layout_constraintEnd_toEndOf="@+id/countryEditText"
+        app:layout_constraintStart_toStartOf="@+id/countryEditText"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <TextView
