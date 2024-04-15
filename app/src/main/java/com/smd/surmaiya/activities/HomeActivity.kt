@@ -1,10 +1,19 @@
-package com.smd.surmaiya
+package com.smd.surmaiya.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.smd.surmaiya.adapters.ListItemAdapter
+import com.smd.surmaiya.adapters.PlaylistAdapter
+import com.smd.surmaiya.adapters.RecentlyPlayedAdapter
+import com.smd.surmaiya.adapters.TopGenresAdapter
+import com.smd.surmaiya.itemClasses.ListItem
+import com.smd.surmaiya.itemClasses.Playlist
+import com.smd.surmaiya.itemClasses.RecentlyPlayedSong
+import com.smd.surmaiya.itemClasses.TopGenres
+import com.smd.surmaiya.R
 
 class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,10 +21,33 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home) // Assuming you have a layout with RecyclerView
         prepareRecentlyPlayed()
         prepareTopGenres()
+        prepareYourPlaylists()
         prepareTopAlbums()
         prepareTopPlaylists()
 
     }
+
+    private fun prepareYourPlaylists() {
+        val recyclerView: RecyclerView = findViewById(R.id.yourPlaylistsRecyclerView) // Find your RecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+
+        val playlistData = preparePlaylistData()  // Replace with your data loading logic
+        val playlistAdapter = PlaylistAdapter(playlistData)
+        recyclerView.adapter = playlistAdapter
+    }
+
+    private fun preparePlaylistData(): List<Playlist> {
+        val playlists = mutableListOf<Playlist>()
+        // Add your playlists here
+        playlists.add(Playlist(R.drawable.playlist, "Playlist Name"))
+        playlists.add(Playlist(R.drawable.playlist, "Playlist Name"))
+        playlists.add(Playlist(R.drawable.playlist, "Playlist Name"))
+        playlists.add(Playlist(R.drawable.playlist, "Playlist Name"))
+
+        // ... add more playlists
+        return playlists
+    }
+
 
     private fun prepareTopAlbums() {
         val recyclerView: RecyclerView =

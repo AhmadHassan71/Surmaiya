@@ -1,4 +1,4 @@
-package com.smd.surmaiya
+package com.smd.surmaiya.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.smd.surmaiya.itemClasses.ListItem
+import com.smd.surmaiya.R
 
 class ListItemAdapter(private val listItems: List<ListItem>) :
     RecyclerView.Adapter<ListItemAdapter.ListItemViewHolder>() {

@@ -33,6 +33,9 @@
     <!-- album -->
     <color name="album_start_gradient">#FFD600</color>
     <color name="album_end_gradient">#17151C</color>
+
+    <color name="forgot_password_end_gradient">#D9FF8B02</color>
+
     <!-- album card -->
     <color name="playlist_card_gradient_start">#C8E4F1</color>
     <color name="playlist_card_gradient_end">#DAEFF8</color>

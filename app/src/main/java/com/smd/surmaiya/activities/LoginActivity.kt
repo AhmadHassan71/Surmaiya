@@ -1,4 +1,4 @@
-package com.smd.surmaiya
+package com.smd.surmaiya.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.smd.surmaiya.R
 
 class LoginActivity: AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +27,10 @@ class LoginActivity: AppCompatActivity(){
         backButton.setOnClickListener{
             onBackPressedDispatcher.onBackPressed()
         }
-
+        val forgotPassword = findViewById<TextView>(R.id.forgotPasswordTextView)
+        forgotPassword.setOnClickListener {
+            val intent = Intent(this, ForgotPasswordActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

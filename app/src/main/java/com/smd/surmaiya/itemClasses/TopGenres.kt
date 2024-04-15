@@ -1,4 +1,4 @@
-package com.smd.surmaiya
+package com.smd.surmaiya.itemClasses
 
 
 data class TopGenres(

@@ -11,6 +11,7 @@
         android:id="@+id/view3"
         android:layout_width="186dp"
         android:layout_height="56dp"
+
         android:background="@drawable/rectangle"
         android:backgroundTint="@color/genre_background"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -18,26 +19,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/genreImageView"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:src="@drawable/genre_image"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <ImageView
+            android:id="@+id/genreImageView"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/genre_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/genreTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:text="Rock"
-        android:textSize="14sp"
+        android:layout_marginEnd="60dp"
         android:fontFamily="@font/avenirnext_regular"
+        android:text="Rock"
         android:textColor="@color/white"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/genreImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cardView2"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
