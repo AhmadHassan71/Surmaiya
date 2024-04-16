@@ -1,11 +1,12 @@
-package com.smd.surmaiya
+package com.smd.surmaiya.moazzActivities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.smd.surmaiya.R
 
-class SettingsActivity  : AppCompatActivity(){
+class AlbumScreenActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        setContentView(R.layout.activity_album_screen)
     }
 }

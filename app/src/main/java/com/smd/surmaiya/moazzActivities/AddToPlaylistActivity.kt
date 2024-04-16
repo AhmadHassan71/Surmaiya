@@ -1,7 +1,8 @@
-package com.smd.surmaiya
+package com.smd.surmaiya.moazzActivities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.smd.surmaiya.R
 
 
 class AddToPlaylistActivity : AppCompatActivity() {

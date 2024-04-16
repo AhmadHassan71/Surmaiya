@@ -25,21 +25,21 @@
         </activity>
 
         <activity android:name=".LoginActivity" android:exported="true" />
-        <activity android:name=".ArtistStatsActivity" android:exported="true" />
-        <activity android:name=".AddAlbumActivity" android:exported="true" />
-        <activity android:name=".AddSongActivity" android:exported="true" />
-        <activity android:name=".AddToPlaylistActivity" android:exported="true" />
-        <activity android:name=".AlbumScreenActivity" android:exported="true" />
-        <activity android:name=".CreateNewPlaylistActivity" android:exported="true" />
-        <activity android:name=".EditPlaylistActivity" android:exported="true" />
-        <activity android:name=".EditProfileActivity" android:exported="true" />
-        <activity android:name=".EqualizerActivity" android:exported="true" />
+        <activity android:name=".moazzActivities.ArtistStatsActivity" android:exported="true" />
+        <activity android:name=".moazzActivities.AddAlbumActivity" android:exported="true" />
+        <activity android:name=".moazzActivities.AddSongActivity" android:exported="true" />
+        <activity android:name=".moazzActivities.AddToPlaylistActivity" android:exported="true" />
+        <activity android:name=".moazzActivities.AlbumScreenActivity" android:exported="true" />
+        <activity android:name=".moazzActivities.CreateNewPlaylistActivity" android:exported="true" />
+        <activity android:name=".moazzActivities.EditPlaylistActivity" android:exported="true" />
+        <activity android:name=".moazzActivities.EditProfileActivity" android:exported="true" />
+        <activity android:name=".moazzActivities.EqualizerActivity" android:exported="true" />
         <activity android:name=".LibraryActivity" android:exported="true" />
-        <activity android:name=".PlaylistSearchActivity" android:exported="true" />
+        <activity android:name=".moazzActivities.PlaylistSearchActivity" android:exported="true" />
         <activity android:name=".SearchActivity" android:exported="true" />
-        <activity android:name=".SearchOptionsActivity" android:exported="true" />
-        <activity android:name=".SearchResultsActivity" android:exported="true" />
-        <activity android:name=".SettingsActivity" android:exported="true" />
+        <activity android:name=".moazzActivities.SearchOptionsActivity" android:exported="true" />
+        <activity android:name=".moazzActivities.SearchResultsActivity" android:exported="true" />
+        <activity android:name=".moazzActivities.SettingsActivity" android:exported="true" />
         <activity android:name=".SplashScreenActivity" android:exported="true" />
 
 
