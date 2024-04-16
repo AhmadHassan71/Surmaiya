@@ -10,25 +10,37 @@ import com.smd.surmaiya.adapters.PopularPlaylistAdapter
 import com.smd.surmaiya.itemClasses.Playlist
 
 class PopularPlaylistsActivity : AppCompatActivity() {
+
+    private lateinit var backButton: ImageView
+    private lateinit var popularPlaylistsRecyclerView: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_popular_playlists) // Assuming you have a layout with RecyclerView
-
+        initalizeViews()
         preparePopularPlaylists()
+        setUpOnClickListeners()
 
-        val backButton = findViewById<ImageView>(R.id.backButton)
+    }
+
+    fun initalizeViews() {
+        backButton = findViewById(R.id.backButton)
+        popularPlaylistsRecyclerView = findViewById(R.id.popularPlaylistsRecyclerView)
+    }
+
+    fun setUpOnClickListeners() {
         backButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
     }
 
     private fun preparePopularPlaylists() {
-        val recyclerView: RecyclerView = findViewById(R.id.popularPlaylistsRecyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        popularPlaylistsRecyclerView.layoutManager = LinearLayoutManager(this)
+
 
         val playlistData = preparePlaylistData()
         val playlistAdapter = PopularPlaylistAdapter(playlistData)
-        recyclerView.adapter = playlistAdapter
+        popularPlaylistsRecyclerView.adapter = playlistAdapter
     }
 
     private fun preparePlaylistData(): List<Playlist> {

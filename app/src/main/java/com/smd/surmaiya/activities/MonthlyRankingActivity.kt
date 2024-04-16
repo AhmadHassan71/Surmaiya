@@ -11,6 +11,8 @@ import com.smd.surmaiya.itemClasses.Song
 
 class MonthlyRankingActivity : AppCompatActivity() {
 
+    private lateinit var backButton: ImageView
+    private lateinit var monthlyRankingRecyclerView: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_monthly_ranking)
@@ -23,13 +25,23 @@ class MonthlyRankingActivity : AppCompatActivity() {
         }
     }
 
+    fun initializeViews() {
+        backButton = findViewById(R.id.backButton)
+        monthlyRankingRecyclerView = findViewById(R.id.monthlyRankingRecyclerView)
+    }
+
+    fun setUpOnClickListeners() {
+        backButton.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+    }
+
     private fun prepareMonthlyRanking() {
-        val recyclerView: RecyclerView = findViewById(R.id.monthlyRankingRecyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        monthlyRankingRecyclerView.layoutManager = LinearLayoutManager(this)
 
         val songData = prepareSongData()
         val songAdapter = TopSongsAdapter(songData)
-        recyclerView.adapter = songAdapter
+        monthlyRankingRecyclerView.adapter = songAdapter
     }
 
     private fun prepareSongData(): List<Song> {

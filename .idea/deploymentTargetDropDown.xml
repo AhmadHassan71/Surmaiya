@@ -2,21 +2,6 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="PlaylistSearchActivity">
-        <State />
-      </entry>
-      <entry key="SearchActivity">
-        <State />
-      </entry>
-      <entry key="SearchOptionsActivity">
-        <State />
-      </entry>
-      <entry key="SearchResultsActivity">
-        <State />
-      </entry>
-      <entry key="SettingsActivity">
-        <State />
-      </entry>
       <entry key="app">
         <State />
       </entry>

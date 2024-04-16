@@ -1,36 +1,52 @@
 package com.smd.surmaiya.activities
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.smd.surmaiya.HelperClasses.Navigator
 import com.smd.surmaiya.R
 
-class LoginActivity: AppCompatActivity(){
+class LoginActivity : AppCompatActivity() {
+
+    private lateinit var loginButton: Button
+    private lateinit var signUpButton: TextView
+    private lateinit var backButton: ImageView
+    private lateinit var forgotPasswordTextView: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        val loginButton = findViewById<Button>(R.id.loginButton)
-        loginButton.setOnClickListener{
-            val intent = Intent(this, HomeActivity::class.java)
-            startActivity(intent)
-        }
-        val signUpButton = findViewById<TextView>(R.id.signUpTextView)
-        signUpButton.setOnClickListener{
-            val intent = Intent(this, SignUpActivity::class.java)
-            startActivity(intent)
+
+        initializeViews()
+        setUpOnClickListeners()
+    }
+
+    private fun initializeViews() {
+        loginButton = findViewById(R.id.loginButton)
+        signUpButton = findViewById(R.id.signUpTextView)
+        backButton = findViewById(R.id.backButton)
+        forgotPasswordTextView = findViewById(R.id.forgotPasswordTextView)
+    }
+
+    private fun setUpOnClickListeners() {
+        loginButton.setOnClickListener {
+            Navigator.navigateToActivity(this, HomeActivity::class.java)
         }
 
-        val backButton = findViewById<ImageView>(R.id.backButton)
-        backButton.setOnClickListener{
-            onBackPressedDispatcher.onBackPressed()
+        signUpButton.setOnClickListener {
+            Navigator.navigateToActivity(this, SignUpActivity::class.java)
         }
-        val forgotPassword = findViewById<TextView>(R.id.forgotPasswordTextView)
-        forgotPassword.setOnClickListener {
-            val intent = Intent(this, ForgotPasswordActivity::class.java)
-            startActivity(intent)
+
+        backButton.setOnClickListener {
+            onBackPressed()
+        }
+
+        forgotPasswordTextView.setOnClickListener {
+            Navigator.navigateToActivity(this, ForgotPasswordActivity::class.java)
         }
     }
+
+
 }

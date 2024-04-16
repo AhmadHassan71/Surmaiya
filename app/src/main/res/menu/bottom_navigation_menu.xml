@@ -1,5 +1,7 @@
 <!-- bottom_navigation_menu.xml -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bottom_navigation_menu"
+    >
 
     <item
         android:id="@+id/navigation_home"
@@ -12,8 +14,6 @@
         android:icon="@drawable/search"
         android:iconTint="@color/icon_primary"
         android:title="Search" />
-
-
 
     <item
         android:id="@+id/navigation_library"
