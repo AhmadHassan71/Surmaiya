@@ -17,12 +17,11 @@ class MonthlyRankingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_monthly_ranking)
 
+        initializeViews()
         prepareMonthlyRanking()
+        setUpOnClickListeners()
 
-        val backButton = findViewById<ImageView>(R.id.backButton)
-        backButton.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
+
     }
 
     fun initializeViews() {

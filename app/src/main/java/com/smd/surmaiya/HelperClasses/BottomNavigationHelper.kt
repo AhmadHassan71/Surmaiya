@@ -3,6 +3,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.smd.surmaiya.Fragments.HomeFragment
+import com.smd.surmaiya.Fragments.LibraryFragment
 import com.smd.surmaiya.Fragments.SearchFragment
 import com.smd.surmaiya.R
 
@@ -20,6 +21,11 @@ class BottomNavigationHelper(private val activity: AppCompatActivity) {
                 R.id.navigation_search -> {
                     loadFragment(SearchFragment())
                     Log.d("BottomNavigationHelper", "Search Fragment loaded")
+                    return@setOnNavigationItemSelectedListener true
+                }
+                R.id.navigation_library -> {
+                    loadFragment(LibraryFragment())
+                    Log.d("BottomNavigationHelper", "Library Fragment loaded")
                     return@setOnNavigationItemSelectedListener true
                 }
                 else -> return@setOnNavigationItemSelectedListener false
