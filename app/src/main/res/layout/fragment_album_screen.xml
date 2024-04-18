@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
 
         android:layout_height="match_parent"
-        android:background="@drawable/yellow_gradient_background">
+       >
 
 
         <ScrollView
@@ -76,124 +76,6 @@
                     android:src="@mipmap/album_cover"
                     app:shapeAppearanceOverlay="@style/cr15" />
 
-                <LinearLayout
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="13dp"
-                    android:background="@drawable/album_song_background"
-                    android:elevation="4dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="27dp"
-                    android:paddingVertical="5dp">
-
-                    <ImageView
-
-                        android:layout_width="42dp"
-                        android:layout_height="39dp"
-                        android:layout_marginEnd="15dp"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/singer2" />
-
-                    <TextView
-
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Beartooth"
-                        android:textColor="#FFFFFF"
-                        android:textSize="20sp" />
-                </LinearLayout>
-
-                <LinearLayout
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="13dp"
-                    android:background="@drawable/album_song_background"
-                    android:elevation="4dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="27dp"
-                    android:paddingVertical="5dp">
-
-                    <ImageView
-
-                        android:layout_width="42dp"
-                        android:layout_height="39dp"
-                        android:layout_marginEnd="16dp"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/song4" />
-
-                    <TextView
-
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Spiritbox"
-                        android:textColor="#FFFFFF"
-                        android:textSize="20sp" />
-                </LinearLayout>
-
-                <LinearLayout
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="13dp"
-                    android:background="@drawable/album_song_background"
-                    android:elevation="4dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="27dp"
-                    android:paddingVertical="5dp">
-
-                    <ImageView
-
-                        android:layout_width="42dp"
-                        android:layout_height="39dp"
-                        android:layout_marginEnd="15dp"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/lib" />
-
-                    <TextView
-
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Memphis May Fire"
-                        android:textColor="#FFFFFF"
-                        android:textSize="20sp" />
-                </LinearLayout>
-
-                <LinearLayout
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/album_song_background"
-                    android:elevation="4dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="23dp"
-                    android:paddingVertical="5dp">
-
-                    <ImageView
-
-                        android:layout_width="42dp"
-                        android:layout_height="39dp"
-                        android:layout_marginEnd="14dp"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/song2" />
-
-                    <TextView
-
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Bring Me The Horizon "
-                        android:textColor="#FFFFFF"
-                        android:textSize="20sp" />
-                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 
