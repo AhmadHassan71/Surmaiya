@@ -133,6 +133,7 @@
 
                     <ImageView
 
+                        android:id="@+id/backButton"
                         android:layout_width="48dp"
                         android:layout_height="match_parent"
                         android:layout_marginEnd="79dp"

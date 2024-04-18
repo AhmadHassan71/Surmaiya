@@ -242,6 +242,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/searchPlaylist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="19dp"
@@ -275,7 +276,7 @@
         </LinearLayout>
 
         <LinearLayout
-
+            android:id="@+id/createNewPlaylist"
             android:layout_width="172dp"
             android:layout_height="51dp"
             android:layout_marginHorizontal="111dp"
@@ -299,6 +300,8 @@
         </LinearLayout>
 
         <ImageView
+
+            android:id="@+id/backButton"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="16dp"

@@ -1,5 +1,6 @@
 package com.smd.surmaiya.Fragments
 
+import BottomNavigationHelper
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.smd.surmaiya.HelperClasses.FragmentNavigationHelper
 import com.smd.surmaiya.HelperClasses.Navigator
 import com.smd.surmaiya.R
 import com.smd.surmaiya.activities.MonthlyRankingActivity
@@ -26,6 +28,7 @@ import com.smd.surmaiya.itemClasses.TopGenres
 class HomeFragment : Fragment() {
     private lateinit var topGenresTextView: TextView
     private lateinit var topPlaylistTextView: TextView
+    private lateinit var yourPlaylistTextView: TextView
     private lateinit var topAlbumsRecyclerView: RecyclerView
     private lateinit var topPlaylistsRecyclerView: RecyclerView
     private lateinit var yourPlaylistsRecyclerView: RecyclerView
@@ -60,6 +63,7 @@ class HomeFragment : Fragment() {
     fun initalizeViews(){
         topGenresTextView = view?.findViewById(R.id.topGenresTextView)!!
         topPlaylistTextView = view?.findViewById(R.id.topPlaylistsTextView)!!
+        yourPlaylistTextView = view?.findViewById(R.id.yourPlaylistsTextView)!!
         topAlbumsRecyclerView = view?.findViewById(R.id.topAlbumsRecyclerView)!!
         topPlaylistsRecyclerView = view?.findViewById(R.id.topPlaylistsRecyclerView)!!
         yourPlaylistsRecyclerView = view?.findViewById(R.id.yourPlaylistsRecyclerView)!!
@@ -75,6 +79,11 @@ class HomeFragment : Fragment() {
         topPlaylistTextView.setOnClickListener {
             this.context?.let { it1 -> Navigator.navigateToActivity(it1, PopularPlaylistsActivity::class.java) }
         }
+
+        yourPlaylistTextView.setOnClickListener {
+            this.context?.let { it1 -> FragmentNavigationHelper(requireActivity()).loadFragment(SettingsFragment())}
+        }
+
     }
 
     private fun prepareYourPlaylists() {

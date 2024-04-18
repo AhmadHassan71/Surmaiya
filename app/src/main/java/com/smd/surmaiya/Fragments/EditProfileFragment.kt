@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.smd.surmaiya.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -36,6 +37,26 @@ class EditProfileFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_edit_profile, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initializeViews()
+        setUpOnClickListeners()
+    }
+
+    private lateinit var backButton: ImageView
+    fun initializeViews() {
+        backButton = view?.findViewById(R.id.backButton)!!
+
+    }
+
+    fun setUpOnClickListeners() {
+
+        backButton.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+
     }
 
     companion object {

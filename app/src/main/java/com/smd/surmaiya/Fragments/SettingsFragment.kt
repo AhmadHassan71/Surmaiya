@@ -1,11 +1,17 @@
 package com.smd.surmaiya.Fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import com.smd.surmaiya.HelperClasses.FragmentNavigationHelper
+import com.smd.surmaiya.HelperClasses.Navigator
 import com.smd.surmaiya.R
+import com.smd.surmaiya.activities.NotificationsActivity
+import com.smd.surmaiya.activities.ResetPasswordActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,6 +34,7 @@ class SettingsFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
     }
 
     override fun onCreateView(
@@ -36,6 +43,38 @@ class SettingsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_settings, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initializeViews()
+        setUpOnClickListeners(requireActivity())
+    }
+
+
+    private lateinit var backButton: ImageView
+    fun initializeViews() {
+        backButton = view?.findViewById(R.id.backButton)!!
+
+    }
+
+    fun setUpOnClickListeners(activity: FragmentActivity) {
+        view?.findViewById<View>(R.id.editProfileTextView)?.setOnClickListener {
+            FragmentNavigationHelper(activity).loadFragment(EditProfileFragment())
+        }
+        view?.findViewById<View>(R.id.resetPasswordTextView)?.setOnClickListener {
+            Navigator.navigateToActivity(activity, ResetPasswordActivity::class.java)
+        }
+        view?.findViewById<View>(R.id.notificationsTextView)?.setOnClickListener {
+            Navigator.navigateToActivity(activity, NotificationsActivity::class.java)
+        }
+        view?.findViewById<View>(R.id.equalizerTextView)?.setOnClickListener {
+            FragmentNavigationHelper(activity).loadFragment(EqualizerFragment())
+        }
+        backButton.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+
     }
 
     companion object {

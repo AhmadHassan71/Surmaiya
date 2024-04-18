@@ -53,6 +53,7 @@
         <activity android:name=".activities.ResetPasswordActivity"/>
         <activity android:name=".activities.MonthlyRankingActivity"/>
         <activity android:name=".activities.PopularPlaylistsActivity"/>
+        <activity android:name=".activities.NotificationsActivity"/>
 
         <meta-data
             android:name="preloaded_fonts"

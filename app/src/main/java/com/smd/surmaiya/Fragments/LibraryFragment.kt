@@ -21,6 +21,7 @@ private const val ARG_PARAM2 = "param2"
 class LibraryFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private lateinit var backButton: ImageView
+    private lateinit var addToPlaylist: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,14 +31,23 @@ class LibraryFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_library, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initializeViews()
+        setOnClickListeners()
+
+    }
     fun initializeViews(){
         backButton=view?.findViewById(R.id.backButton)!!
-
+        addToPlaylist=view?.findViewById(R.id.addToPlaylist)!!
     }
 
     fun setOnClickListeners(){
         backButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
+        }
+        addToPlaylist.setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.fragment_container, AddToPlaylistFragment()).addToBackStack(null).commit()
         }
     }
 
