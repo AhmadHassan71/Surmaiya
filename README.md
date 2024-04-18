@@ -44,7 +44,7 @@ We welcome contributions from the community! To contribute to Surmaiya, please f
 - Make your changes and ensure that the code follows the existing style and conventions.
 - Test your changes thoroughly.
 - Commit your changes with descriptive commit messages.
--Push your changes to your fork and create a pull request to the main branch of the original repository.
+- Push your changes to your fork and create a pull request to the main branch of the original repository.
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
