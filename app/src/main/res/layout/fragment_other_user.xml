@@ -82,7 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="13dp"
-                    android:fontFamily="@font/satoshiregular"
+                    android:fontFamily="@font/satoshi_regular"
                     android:text="melissajohns@gmail.com"
                     android:textColor="@color/white"
                     android:textSize="15sp"
