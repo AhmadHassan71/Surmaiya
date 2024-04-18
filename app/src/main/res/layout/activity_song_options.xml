@@ -35,9 +35,9 @@
         android:id="@+id/artistNameTextView"
         android:fontFamily="@font/avenirnext_regular"
         android:text="Artist Name"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        android:textFontWeight="600"
+        android:textColor="#B3B3B3"
+        android:textSize="14sp"
+        android:textFontWeight="800"
         app:layout_constraintEnd_toEndOf="@+id/songNameTextView"
         app:layout_constraintStart_toStartOf="@+id/songNameTextView"
         app:layout_constraintTop_toBottomOf="@+id/songNameTextView" />

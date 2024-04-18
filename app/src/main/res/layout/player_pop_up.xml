@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@drawable/player_gradient"
+    android:layout_height="match_parent">
+
+
+    <Button
+        android:id="@+id/dropdownButton"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/dropdown"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/threedots"
+        android:layout_width="38dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/threedotshorizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/dropdownButton" />
+
+
+    <TextView
+        android:id="@+id/artistNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/poppinsmedium"
+        android:text="ZAYN ft. Sia"
+        android:textColor="#693F00"
+        android:textFontWeight="800"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="@+id/songNameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/songNameTextView" />
+
+    <TextView
+        android:id="@+id/songNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/poppinsbold"
+        android:text="Dusk Till Dawn"
+        android:textColor="#693F00"
+        android:textSize="32sp"
+        app:layout_constraintStart_toStartOf="@+id/dropdownButton"
+        app:layout_constraintTop_toBottomOf="@+id/dropdownButton" />
+
+    <TextView
+        android:id="@+id/playingDeviceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/poppinssemibold"
+        android:text="Kazyua's Air pods Pro"
+        android:textColor="#99EE3900"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/artistNameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/artistNameTextView" />
+
+    <LinearLayout
+        android:elevation="15dp"
+        android:translationZ="15dp"
+        android:outlineSpotShadowColor="@color/bottom_nav_primary"
+        android:id="@+id/playerBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/rounded_border"
+        android:backgroundTint="#F88703"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="15dp"
+        android:paddingVertical="50dp"
+        app:layout_constraintEnd_toEndOf="@+id/playingDeviceTextView"
+        app:layout_constraintHorizontal_bias="0.469"
+        app:layout_constraintStart_toStartOf="@+id/playingDeviceTextView"
+        app:layout_constraintTop_toBottomOf="@+id/playingDeviceTextView">
+
+
+        <ImageView
+            android:id="@+id/repeatButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:translationZ="45dp"
+            android:elevation="45dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/repeat"
+            android:backgroundTint="@color/white" />
+
+        <ImageView
+            android:id="@+id/nextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:translationZ="45dp"
+            android:elevation="45dp"
+            android:background="@drawable/next"
+            android:backgroundTint="@color/white"
+            app:tint="@color/black" />
+
+        <ImageView
+            android:id="@+id/pauseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/pausealt"
+            android:backgroundTint="@color/white"
+            android:layout_marginBottom="30dp"
+            android:translationZ="45dp"
+            android:elevation="45dp"
+            app:tint="@color/black" />
+
+        <ImageView
+            android:id="@+id/previousButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/previous"
+            android:backgroundTint="@color/white"
+            android:elevation="45dp"
+            android:translationZ="45dp"
+            app:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/likeButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:translationZ="55dp"
+            android:elevation="55dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/heart_empty"
+            android:backgroundTint="@color/white"
+            app:tint="@color/black" />
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.smd.surmaiya.HelperClasses.CustomProgressBar
+
+            android:id="@+id/customProgressBar"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="258dp"
+            android:layout_marginEnd="-81dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
