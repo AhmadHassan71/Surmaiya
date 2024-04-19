@@ -142,24 +142,51 @@
     </LinearLayout>
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/playerBar"
+        app:layout_constraintStart_toEndOf="@+id/playerBar"
+        app:layout_constraintTop_toTopOf="@+id/playerBar"
+        >
 
-        <com.smd.surmaiya.HelperClasses.CustomProgressBar
+        <View
+            android:id="@+id/circleBackground"
+            android:layout_width="370dp"
+            android:layout_height="370dp"
+            android:layout_gravity="center"
+            android:background="@drawable/circle_background"
+            android:elevation="4dp" />
 
-            android:id="@+id/customProgressBar"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="258dp"
-            android:layout_marginEnd="-81dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:elevation="10dp">
 
-    </RelativeLayout>
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="450dp"
+                android:layout_height="450dp"
+                android:layout_centerInParent="true"
+                android:progress="40"
+                android:progressDrawable="@drawable/progress_bar_circle"
+                android:rotation="90" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/albumCoverView"
+                android:layout_width="360dp"
+                android:layout_height="300dp"
+                android:layout_centerInParent="true"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/album_cover" />
+
+        </RelativeLayout>
+
+    </FrameLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

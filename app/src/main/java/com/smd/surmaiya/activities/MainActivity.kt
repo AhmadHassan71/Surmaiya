@@ -1,12 +1,12 @@
 package com.smd.surmaiya.activities
 
-import android.R
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.smd.surmaiya.HelperClasses.CustomProgressBar
-
+import com.smd.surmaiya.HelperClasses.Navigator
+import com.smd.surmaiya.R
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,33 +15,35 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(com.smd.surmaiya.R.layout.player_pop_up)
-        val customProgressBar = findViewById<CustomProgressBar>(com.smd.surmaiya.R.id.customProgressBar)
-        customProgressBar.setProgress(80f) // Set progress to 50%
+        setContentView(R.layout.activity_main)
+        val loginTextView = findViewById<TextView>(R.id.LoginTextView)
 
-
-//
-//        initalizeViews()
-//        setUpOnClickListeners()
+        initalizeViews()
+        setUpOnClickListeners()
     }
 
-//    fun initalizeViews()
-//    {
-//        loginTextView = findViewById(R.id.LoginTextView)
-//        signUpButton = findViewById(R.id.signUpButton)
-//    }
-//
-//    fun setUpOnClickListeners()
-//    {
-//        loginTextView.setOnClickListener{
-//            Navigator.navigateToActivity(this, LoginActivity::class.java)
-//
-//        }
-//
-//        signUpButton.setOnClickListener{
-//            Navigator.navigateToActivity(this, SignUpActivity::class.java)
-//        }
-//    }
+    fun initalizeViews()
+    {
+        loginTextView = findViewById(R.id.LoginTextView)
+        signUpButton = findViewById(R.id.signUpButton)
+    }
 
+    fun setUpOnClickListeners()
+    {
+        loginTextView.setOnClickListener{
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            Navigator.navigateToActivity(this, LoginActivity::class.java)
+
+        }
+        val signUpButton = findViewById<Button>(R.id.signUpButton)
+
+        signUpButton.setOnClickListener{
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
+            Navigator.navigateToActivity(this, SignUpActivity::class.java)
+        }
+    }
 
 }
+
