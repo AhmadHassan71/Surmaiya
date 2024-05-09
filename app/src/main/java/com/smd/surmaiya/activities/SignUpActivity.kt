@@ -32,6 +32,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.CheckBox
 import android.widget.Spinner
 import android.widget.Toast
 import com.google.android.material.internal.ViewUtils.dpToPx
@@ -49,6 +50,7 @@ import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.itemClasses.User
+import com.smd.surmaiya.itemClasses.UserType
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 
@@ -67,6 +69,7 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var tooltip: PopupWindow
     private var isSignUpInProgress = false
     private var storedVerificationId: String? = ""
+    private lateinit var artistCheckbox:CheckBox
 
 
     private lateinit var mauth: FirebaseAuth
@@ -98,6 +101,7 @@ class SignUpActivity : AppCompatActivity() {
         setupCountrySpinner()
         mauth = FirebaseAuth.getInstance()
         var settings = mauth.firebaseAuthSettings
+        artistCheckbox=findViewById(R.id.rememberMeCheckBox)
         settings.forceRecaptchaFlowForTesting(true)
         //mauth.firebaseAuthSettings = settings
 
@@ -297,6 +301,11 @@ class SignUpActivity : AppCompatActivity() {
 
         signUpButton.setOnClickListener {
 
+            var userType=UserType.CONSUMER
+            if(artistCheckbox.isChecked)
+                userType=UserType.ARTIST
+
+
             val user=User(
                 "",
                 "",
@@ -305,7 +314,8 @@ class SignUpActivity : AppCompatActivity() {
                 passwordEditText.text.toString(),
                 phoneNumberEditText.text.toString(),
                 "",
-                ""
+                "",
+                userType =  userType
             )
 
             if (!isSignUpInProgress) {

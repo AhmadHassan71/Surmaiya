@@ -154,11 +154,33 @@
         app:layout_constraintStart_toStartOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/passwordEditText" />
 
+    <CheckBox
+        android:id="@+id/rememberMeCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:layout_marginTop="5dp"
+        android:buttonTint="@color/text_secondary"
+        app:layout_constraintEnd_toStartOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/reEnterPasswordEditText" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/abeezee"
+        android:text="Are You An Artist?"
+        android:textColor="@color/text_secondary"
+        android:textFontWeight="600"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/rememberMeCheckBox"
+        app:layout_constraintEnd_toEndOf="@+id/reEnterPasswordEditText"
+        app:layout_constraintTop_toTopOf="@+id/rememberMeCheckBox" />
+
     <Button
         android:id="@+id/signUpButton"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/rounded_border"
         android:backgroundTint="@color/icon_secondary"
         android:paddingTop="4dp"
@@ -169,7 +191,7 @@
         app:layout_constraintEnd_toEndOf="@+id/passwordEditText"
         app:layout_constraintHorizontal_bias="0.466"
         app:layout_constraintStart_toStartOf="@+id/passwordEditText"
-        app:layout_constraintTop_toBottomOf="@+id/reEnterPasswordEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/rememberMeCheckBox" />
 
     <TextView
         android:id="@+id/TextView"
