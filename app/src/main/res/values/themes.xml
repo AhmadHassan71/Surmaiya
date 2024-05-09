@@ -10,4 +10,15 @@
         <item name="android:windowBackground">@color/splash_primary</item>
     </style>
 
+    <style name="Theme.DrawerNavigation" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/bottom_nav_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/bottom_nav_primary</item>
+        <item name="colorOnSecondary">@color/bottom_nav_secondary</item>
+        <item name="android:statusBarColor">@color/white</item>
+
+    </style>
+
 </resources>
