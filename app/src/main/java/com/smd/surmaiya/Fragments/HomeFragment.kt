@@ -6,12 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.smd.surmaiya.HelperClasses.FragmentNavigationHelper
 import com.smd.surmaiya.HelperClasses.Navigator
+import com.smd.surmaiya.HelperClasses.SideBarNavigationHelper
+import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.activities.MonthlyRankingActivity
 import com.smd.surmaiya.activities.PopularPlaylistsActivity
@@ -34,6 +37,7 @@ class HomeFragment : Fragment() {
     private lateinit var yourPlaylistsRecyclerView: RecyclerView
     private lateinit var topGenresRecyclerView: RecyclerView
     private lateinit var recentlyPlayedRecyclerView: RecyclerView
+    private lateinit var userName: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,6 +62,7 @@ class HomeFragment : Fragment() {
         prepareTopPlaylists()
 
         setUpOnClickListeners()
+
     }
 
     fun initalizeViews(){
@@ -69,6 +74,8 @@ class HomeFragment : Fragment() {
         yourPlaylistsRecyclerView = view?.findViewById(R.id.yourPlaylistsRecyclerView)!!
         topGenresRecyclerView = view?.findViewById(R.id.topGenresRecyclerView)!!
         recentlyPlayedRecyclerView = view?.findViewById(R.id.recentlyPlayedRecyclerView)!!
+        userName = view?.findViewById(R.id.usernameTextView)!!
+        userName.text = UserManager.getCurrentUser()?.userType.toString()
     }
 
     fun setUpOnClickListeners(){

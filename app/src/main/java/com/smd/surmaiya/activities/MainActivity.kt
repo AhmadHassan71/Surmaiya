@@ -7,7 +7,9 @@ import android.os.Handler
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.smd.surmaiya.HelperClasses.Navigator
 import com.smd.surmaiya.ManagerClasses.NotificationsManager
+import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 
 
@@ -18,11 +20,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        if(UserManager.getInstance().getUserLoggedInSP(getSharedPreferences("USER_LOGIN", MODE_PRIVATE))){
-//            Navigator.navigateToActivity(this@MainActivity,HomeActivity::class.java)
-//            finish()
-//        }
-//        else {
+        if(UserManager.getInstance().getUserLoggedInSP(getSharedPreferences("USER_LOGIN", MODE_PRIVATE))){
+            Navigator.navigateToActivity(this@MainActivity,HomeActivity::class.java)
+            finish()
+        }
+        else {
         Handler().postDelayed(Runnable {
 
             NotificationsManager.getInstance().createNotificationChannel(this)
@@ -30,8 +32,9 @@ class MainActivity : AppCompatActivity() {
 
             finish()
         }, MainActivity.SPLASH_DELAY)
-//        }
+        }
     }
+
     companion object {
         private const val SPLASH_DELAY: Long = 2000 // 2 seconds
     }
