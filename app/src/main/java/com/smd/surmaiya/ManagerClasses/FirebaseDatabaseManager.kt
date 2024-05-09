@@ -36,6 +36,7 @@ object FirebaseDatabaseManager {
         val userId = myRef.push().key
         user.id = userId.toString()
         user.password = hashPassword(user.password)
+        UserManager.setCurrentUser(user)
 
         myRef.child(userId.toString()).setValue(user)
             .addOnSuccessListener {
