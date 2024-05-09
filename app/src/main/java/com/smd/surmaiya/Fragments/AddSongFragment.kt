@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import com.smd.surmaiya.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -43,17 +45,52 @@ class AddSongFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initializeViews()
         setUpOnClickListeners()
+
     }
 
     private lateinit var cancelButton: Button
     fun initializeViews() {
         cancelButton = view?.findViewById(R.id.cancelButton)!!
 
+        val addArtworkLayout = view?.findViewById<ImageView>(R.id.addArtworkLayout)
+        val addArtworkTextViewTitle = view?.findViewById<TextView>(R.id.addArtworkTextViewTitle)
+        val addArtworkTextView = view?.findViewById<TextView>(R.id.addArtworkTextView)
+
+        addArtworkTextView?.setOnClickListener {
+            uploadSongCover()
+        }
+        addArtworkTextViewTitle?.setOnClickListener {
+            uploadSongCover()
+        }
+        addArtworkLayout?.setOnClickListener {
+            uploadSongCover()
+        }
+
+
+
+        val addSong = view?.findViewById<ImageView>(R.id.addSong)
+        addSong?.setOnClickListener {
+            uploadSong()
+        }
+
+    }
+
+    private fun uploadSong() {
+        TODO("Not yet implemented")
+    }
+
+    private fun uploadSongCover() {
+
     }
 
     fun setUpOnClickListeners() {
 
         cancelButton.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+
+        val backButton = view?.findViewById<ImageView>(R.id.backButton)
+        backButton?.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
 

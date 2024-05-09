@@ -125,17 +125,18 @@
                     android:textColor="#FFFFFF"
                     android:textSize="20sp" />
 
-                <TextView
-
+                <EditText
+                    android:id="@+id/songName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
-                    android:text="Name"
+                    android:hint="Name"
                     android:gravity="center_horizontal"
                     android:layout_gravity="center"
                     android:fontFamily="@font/poppins_medium"
-
-                    android:textColor="#8A9A9D"
+                    android:background="@null"
+                    android:textColor="@color/white"
+                    android:textColorHint="#8A9A9D"
                     android:textSize="16sp" />
 
                 <LinearLayout
@@ -148,17 +149,18 @@
                     android:background="#FF8A9A9D"
                     android:orientation="vertical"/>
 
-                <TextView
-
+                <EditText
+                    android:id="@+id/songArtists"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="81dp"
                     android:layout_marginBottom="5dp"
-                    android:text="Name of Artists"
+                    android:hint="Name of Artists"
                     android:layout_gravity="center"
                     android:fontFamily="@font/poppins_medium"
-
-                    android:textColor="#8A9A9D"
+                    android:background="@null"
+                    android:textColor="@color/white"
+                    android:textColorHint="#8A9A9D"
                     android:textSize="16sp" />
 
                 <LinearLayout
