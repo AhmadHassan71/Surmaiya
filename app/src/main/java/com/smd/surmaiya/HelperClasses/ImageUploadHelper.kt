@@ -20,7 +20,7 @@ object ImageUploadUtils {
     private const val GALLERY = 1
     private const val CAMERA = 2
 
-    fun showImageUploadDialog(fragment: Fragment, onImageUploadSuccess: (imagePath: String) -> Unit) {
+    fun showImageUploadDialog(fragment: Fragment) {
         val dialog = Dialog(fragment.requireContext())
         dialog.setContentView(R.layout.dialog_select_image)
 

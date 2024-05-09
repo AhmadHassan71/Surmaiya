@@ -119,7 +119,7 @@ class EditProfileFragment : Fragment() {
 
     private fun setUpOnClickListeners() {
         imageView17.setOnClickListener {
-            showPictureDialog()
+            ImageUploadUtils.showImageUploadDialog(this)
         }
 
         saveChangesButton.setOnClickListener {
@@ -174,12 +174,6 @@ class EditProfileFragment : Fragment() {
         }
     }
 
-    private fun showPictureDialog() {
-        ImageUploadUtils.showImageUploadDialog(this) { imagePath ->
-
-
-        }
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
