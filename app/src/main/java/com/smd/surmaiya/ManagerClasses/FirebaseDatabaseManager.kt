@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.FirebaseDatabase
 import com.smd.surmaiya.itemClasses.User
+import java.security.MessageDigest
+
 
 object FirebaseDatabaseManager {
 
@@ -20,11 +22,20 @@ object FirebaseDatabaseManager {
         return instance!!
     }
 
+    fun hashPassword(password: String): String {
+        val bytes = password.toByteArray()
+        val md = MessageDigest.getInstance("SHA-256")
+        val digest = md.digest(bytes)
+        return digest.fold("", { str, it -> str + "%02x".format(it) })
+    }
+
+
     fun signUpUser(user: User, activity:AppCompatActivity, Callback: (Boolean) -> Unit){
 
         val myRef = database.getReference("users")
         val userId = myRef.push().key
         user.id = userId.toString()
+        user.password = hashPassword(user.password)
 
         myRef.child(userId.toString()).setValue(user)
             .addOnSuccessListener {

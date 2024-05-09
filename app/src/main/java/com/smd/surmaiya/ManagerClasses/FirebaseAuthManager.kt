@@ -14,13 +14,22 @@ import com.smd.surmaiya.itemClasses.User
 import com.google.firebase.messaging.FirebaseMessaging
 import com.smd.surmaiya.HelperClasses.CustomToastMaker
 import kotlinx.coroutines.flow.callbackFlow
+import java.security.MessageDigest
+
 
 class FirebaseAuthManager(private val activity: AppCompatActivity) {
 
     private var mAuth : FirebaseAuth = FirebaseAuth.getInstance()
 
+    fun hashPassword(password: String): String {
+        val bytes = password.toByteArray()
+        val md = MessageDigest.getInstance("SHA-256")
+        val digest = md.digest(bytes)
+        return digest.fold("", { str, it -> str + "%02x".format(it) })
+    }
     fun saveUserAuthentication(user: User,Callback:(Boolean)->Unit)
     {
+
         mAuth.createUserWithEmailAndPassword(user.email, user.password)
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
@@ -50,11 +59,15 @@ class FirebaseAuthManager(private val activity: AppCompatActivity) {
 
                 }
             }
-
     }
 
-    fun loginUser(email: String,password:String, Callback: (Boolean) -> Unit)
+    fun loginUser(email: String,password1:String, Callback: (Boolean) -> Unit)
     {
+        val password = hashPassword(password1)
+
+        Log.d("Password",password)
+
+
         mAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
