@@ -8,8 +8,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
+import com.smd.surmaiya.itemClasses.Song
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -52,7 +55,7 @@ class AddSongFragment : Fragment() {
     fun initializeViews() {
         cancelButton = view?.findViewById(R.id.cancelButton)!!
 
-        val addArtworkLayout = view?.findViewById<ImageView>(R.id.addArtworkLayout)
+        val addArtworkLayout = view?.findViewById<LinearLayout>(R.id.addArtworkLayout)
         val addArtworkTextViewTitle = view?.findViewById<TextView>(R.id.addArtworkTextViewTitle)
         val addArtworkTextView = view?.findViewById<TextView>(R.id.addArtworkTextView)
 
@@ -73,6 +76,36 @@ class AddSongFragment : Fragment() {
             uploadSong()
         }
 
+        val createButton = view?.findViewById<Button>(R.id.createButton)
+        createButton?.setOnClickListener {
+            createSong()
+        }
+
+    }
+
+    private fun createSong() {
+        val songName = view?.findViewById<EditText>(R.id.songName)
+        val songArtist = view?.findViewById<EditText>(R.id.songArtists)
+//        val songGenre = view?.findViewById<EditText>(R.id.songGenre)
+//        val songDuration = view?.findViewById<EditText>(R.id.songDuration)
+
+        val songNameText = songName?.text.toString()
+        val songArtistText = songArtist?.text.toString()
+//        val songAlbumText = songAlbum?.text.toString()
+//        val songGenreText = songGenre?.text.toString()
+//        val songYearText = songYear?.text.toString()
+//        val songDurationText = songDuration?.text.toString()
+//        val songDescriptionText = songDescription?.text.toString()
+//        val songLyricsText = songLyrics?.text.toString()
+
+        if (songNameText.isEmpty() || songArtistText.isEmpty()) {
+            return
+        }
+
+        // Create song
+
+        val songToUpload = Song("id",songNameText,songArtistText,"album","duration","https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg","songUrl","releaseDate",0, listOf("genre"))
+
     }
 
     private fun uploadSong() {
@@ -80,6 +113,7 @@ class AddSongFragment : Fragment() {
     }
 
     private fun uploadSongCover() {
+
 
     }
 

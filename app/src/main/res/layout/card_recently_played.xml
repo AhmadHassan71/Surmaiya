@@ -7,15 +7,28 @@
     android:layout_marginEnd="5dp"
     >
 
-    <ImageView
-        android:id="@+id/songCoverImageView"
-        android:layout_width="160dp"
-        android:layout_height="213dp"
-        android:src="@drawable/album"
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="2dp"
+        app:cardPreventCornerOverlap="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/songCoverImageView"
+            android:layout_width="160dp"
+            android:layout_height="213dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/album"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/songNameTextView"
@@ -25,6 +38,8 @@
         android:text="Dawn FM"
         android:textColor="@color/white"
         android:textSize="16sp"
+        android:elevation="10dp"
+        android:textFontWeight="600"
         app:layout_constraintBottom_toTopOf="@+id/artistNameTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.2"
@@ -37,6 +52,9 @@
         android:layout_marginBottom="24dp"
         android:fontFamily="@font/raleway_light"
         android:text="Weekend"
+        android:elevation="10dp"
+        android:textFontWeight="600"
+
         android:textColor="@color/white"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"

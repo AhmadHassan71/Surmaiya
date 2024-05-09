@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.smd.surmaiya.R
 import com.smd.surmaiya.itemClasses.Song
 
@@ -19,9 +20,12 @@ class TopSongsAdapter(private val songs: List<Song>) : RecyclerView.Adapter<TopS
 
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
         val currentSong = songs[position]
-        holder.songImageView.setImageResource(currentSong.songCoverImageResource)
+//        holder.songImageView.setImageResource(currentSong.songCoverImageResource)
+        Glide.with(holder.itemView.context)
+            .load(currentSong.coverArtUrl)
+            .into(holder.songImageView)
         holder.songNameTextView.text = currentSong.songName
-        holder.artistNameTextView.text = currentSong.artistName
+        holder.artistNameTextView.text = currentSong.artist
     }
 
     override fun getItemCount() = songs.size

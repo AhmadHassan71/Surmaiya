@@ -46,10 +46,11 @@ class MonthlyRankingActivity : AppCompatActivity() {
     private fun prepareSongData(): List<Song> {
         val songs = mutableListOf<Song>()
         // Add your songs here
-        songs.add(Song(R.drawable.playlist_image, "Song Name", "Artist Name"))
-        songs.add(Song(R.drawable.playlist_image, "Song Name", "Artist Name"))
-        songs.add(Song(R.drawable.playlist_image, "Song Name", "Artist Name"))
-        songs.add(Song(R.drawable.playlist_image, "Song Name", "Artist Name"))
+        songs.add(Song("id", "Song Name", "Artist", "Album", "Duration", "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg", "songUrl", "releaseDate", 0, listOf("genre")))
+        songs.add(Song("id", "Song Name", "Artist", "Album", "Duration", "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg", "songUrl", "releaseDate", 0, listOf("genre")))
+        songs.add(Song("id", "Song Name", "Artist", "Album", "Duration", "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg", "songUrl", "releaseDate", 0, listOf("genre")))
+        songs.add(Song("id", "Song Name", "Artist", "Album", "Duration", "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg", "songUrl", "releaseDate", 0, listOf("genre")))
+
 
         // ... add more songs
         return songs
