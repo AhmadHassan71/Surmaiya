@@ -23,6 +23,10 @@ class SearchFilterAdapter(private val filters: MutableList<String>) :
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val textView = holder.linearLayout.findViewById<TextView>(R.id.filterText)
         textView.text = filters[position]
+        holder.linearLayout.setOnClickListener {
+            it.setBackgroundResource(R.drawable.tag_selected) // replace with your new background
+        }
+
     }
 
     override fun getItemCount() = filters.size

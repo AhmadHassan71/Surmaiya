@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.AddAlbumFragment">
-
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -46,7 +45,6 @@
 
                     <ImageView
 
-                        android:id="@+id/backButton"
                         android:layout_width="48dp"
                         android:layout_height="match_parent"
                         android:layout_marginEnd="79dp"
@@ -116,8 +114,8 @@
                     android:textColor="#FFFFFF"
                     android:textSize="20sp" />
 
-                <TextView
-
+                <EditText
+                    android:background="@null"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="82dp"
@@ -135,50 +133,12 @@
                     android:background="#FF8A9A9D"
                     android:orientation="vertical"></LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/r0zz4k1rt5zoc"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/albumAddSongRecyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginHorizontal="60dp"
-                    android:layout_marginBottom="27dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/r8eklw1n2fou"
-                        android:layout_width="47dp"
-                        android:layout_height="47dp"
-                        android:layout_marginEnd="3dp"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/starboy" />
-
-                    <LinearLayout
-                        android:id="@+id/rjuu38jkqom"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/r5wjk1ycnqmg"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="3dp"
-                            android:layout_marginBottom="6dp"
-                            android:text="StarBoy"
-                            android:textColor="#000000"
-                            android:textSize="15sp" />
-
-                        <TextView
-                            android:id="@+id/r40ydgd8lol6"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="The Weekend"
-                            android:textColor="#00A136"
-                            android:textSize="13sp" />
-                    </LinearLayout>
-                </LinearLayout>
-
+                    android:layout_marginBottom="27dp"/>
                 <LinearLayout
                     android:id="@+id/rnk1v5r9v4ca"
                     android:layout_width="match_parent"
@@ -217,7 +177,7 @@
                     android:orientation="horizontal">
 
                     <Button
-
+                        android:id="@+id/cancelButton"
                         android:layout_width="72dp"
                         android:layout_height="32dp"
                         android:layout_marginEnd="150dp"
@@ -246,6 +206,5 @@
         </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </FrameLayout>
