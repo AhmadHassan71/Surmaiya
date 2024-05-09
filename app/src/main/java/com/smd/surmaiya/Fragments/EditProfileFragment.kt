@@ -125,6 +125,11 @@ class EditProfileFragment : Fragment() {
         saveChangesButton.setOnClickListener {
             saveChanges()
         }
+
+        val backButton = requireView().findViewById<ImageView>(R.id.backButton)
+        backButton.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
     }
 
     private fun saveChanges() {
