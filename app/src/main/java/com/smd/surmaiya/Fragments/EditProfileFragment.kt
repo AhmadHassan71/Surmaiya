@@ -19,8 +19,10 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.snackbar.Snackbar
 import com.smd.surmaiya.HelperClasses.CustomToastMaker
+import com.smd.surmaiya.HelperClasses.ImageUploadUtils
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.FirebaseStorageManager
 import com.smd.surmaiya.ManagerClasses.UserManager
@@ -173,96 +175,28 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun showPictureDialog() {
-        val dialog = Dialog(requireContext())
-        dialog.setContentView(R.layout.dialog_select_image)
+        ImageUploadUtils.showImageUploadDialog(this) { imagePath ->
 
-        val btnGallery = dialog.findViewById<TextView>(R.id.galleryText)
-        val btnCamera = dialog.findViewById<TextView>(R.id.photoCameraText)
 
-        btnGallery.setOnClickListener {
-            choosePhotoFromGallery()
-            dialog.dismiss()
         }
-
-        btnCamera.setOnClickListener {
-            takePhotoFromCamera()
-            dialog.dismiss()
-        }
-
-        dialog.show()
     }
 
-    private fun choosePhotoFromGallery() {
-        val galleryIntent = Intent(
-            Intent.ACTION_PICK,
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        )
-        startActivityForResult(galleryIntent, GALLERY)
-    }
-
-    private fun takePhotoFromCamera() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intent, CAMERA)
-    }
-
-      override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        ImageUploadUtils.handleImageUploadResult(requestCode, resultCode, data, this, requireView()) { imagePath ->
+            var currentUserImage= userProfilePicture.drawable
+            UserManager.getCurrentUser()?.profilePictureUrl = imagePath
+            FirebaseDatabaseManager.getInstance().updateUser(UserManager.getCurrentUser()!!) { success ->
+                if (success) {
+                    Glide.with(this)
+                        .load(imagePath)
+                        .placeholder(currentUserImage)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL) // Enable disk cache
+                        .into((userProfilePicture))
 
-        if (resultCode == Activity.RESULT_OK && data != null) {
-            when (requestCode) {
-                GALLERY -> {
-                    val contentURI = data.data
-                    val snackbar = Snackbar.make(requireView(), "Uploading photo...", Snackbar.LENGTH_INDEFINITE)
-                    snackbar.show()
-                    FirebaseStorageManager.uploadImage(contentURI!!,
-                        onUploadStart = {},
-                        onSuccess = { imagePath ->
-                            snackbar.dismiss() // Dismiss the Snackbar
-                            UserManager.getCurrentUser()?.profilePictureUrl = imagePath
-                            FirebaseDatabaseManager.getInstance().updateUser(UserManager.getCurrentUser()!!)
-                            {
-                                if(it) {
-                                    CustomToastMaker().showToast(
-                                        requireContext(),
-                                        "Profile picture updated successfully"
-                                    )
-                                    Glide.with(this)
-                                        .load(UserManager.getCurrentUser()?.profilePictureUrl)
-                                        .into(userProfilePicture)
-                                }else
-                                    CustomToastMaker().showToast(requireContext(), "Failed to update profile picture")
-                            }
-                        }
-                    )
-                }
-                CAMERA -> {
-                    val thumbnail = data.extras?.get("data") as Bitmap
-                    val bytes = ByteArrayOutputStream()
-                    thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-                    val path = MediaStore.Images.Media.insertImage(context?.contentResolver, thumbnail, "Title", null)
-                    val contentURI = Uri.parse(path)
-                    val snackbar = Snackbar.make(requireView(), "Uploading photo...", Snackbar.LENGTH_INDEFINITE)
-                    snackbar.show()
-                    FirebaseStorageManager.uploadImage(contentURI,
-                        onUploadStart = {},
-                        onSuccess = { imagePath ->
-                            snackbar.dismiss() // Dismiss the Snackbar
-                            UserManager.getCurrentUser()?.profilePictureUrl = imagePath
-                            FirebaseDatabaseManager.getInstance().updateUser(UserManager.getCurrentUser()!!)
-                            {
-                                if(it) {
-                                    CustomToastMaker().showToast(
-                                        requireContext(),
-                                        "Profile picture updated successfully"
-                                    )
-                                    Glide.with(this)
-                                        .load(UserManager.getCurrentUser()?.profilePictureUrl)
-                                        .into(userProfilePicture)
-                                }else
-                                    CustomToastMaker().showToast(requireContext(), "Failed to update profile picture")
-                            }
-                        }
-                    )
+                    CustomToastMaker().showToast(requireContext(), "Profile picture updated successfully")
+                } else {
+                    CustomToastMaker().showToast(requireContext(), "Failed to update profile picture")
                 }
             }
         }
