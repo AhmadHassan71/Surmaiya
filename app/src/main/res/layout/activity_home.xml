@@ -41,6 +41,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:menu="@menu/bottom_navigation_menu" />
 
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include layout="@layout/sidebar_drawer"
@@ -56,5 +57,6 @@
         app:itemTextAppearance="@style/navBarTextStyle"
         app:itemTextAppearanceActiveBoldEnabled="true"
         app:itemTextColor="@color/white" />
+
 
 </androidx.drawerlayout.widget.DrawerLayout>
