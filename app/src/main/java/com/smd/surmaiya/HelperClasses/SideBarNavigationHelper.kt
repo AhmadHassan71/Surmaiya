@@ -12,12 +12,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
+import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.smd.surmaiya.Fragments.SettingsFragment
 import com.smd.surmaiya.Fragments.YourUserFragment
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.activities.LoginActivity
+import com.smd.surmaiya.itemClasses.UserType
 
 class SideBarNavigationHelper(private val activity: Activity) {
 
@@ -79,7 +81,23 @@ class SideBarNavigationHelper(private val activity: Activity) {
 
     private fun prepareUsername(activity: Activity){
         val userName = activity.findViewById<TextView>(R.id.userName)
-        userName.text = UserManager.getCurrentUser()?.userType.toString()
+
+        if (UserManager.getCurrentUser()?.name == null) {
+            userName.text = "User"
+            return
+        }
+        if(UserManager.getCurrentUser()?.userType == UserType.GUEST){
+            userName.text = "GUEST USER"
+            return
+        }
+        userName.text = UserManager.getCurrentUser()?.name
+
+        val profilePicture = activity.findViewById<ImageView>(R.id.profilePic)
+
+        Glide.with(activity)
+            .load(UserManager.getCurrentUser()?.profilePictureUrl)
+            .into(profilePicture)
+
     }
     private fun handleViewProfile(activity: Activity){
         val viewProfile = activity.findViewById<TextView>(R.id.viewProfile)
