@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import com.smd.surmaiya.itemClasses.User
+import com.smd.surmaiya.itemClasses.getUserWithEmail
+
 
 object UserManager {
 
@@ -72,9 +74,16 @@ object UserManager {
         Log.d(ContentValues.TAG, "loadUserInformation: ${currentUser.profilePictureUrl}")
     }
 
-    fun fetchAndSetCurrentUser(email: String, context: Context, callback: () -> Unit) {
-
-
+    fun fetchAndSetCurrentUser(email: String, callback: () -> Unit) {
+        getUserWithEmail(email) { user ->
+            if (user != null) {
+                currentUser = user
+                logUser(user)
+                setCurrentUser(user)
+                Log.d(ContentValues.TAG, "loadUserInformation: ${currentUser.id}")
+                callback.invoke() // Execute the callback function
+            }
+        }
 
     }
 }

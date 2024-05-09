@@ -1,7 +1,9 @@
 package com.smd.surmaiya.ManagerClasses
 
 import android.content.ContentValues
+import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -49,6 +51,43 @@ class FirebaseAuthManager(private val activity: AppCompatActivity) {
                 }
             }
 
+    }
+
+    fun loginUser(email: String,password:String, Callback: (Boolean) -> Unit)
+    {
+        mAuth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(activity) { task ->
+                if (task.isSuccessful) {
+                    val user = mAuth.currentUser
+
+                    val userManager = UserManager.getInstance()
+                    userManager.fetchAndSetCurrentUser(user?.email.toString())
+                    {
+                        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                            if (!task.isSuccessful) {
+                                return@addOnCompleteListener
+                            }
+
+                            // Get new FCM registration token
+                            val token = task.result
+
+                            // Log and toast
+                            val msg = token
+                            Log.d("MyToken", msg)
+                            addFcmTokenToUser(UserManager.getCurrentUser()?.id.toString(), "users", token)
+                            UserManager.getCurrentUser()?.fcmToken = token.toString()
+                            CustomToastMaker().showToast(activity, "User logged in successfully")
+                            Callback(true)
+                        }
+
+                    }
+                } else {
+
+                    Log.w(ContentValues.TAG, "signInWithEmail:failure", task.exception)
+                    Callback(false)
+
+                }
+            }
     }
 
     fun checkEmailAvailability(email: String, completion: (Boolean) -> Unit) {

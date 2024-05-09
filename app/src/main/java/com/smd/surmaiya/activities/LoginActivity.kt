@@ -21,6 +21,7 @@ import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.smd.surmaiya.HelperClasses.CustomToastMaker
 import com.smd.surmaiya.HelperClasses.Navigator
+import com.smd.surmaiya.ManagerClasses.FirebaseAuthManager
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import java.util.UUID
@@ -56,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
         backButton = findViewById(R.id.backButton)
         forgotPasswordTextView = findViewById(R.id.forgotPasswordTextView)
         emailEditText = findViewById(R.id.emailEditText)
-        passwordEditText = findViewById(R.id.passwordEditText)
+        passwordEditText = findViewById(R.id.countryEditText)
         rememberMeCheckBox = findViewById(R.id.rememberMeCheckBox)
         mauth = FirebaseAuth.getInstance()
     }
@@ -66,7 +67,13 @@ class LoginActivity : AppCompatActivity() {
         loginButton.setOnClickListener {
             verifyFields { isValid ->
                 if (isValid) {
-                    Log.d("LoginActivity", "Login button clicked")
+                    FirebaseAuthManager(this).loginUser(emailEditText.text.toString(), passwordEditText.text.toString()) { success ->
+                        if (success) {
+                            showOtpDialog()
+                        } else {
+                            CustomToastMaker().showToast(this, "Login failed")
+                        }
+                    }
 
                 }
             }
@@ -235,17 +242,10 @@ class LoginActivity : AppCompatActivity() {
     {
         Log.d("SignUpActivity", "verifyCode: $code") // Debug statement
 
-        var credential: PhoneAuthCredential? =
-            storedVerificationId?.let { PhoneAuthProvider.getCredential(it, code) }
-
-
         if(rememberMeCheckBox.isChecked){
             Log.d("LoginActivity", "Remember me is checked")
-            UserManager.saveUserLoggedInSP(
-                true,
-                getSharedPreferences("USER_LOGIN", MODE_PRIVATE)
-            )
-            UserManager.saveUserEmailSP(emailEditText.text.toString(), getSharedPreferences("USER_LOGIN", MODE_PRIVATE))
+            UserManager.saveUserLoggedInSP(true, getSharedPreferences("USER_LOGIN", MODE_PRIVATE))
+            UserManager.saveUserEmailSP(UserManager.getCurrentUser()?.email.toString(), getSharedPreferences("USER_LOGIN", MODE_PRIVATE))
         }
 
         Navigator.navigateToActivity(this, HomeActivity::class.java)
