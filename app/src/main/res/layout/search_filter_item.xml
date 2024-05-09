@@ -1,0 +1,19 @@
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="80dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="12dp"
+    android:background="@drawable/tag_unselected"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingVertical="7dp">
+
+    <TextView
+        android:id="@+id/filterText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Playlists"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp" />
+</LinearLayout>

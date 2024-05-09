@@ -1,12 +1,16 @@
 package com.smd.surmaiya.Fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.smd.surmaiya.R
+import com.smd.surmaiya.adapters.AlbumSongAdapter
+import com.smd.surmaiya.itemClasses.SongNew
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,7 +26,9 @@ class AlbumScreenFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    private lateinit var albumSongRecyclerView: RecyclerView
+    private lateinit var albumSongAdapter: AlbumSongAdapter
+    private var songList: MutableList<SongNew> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -32,14 +38,35 @@ class AlbumScreenFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+
+
         return inflater.inflate(R.layout.fragment_album_screen, container, false)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        fun initializeViews() {
+            backButton = view.findViewById(R.id.backButton)!!
+            albumSongRecyclerView = view.findViewById(R.id.AlbumSongRecyclerView)!!
+
+            songList = mutableListOf(
+                SongNew(
+                    "https://preview.redd.it/the-full-key-visual-for-bleach-tybw-the-separation-v0-ifguzaidwgkb1.jpg?auto=webp&s=c3c7385837b8d5f1f449a989320cd15cc4eef49e",
+                    "Song 1",
+                    "Faraz Deutsch"
+                ),
+                SongNew(
+                    "https://preview.redd.it/the-full-key-visual-for-bleach-tybw-the-separation-v0-ifguzaidwgkb1.jpg?auto=webp&s=c3c7385837b8d5f1f449a989320cd15cc4eef49e",
+                    "Song 2",
+                    "Ahmad Deutsch"
+                ),
+            )
+            albumSongAdapter = AlbumSongAdapter(songList)
+            albumSongRecyclerView.adapter = albumSongAdapter
+            albumSongRecyclerView.layoutManager = LinearLayoutManager(context)
+        }
         initializeViews()
         setUpOnClickListeners()
     }
@@ -47,7 +74,6 @@ class AlbumScreenFragment : Fragment() {
     private lateinit var backButton: ImageView
     fun initializeViews() {
         backButton = view?.findViewById(R.id.backButton)!!
-
     }
 
     fun setUpOnClickListeners() {
@@ -57,6 +83,7 @@ class AlbumScreenFragment : Fragment() {
         }
 
     }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -68,12 +95,11 @@ class AlbumScreenFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AlbumScreenFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        fun newInstance(param1: String, param2: String) = AlbumScreenFragment().apply {
+            arguments = Bundle().apply {
+                putString(ARG_PARAM1, param1)
+                putString(ARG_PARAM2, param2)
             }
+        }
     }
 }

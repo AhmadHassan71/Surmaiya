@@ -84,49 +84,12 @@
 				android:textColor="#00A136"
 				android:textSize="17sp" />
 
-			<LinearLayout
-
+			<androidx.recyclerview.widget.RecyclerView
+				android:id="@+id/recyclerView"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginHorizontal="30dp"
-				android:layout_marginBottom="18dp"
-				android:gravity="center_vertical"
-				android:orientation="horizontal">
-
-				<ImageView
-
-					android:layout_width="47dp"
-					android:layout_height="47dp"
-					android:layout_marginEnd="9dp"
-					android:scaleType="fitXY"
-					android:src="@mipmap/one" />
-
-				<LinearLayout
-
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:orientation="vertical">
-
-					<TextView
-
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_marginBottom="7dp"
-						android:text="FKA twigs"
-						android:textColor="#000000"
-						android:textSize="15sp" />
-
-					<TextView
-
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="Artist"
-						android:textColor="#00A136"
-						android:textSize="13sp" />
-				</LinearLayout>
-			</LinearLayout>
-
+				android:layout_marginBottom="18dp"/>
 			<LinearLayout
 
 				android:layout_width="match_parent"

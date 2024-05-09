@@ -39,7 +39,6 @@ class HomeActivity : AppCompatActivity() {
         BottomNavigationHelper(this).loadFragment(HomeFragment())
         BottomNavigationHelper(this).setUpBottomNavigation()
 
-
         val musicPlayer = findViewById<View>(R.id.music_player)
         musicPlayer.setOnClickListener {
             showPlayerBottomSheetDialog()
