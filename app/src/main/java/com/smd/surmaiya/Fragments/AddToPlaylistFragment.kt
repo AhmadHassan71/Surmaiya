@@ -1,13 +1,17 @@
 package com.smd.surmaiya.Fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.smd.surmaiya.R
+import com.smd.surmaiya.adapters.PlaylistSearchItemAdapter
+import com.smd.surmaiya.itemClasses.PlaylistSearchItem
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,6 +30,7 @@ class AddToPlaylistFragment : Fragment() {
     private lateinit var backButton: ImageView
     private lateinit var createNewPlaylist: LinearLayout
     private lateinit var searchPlaylist: LinearLayout
+    private lateinit var playlistSearchRecyclerView: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -35,22 +40,48 @@ class AddToPlaylistFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_add_to_playlist, container, false)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeViews()
         setUpOnClickListeners()
+        setUpRecyclerView()
     }
 
     fun initializeViews() {
         backButton = view?.findViewById(R.id.backButton)!!
         createNewPlaylist = view?.findViewById(R.id.createNewPlaylist)!!
         searchPlaylist = view?.findViewById(R.id.searchPlaylist)!!
+        playlistSearchRecyclerView = view?.findViewById(R.id.playlistSearchRecyclerView)!!
+    }
+
+    private fun setUpRecyclerView() {
+        // Create dummy data for testing
+        val playlistSearchItems = mutableListOf(
+            PlaylistSearchItem(
+                "https://preview.redd.it/the-full-key-visual-for-bleach-tybw-the-separation-v0-ifguzaidwgkb1.jpg?auto=webp&s=c3c7385837b8d5f1f449a989320cd15cc4eef49e",
+                "title1",
+                "subtitle1"
+            ), PlaylistSearchItem(
+                "https://preview.redd.it/the-full-key-visual-for-bleach-tybw-the-separation-v0-ifguzaidwgkb1.jpg?auto=webp&s=c3c7385837b8d5f1f449a989320cd15cc4eef49e",
+                "title2",
+                "subtitle2"
+            ), PlaylistSearchItem(
+                "https://preview.redd.it/the-full-key-visual-for-bleach-tybw-the-separation-v0-ifguzaidwgkb1.jpg?auto=webp&s=c3c7385837b8d5f1f449a989320cd15cc4eef49e",
+                "title3",
+                "subtitle3"
+            )
+        )
+
+        // Set the adapter for the RecyclerView
+        playlistSearchRecyclerView.adapter = PlaylistSearchItemAdapter(playlistSearchItems)
+        // Set the layout manager for the RecyclerView
+        playlistSearchRecyclerView.layoutManager = LinearLayoutManager(context)
     }
 
     fun setUpOnClickListeners() {
@@ -59,12 +90,17 @@ class AddToPlaylistFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
         }
         createNewPlaylist.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CreateNewPlaylistFragment()).addToBackStack(null).commit()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, CreateNewPlaylistFragment()).addToBackStack(null)
+                .commit()
         }
         searchPlaylist.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.fragment_container, PlaylistSearchFragment()).addToBackStack(null).commit()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, PlaylistSearchFragment()).addToBackStack(null)
+                .commit()
         }
     }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -76,12 +112,11 @@ class AddToPlaylistFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AddToPlaylistFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        fun newInstance(param1: String, param2: String) = AddToPlaylistFragment().apply {
+            arguments = Bundle().apply {
+                putString(ARG_PARAM1, param1)
+                putString(ARG_PARAM2, param2)
             }
+        }
     }
 }

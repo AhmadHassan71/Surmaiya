@@ -18,7 +18,7 @@
             android:layout_width="234dp"
             android:layout_height="238dp"
             android:layout_marginStart="68dp"
-            android:layout_marginTop="120dp"
+            android:layout_marginTop="40dp"
             android:scaleType="fitXY"
             android:src="@mipmap/current_favourites"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="104dp"
-            android:layout_marginTop="412dp"
+            android:layout_marginTop="352dp"
             android:text="New Playlist"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="52dp"
-            android:layout_marginTop="592dp"
+            android:layout_marginTop="536dp"
             android:text="Privacy"
             android:textColor="@color/white"
             android:textSize="16sp"
@@ -51,8 +51,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="53dp"
-            android:layout_marginTop="489dp"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="436dp"
             android:text="Give your playlist a title "
             android:textColor="#8A9A9D"
             android:textSize="12sp"
@@ -63,8 +63,8 @@
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="53dp"
-            android:layout_marginTop="540dp"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="492dp"
             android:text="Give your playlist a title "
             android:textColor="#8A9A9D"
             android:textSize="12sp"
@@ -76,7 +76,7 @@
             android:layout_width="200dp"
             android:layout_height="1dp"
             android:layout_marginStart="52dp"
-            android:layout_marginTop="512dp"
+            android:layout_marginTop="472dp"
             android:background="#8A9A9D"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
@@ -87,9 +87,39 @@
             android:layout_width="200dp"
             android:layout_height="1dp"
             android:layout_marginStart="52dp"
-            android:layout_marginTop="568dp"
+            android:layout_marginTop="516dp"
             android:background="#8A9A9D"
             android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+
+            android:layout_width="84dp"
+            android:layout_height="30dp"
+
+            android:layout_marginTop="640dp"
+            android:layout_marginEnd="72dp"
+            android:background="@drawable/green_round"
+            android:text="Create"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+
+            android:id="@+id/cancelButton"
+            android:layout_width="72dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="639dp"
+            android:background="@drawable/cancel_background"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -97,8 +127,8 @@
             android:layout_width="84dp"
             android:layout_height="24dp"
 
-            android:layout_marginStart="52dp"
-            android:layout_marginTop="635dp"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="568dp"
             android:background="@drawable/dropdown_back"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
@@ -127,36 +157,6 @@
                 android:layout_weight="1"
                 app:srcCompat="@drawable/drop_triangle" />
         </LinearLayout>
-
-        <Button
-
-            android:layout_width="84dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="60dp"
-            android:layout_marginBottom="168dp"
-            android:background="@drawable/green_round"
-
-            android:text="Create"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="14dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <Button
-
-            android:id="@+id/cancelButton"
-            android:layout_width="72dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="52dp"
-            android:layout_marginBottom="168dp"
-            android:background="@drawable/cancel_background"
-            android:text="Cancel"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

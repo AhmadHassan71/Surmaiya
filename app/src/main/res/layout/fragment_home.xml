@@ -54,6 +54,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/recentlyPlayedTextView"
                     android:fontFamily="@font/avenirnext_bold"
                     android:text="Recently Played"
                     android:textColor="@color/text_primary"

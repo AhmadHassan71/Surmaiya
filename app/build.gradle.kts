@@ -42,18 +42,18 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation ("com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:1.0.0")
-
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.database)
+    implementation(libs.firebase.auth.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(kotlin("script-runtime"))
-
+    implementation("com.github.bumptech.glide:glide:4.12.0")
     implementation ("com.google.android.material:material:1.4.0")
     implementation ("de.hdodenhof:circleimageview:3.1.0")
 

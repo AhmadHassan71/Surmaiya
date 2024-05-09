@@ -1,12 +1,11 @@
 package com.smd.surmaiya.Fragments
 
-import BottomNavigationHelper
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -60,7 +59,7 @@ class HomeFragment : Fragment() {
         setUpOnClickListeners()
     }
 
-    fun initalizeViews(){
+    fun initalizeViews() {
         topGenresTextView = view?.findViewById(R.id.topGenresTextView)!!
         topPlaylistTextView = view?.findViewById(R.id.topPlaylistsTextView)!!
         yourPlaylistTextView = view?.findViewById(R.id.yourPlaylistsTextView)!!
@@ -71,24 +70,40 @@ class HomeFragment : Fragment() {
         recentlyPlayedRecyclerView = view?.findViewById(R.id.recentlyPlayedRecyclerView)!!
     }
 
-    fun setUpOnClickListeners(){
+    fun setUpOnClickListeners() {
         topGenresTextView.setOnClickListener {
-            this.context?.let { it1 -> Navigator.navigateToActivity(it1, MonthlyRankingActivity::class.java) }
+            this.context?.let { it1 ->
+                Navigator.navigateToActivity(
+                    it1,
+                    MonthlyRankingActivity::class.java
+                )
+            }
         }
 
         topPlaylistTextView.setOnClickListener {
-            this.context?.let { it1 -> Navigator.navigateToActivity(it1, PopularPlaylistsActivity::class.java) }
+            this.context?.let { it1 ->
+                Navigator.navigateToActivity(
+                    it1,
+                    PopularPlaylistsActivity::class.java
+                )
+            }
         }
 
         yourPlaylistTextView.setOnClickListener {
-            this.context?.let { it1 -> FragmentNavigationHelper(requireActivity()).loadFragment(SettingsFragment())}
+            this.context?.let { it1 ->
+                FragmentNavigationHelper(requireActivity()).loadFragment(
+                    SettingsFragment()
+                )
+            }
         }
 
     }
 
     private fun prepareYourPlaylists() {
-        yourPlaylistsRecyclerView.layoutManager = LinearLayoutManager(this.context,
-            LinearLayoutManager.HORIZONTAL,false)
+        yourPlaylistsRecyclerView.layoutManager = LinearLayoutManager(
+            this.context,
+            LinearLayoutManager.HORIZONTAL, false
+        )
 
         val playlistData = preparePlaylistData()  // Replace with your data loading logic
         val playlistAdapter = PlaylistAdapter(playlistData)
@@ -101,7 +116,7 @@ class HomeFragment : Fragment() {
         playlists.add(Playlist(R.drawable.playlist, "Playlist Name", 80))
         playlists.add(Playlist(R.drawable.playlist, "Playlist Name", 80))
         playlists.add(Playlist(R.drawable.playlist, "Playlist Name", 80))
-        playlists.add(Playlist(R.drawable.playlist, "Playlist Name", 80 ))
+        playlists.add(Playlist(R.drawable.playlist, "Playlist Name", 80))
 
         // ... add more playlists
         return playlists
@@ -110,16 +125,19 @@ class HomeFragment : Fragment() {
 
     private fun prepareTopAlbums() {
 
-        topAlbumsRecyclerView.layoutManager = LinearLayoutManager(this.context,
-            LinearLayoutManager.HORIZONTAL,false)
+        topAlbumsRecyclerView.layoutManager = LinearLayoutManager(
+            this.context,
+            LinearLayoutManager.HORIZONTAL, false
+        )
 
         val listData = prepareListData() // Replace with your data loading logic
         val listItemAdapter = ListItemAdapter(listData)
         topAlbumsRecyclerView.adapter = listItemAdapter
     }
 
-    private fun prepareTopPlaylists(){
-        topPlaylistsRecyclerView.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+    private fun prepareTopPlaylists() {
+        topPlaylistsRecyclerView.layoutManager =
+            LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
 
         val listData = prepareListData()
         val listItemAdapter = ListItemAdapter(listData)
@@ -156,7 +174,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun prepareRecentlyPlayed() {
-        recentlyPlayedRecyclerView.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+        recentlyPlayedRecyclerView.layoutManager =
+            LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
 
         val songList = prepareSongData()  // Replace with your data loading logic
         val songAdapter = RecentlyPlayedAdapter(songList)
