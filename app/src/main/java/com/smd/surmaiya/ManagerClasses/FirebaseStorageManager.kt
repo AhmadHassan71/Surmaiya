@@ -14,7 +14,7 @@ object FirebaseStorageManager {
     private val imagesRef: StorageReference
         get() = storageInstance.reference.child("images")
 
-    fun uploadImage(imageUri: Uri, onSuccess: (imagePath: String) -> Unit) {
+    fun uploadImage(imageUri: Uri, onUploadStart: () -> Unit, onSuccess: (imagePath: String) -> Unit) {
         // Delete the old image
         val oldImagePath = UserManager.getCurrentUser()?.profilePictureUrl
         if (oldImagePath != null && oldImagePath.isNotEmpty()) {
@@ -30,6 +30,7 @@ object FirebaseStorageManager {
 
         // Upload the new image
         val ref = imagesRef.child(UUID.randomUUID().toString())
+        onUploadStart() // Call the onUploadStart callback
         ref.putFile(imageUri)
             .addOnSuccessListener {
                 ref.downloadUrl.addOnSuccessListener {

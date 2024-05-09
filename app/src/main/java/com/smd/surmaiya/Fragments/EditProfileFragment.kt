@@ -19,6 +19,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import com.smd.surmaiya.HelperClasses.CustomToastMaker
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.FirebaseStorageManager
@@ -204,56 +205,64 @@ class EditProfileFragment : Fragment() {
         startActivityForResult(intent, CAMERA)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+      override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (resultCode == Activity.RESULT_OK && data != null) {
             when (requestCode) {
                 GALLERY -> {
                     val contentURI = data.data
-                    FirebaseStorageManager.uploadImage(contentURI!!) { imagePath ->
-                        UserManager.getCurrentUser()?.profilePictureUrl= imagePath
-                        FirebaseDatabaseManager.getInstance().updateUser(UserManager.getCurrentUser()!!)
-                        {
-                            // Show custom toast message
-                            if(it) {
-                                CustomToastMaker().showToast(
-                                    requireContext(),
-                                    "Profile picture updated successfully"
-                                )
-                                Glide.with(this)
-                                    .load(UserManager.getCurrentUser()?.profilePictureUrl)
-                                    .into(userProfilePicture)
+                    val snackbar = Snackbar.make(requireView(), "Uploading photo...", Snackbar.LENGTH_INDEFINITE)
+                    snackbar.show()
+                    FirebaseStorageManager.uploadImage(contentURI!!,
+                        onUploadStart = {},
+                        onSuccess = { imagePath ->
+                            snackbar.dismiss() // Dismiss the Snackbar
+                            UserManager.getCurrentUser()?.profilePictureUrl = imagePath
+                            FirebaseDatabaseManager.getInstance().updateUser(UserManager.getCurrentUser()!!)
+                            {
+                                if(it) {
+                                    CustomToastMaker().showToast(
+                                        requireContext(),
+                                        "Profile picture updated successfully"
+                                    )
+                                    Glide.with(this)
+                                        .load(UserManager.getCurrentUser()?.profilePictureUrl)
+                                        .into(userProfilePicture)
+                                }else
+                                    CustomToastMaker().showToast(requireContext(), "Failed to update profile picture")
                             }
-                            else
-                                CustomToastMaker().showToast(requireContext(), "Failed to update profile picture")
                         }
-                    }
+                    )
                 }
                 CAMERA -> {
                     val thumbnail = data.extras?.get("data") as Bitmap
-                    // getting bitmap path from bitmap
                     val bytes = ByteArrayOutputStream()
                     thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
                     val path = MediaStore.Images.Media.insertImage(context?.contentResolver, thumbnail, "Title", null)
                     val contentURI = Uri.parse(path)
-                    FirebaseStorageManager.uploadImage(contentURI) { imagePath ->
-                        UserManager.getCurrentUser()?.profilePictureUrl = imagePath
-                        FirebaseDatabaseManager.getInstance().updateUser(UserManager.getCurrentUser()!!)
-                        {
-
-                            if(it) {
-                                CustomToastMaker().showToast(
-                                    requireContext(),
-                                    "Profile picture updated successfully"
-                                )
-                                Glide.with(this)
-                                    .load(UserManager.getCurrentUser()?.profilePictureUrl)
-                                    .into(userProfilePicture)
-                            }else
-                                CustomToastMaker().showToast(requireContext(), "Failed to update profile picture")
+                    val snackbar = Snackbar.make(requireView(), "Uploading photo...", Snackbar.LENGTH_INDEFINITE)
+                    snackbar.show()
+                    FirebaseStorageManager.uploadImage(contentURI,
+                        onUploadStart = {},
+                        onSuccess = { imagePath ->
+                            snackbar.dismiss() // Dismiss the Snackbar
+                            UserManager.getCurrentUser()?.profilePictureUrl = imagePath
+                            FirebaseDatabaseManager.getInstance().updateUser(UserManager.getCurrentUser()!!)
+                            {
+                                if(it) {
+                                    CustomToastMaker().showToast(
+                                        requireContext(),
+                                        "Profile picture updated successfully"
+                                    )
+                                    Glide.with(this)
+                                        .load(UserManager.getCurrentUser()?.profilePictureUrl)
+                                        .into(userProfilePicture)
+                                }else
+                                    CustomToastMaker().showToast(requireContext(), "Failed to update profile picture")
+                            }
                         }
-                    }
+                    )
                 }
             }
         }
