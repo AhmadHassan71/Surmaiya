@@ -1,6 +1,7 @@
 package com.smd.surmaiya.Fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -109,12 +110,13 @@ class AddSongFragment : Fragment() {
     }
 
     private fun uploadSong() {
-        TODO("Not yet implemented")
+        Log.d("AddSongFragment", "uploadSong: ")
+        return
     }
 
     private fun uploadSongCover() {
-
-
+        Log.d("AddSongFragment", "uploadSongCover: ")
+        return
     }
 
     fun setUpOnClickListeners() {
