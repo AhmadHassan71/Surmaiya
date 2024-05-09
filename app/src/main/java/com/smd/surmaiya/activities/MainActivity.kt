@@ -7,6 +7,7 @@ import android.os.Handler
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.smd.surmaiya.Fragments.EditProfileFragment
 import com.smd.surmaiya.HelperClasses.Navigator
 import com.smd.surmaiya.ManagerClasses.NotificationsManager
 import com.smd.surmaiya.ManagerClasses.UserManager
@@ -20,9 +21,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if(UserManager.getInstance().getUserLoggedInSP(getSharedPreferences("USER_LOGIN", MODE_PRIVATE))){
-            Navigator.navigateToActivity(this@MainActivity,HomeActivity::class.java)
-            finish()
+        if (UserManager.getInstance().getUserLoggedInSP(getSharedPreferences("USER_LOGIN", MODE_PRIVATE))) {
+
+            UserManager.getInstance()
+                .getUserEmailSP(getSharedPreferences("USER_LOGIN", MODE_PRIVATE))?.let {
+
+                val intent = Intent(this, HomeActivity::class.java)
+
+                UserManager.getInstance().fetchAndSetCurrentUser(it)
+                {
+                    //add logged in boolean to shared preferences
+                    startActivity(intent)
+                    finish()
+                }
+
+            }
         }
         else {
         Handler().postDelayed(Runnable {
