@@ -15,6 +15,7 @@ firebaseMessaging = "24.0.0"
 firebaseDatabase = "21.0.0"
 firebaseAuthKtx = "23.0.0"
 googleServices = "4.4.1"
+firebaseStorage = "21.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -30,6 +31,7 @@ firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 google-services = { group = "com.google.gms", name = "google-services", version.ref = "googleServices" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

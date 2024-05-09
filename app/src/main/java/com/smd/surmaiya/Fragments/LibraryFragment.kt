@@ -8,6 +8,7 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.smd.surmaiya.HelperClasses.SideBarNavigationHelper
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.LibraryFilterAdapter
 import com.smd.surmaiya.adapters.SearchItemAdapter
@@ -44,6 +45,9 @@ class LibraryFragment : Fragment() {
         initializeViews()
         setOnClickListeners()
         setUpRecyclerView()
+        SideBarNavigationHelper(requireActivity()).openDrawerOnMenuClick(view, requireActivity())
+        SideBarNavigationHelper(requireActivity()).setupNavigationView(requireActivity().findViewById(R.id.drawer_layout))
+
     }
 
     fun initializeViews() {

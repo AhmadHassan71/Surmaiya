@@ -9,24 +9,59 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <com.google.android.material.card.MaterialCardView
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:elevation="2dp"
+            app:layout_constraintHeight_percent="0.2"
+            android:background="@color/bottom_nav_primary"
+            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.cardview.widget.CardView
             android:id="@+id/materialCardView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardPreventCornerOverlap="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="0dp"
             android:background="@drawable/rounded_bottom"
             android:backgroundTint="@color/bottom_nav_primary"
             android:paddingBottom="15dp"
+            app:cardCornerRadius="70dp"
+            app:layout_constraintHeight_percent="0.44"
+            app:cardPreventCornerOverlap="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+                android:layout_height="match_parent">
 
+
+                <TextView
+                    android:id="@+id/playlistsTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/satoshibold"
+                    android:text="Playlists"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@+id/playlistCount"
+                    app:layout_constraintStart_toStartOf="@+id/playlistCount"
+                    app:layout_constraintTop_toBottomOf="@+id/playlistCount" />
+
+                <TextView
+                    android:id="@+id/playlistCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="63dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="94dp"
+                    android:fontFamily="@font/satoshibold"
+                    android:text="778"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@+id/followersCount"
+                    app:layout_constraintStart_toEndOf="@+id/followingCount"
+                    app:layout_constraintTop_toBottomOf="@+id/username" />
 
                 <TextView
                     android:id="@+id/followersCount"
@@ -68,7 +103,7 @@
                     android:id="@+id/followersTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="9dp"
+                    android:layout_marginTop="10dp"
                     android:fontFamily="@font/satoshibold"
                     android:text="Followers"
                     android:textColor="@color/white"
@@ -96,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/satoshibold"
-                    android:text="Profile"
+                    android:text="Your Profile"
                     android:textColor="@color/white"
                     android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -109,8 +144,8 @@
                     android:layout_width="120dp"
                     android:layout_height="98dp"
                     android:layout_marginTop="8dp"
-                    android:src="@mipmap/melisa"
                     android:scaleType="centerCrop"
+                    android:src="@mipmap/melisa"
                     app:civ_border_color="@color/icon_secondary"
                     app:civ_border_width="2dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -140,7 +175,7 @@
                     android:translationZ="320dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/profileText"
-                    app:tint="#A68C8C" />
+                    app:tint="#FFFFFF" />
 
                 <ImageView
                     android:id="@+id/backButton"
@@ -154,7 +189,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/artistNameTextView"
