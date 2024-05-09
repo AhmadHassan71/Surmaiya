@@ -4,6 +4,7 @@ import BottomNavigationHelper
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.smd.surmaiya.Fragments.EditProfileFragment
+import com.google.android.material.navigation.NavigationView
 import com.smd.surmaiya.Fragments.HomeFragment
 import com.smd.surmaiya.Fragments.PlayerBottomSheetDialogFragment
 import com.smd.surmaiya.Fragments.SearchFragment
@@ -36,6 +38,7 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
         BottomNavigationHelper(this).loadFragment(EditProfileFragment())
         BottomNavigationHelper(this).setUpBottomNavigation()
+
 
         val musicPlayer = findViewById<View>(R.id.music_player)
         musicPlayer.setOnClickListener {

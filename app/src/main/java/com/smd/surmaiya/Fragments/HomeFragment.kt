@@ -7,7 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -62,6 +65,14 @@ class HomeFragment : Fragment() {
         prepareTopPlaylists()
 
         setUpOnClickListeners()
+
+        SideBarNavigationHelper(requireActivity()).openDrawerOnMenuClick(view, requireActivity())
+        SideBarNavigationHelper(requireActivity()).setupNavigationView(requireActivity().findViewById(R.id.drawer_layout))
+        SideBarNavigationHelper(requireActivity()).prepareSideBar(requireActivity())
+//         use with these names
+//        val menuOpener = view.findViewById<ImageView>(R.id.menu_opener)
+//        val drawerLayout = activity?.findViewById<DrawerLayout>(R.id.drawer_layout)
+
 
     }
 

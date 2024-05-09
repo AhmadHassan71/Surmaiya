@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="45dp"
+        android:layout_margin="20dp"
+        app:cardBackgroundColor="@color/add_album"
+        >
+    <ImageView
+        android:id="@+id/profilePic"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="start"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/artist_cover" />
+    </androidx.cardview.widget.CardView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:text="User Name"
+            android:textSize="26sp"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:textColor="@color/black"
+            android:layout_marginTop="20dp"
+            />
+        <TextView
+            android:id="@+id/viewProfile"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:text="View Profile"
+            android:textSize="16sp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="#3E3E3E"
+            />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ScrollView
+
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/nav_view"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            app:itemBackground="@drawable/drawer_item_background"
+            app:itemIconTint="@color/black"
+            app:itemTextColor="@color/black"
+            app:menu="@menu/navigation_menu_drawer" />
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/logoutTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        android:textSize="18sp"
+        android:drawableStart="@drawable/mdi_logout"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:textColor="#CD3535"
+        android:layout_marginStart="30dp"
+        android:layout_marginBottom="10dp"/>
+
+</LinearLayout>

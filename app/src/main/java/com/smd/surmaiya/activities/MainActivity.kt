@@ -21,31 +21,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if (UserManager.getInstance().getUserLoggedInSP(getSharedPreferences("USER_LOGIN", MODE_PRIVATE))) {
+//        if(UserManager.getInstance().getUserLoggedInSP(getSharedPreferences("USER_LOGIN", MODE_PRIVATE))){
+//            Navigator.navigateToActivity(this@MainActivity,HomeActivity::class.java)
+//            finish()
+//        }
+//        else {
+//        Handler().postDelayed(Runnable {
+//
+//            NotificationsManager.getInstance().createNotificationChannel(this)
+//            startActivity(Intent(this@MainActivity, LoginOrSignupActivity::class.java))
+//
+//            finish()
+//        }, MainActivity.SPLASH_DELAY)
+//        }
 
-            UserManager.getInstance()
-                .getUserEmailSP(getSharedPreferences("USER_LOGIN", MODE_PRIVATE))?.let {
-
-                val intent = Intent(this, HomeActivity::class.java)
-
-                UserManager.getInstance().fetchAndSetCurrentUser(it)
-                {
-                    //add logged in boolean to shared preferences
-                    startActivity(intent)
-                    finish()
-                }
-
-            }
-        }
-        else {
-        Handler().postDelayed(Runnable {
-
-            NotificationsManager.getInstance().createNotificationChannel(this)
-            startActivity(Intent(this@MainActivity, LoginOrSignupActivity::class.java))
-
-            finish()
-        }, MainActivity.SPLASH_DELAY)
-        }
+        startActivity(Intent(this@MainActivity, HomeActivity::class.java))
     }
 
     companion object {

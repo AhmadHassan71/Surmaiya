@@ -3,18 +3,28 @@
 
     <item android:id="@+id/settingsButton"
         android:title="Settings"
+        android:icon="@drawable/settings"
         />
 
     <item android:id="@+id/monthlyRankingsButton"
         android:title="Monthly Rankings"
+        android:icon="@drawable/rankings"
+        android:iconTint="@color/black"
+
         />
     <item android:id="@+id/popularPLaylistsButton"
         android:title="Popular Playlists"
+        android:icon="@drawable/rankings"
+        android:iconTint="@color/black"
         />
 
     <item android:id="@+id/notificataionsButton"
         android:title="Notifications"
+        android:icon = "@drawable/notifications"
+        android:iconTint="@color/black"
 
         />
+
+
 
 </menu>
