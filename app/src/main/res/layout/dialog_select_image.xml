@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:padding="5dp"
+        android:id="@+id/galleryText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:textSize="18sp"
+        android:text="Select photo from gallery" />
+
+    <TextView
+        android:padding="5dp"
+        android:id="@+id/photoCameraText"
+        android:textColor="@color/black"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:layout_width="match_parent"
+        android:textSize="18sp"
+        android:layout_height="wrap_content"
+        android:text="Capture photo from camera" />
+
+</LinearLayout>

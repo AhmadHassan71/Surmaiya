@@ -55,5 +55,19 @@ object FirebaseDatabaseManager {
 
     }
 
+    fun updateUser(user: User, callback: (Boolean) -> Unit) {
+        val myRef = database.getReference("users")
+
+        myRef.child(user.id).setValue(user)
+            .addOnSuccessListener {
+                Log.d("Updating User In Database", "User data updated successfully")
+                callback(true)
+            }
+            .addOnFailureListener { e ->
+                Log.e(ContentValues.TAG, "Error updating user data: ${e.message}")
+                callback(false)
+            }
+    }
+
 }
 

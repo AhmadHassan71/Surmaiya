@@ -1,20 +1,30 @@
 package com.smd.surmaiya.Fragments
 
+import android.app.Activity
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.smd.surmaiya.HelperClasses.CustomToastMaker
+import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
+import com.smd.surmaiya.ManagerClasses.FirebaseStorageManager
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
+import java.io.ByteArrayOutputStream
 import java.util.Collections
 import java.util.Locale
 
@@ -26,6 +36,8 @@ class EditProfileFragment : Fragment() {
     private lateinit var emailEditText: EditText
     private lateinit var countrySpinner: Spinner
     private lateinit var imageView17: ImageView
+    private lateinit var userProfilePicture:ImageView
+    private lateinit var saveChangesButton:Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +53,7 @@ class EditProfileFragment : Fragment() {
         setUpOnClickListeners()
         setupCountrySpinner()
         setUserDetails()
+
     }
 
     private fun initializeViews(view: View) {
@@ -49,6 +62,8 @@ class EditProfileFragment : Fragment() {
         phoneEditText= view.findViewById(R.id.birthEditText)
         countrySpinner = view.findViewById(R.id.countryEditText)
         imageView17 = view.findViewById(R.id.imageView17)
+        userProfilePicture=view.findViewById(R.id.imageView16)
+        saveChangesButton=view.findViewById(R.id.loginButton)
     }
 
     private fun setUserDetails()
@@ -59,6 +74,10 @@ class EditProfileFragment : Fragment() {
         phoneEditText.setText(user?.phone)
         countrySpinner.setSelection(countryList().indexOf(user?.country))
 
+        Glide.with(this)
+            .load(UserManager.getCurrentUser()?.profilePictureUrl)
+            .placeholder(R.mipmap.melisa)
+            .into((userProfilePicture))
 
     }
 
@@ -99,20 +118,77 @@ class EditProfileFragment : Fragment() {
         imageView17.setOnClickListener {
             showPictureDialog()
         }
+
+        saveChangesButton.setOnClickListener {
+            saveChanges()
+        }
+    }
+
+    private fun saveChanges() {
+        val user = UserManager.getCurrentUser()
+
+        val newName = nameEditText.text.toString()
+        val newEmail = emailEditText.text.toString()
+        val newPhone = phoneEditText.text.toString()
+        val newCountry = countrySpinner.selectedItem.toString()
+
+        var changesMade = false
+
+        if (user?.name != newName && newName.isNotEmpty() && !newName.matches(Regex(".*\\d.*"))) {
+            user?.name = newName
+            changesMade = true
+        }
+
+        if (user?.email != newEmail && android.util.Patterns.EMAIL_ADDRESS.matcher(newEmail).matches()) {
+            user?.email = newEmail
+            changesMade = true
+        }
+
+        if (user?.phone != newPhone && newPhone.matches(Regex("^[+]?[0-9]{10,13}\$"))) {
+            user?.phone = newPhone
+            changesMade = true
+        }
+
+        if (user?.country != newCountry && newCountry != "Select A Country") {
+            user?.country = newCountry
+            changesMade = true
+        }
+
+        if (changesMade) {
+            if (user != null) {
+                FirebaseDatabaseManager.getInstance().updateUser(user) { success ->
+                    if (success) {
+                        CustomToastMaker().showToast(requireContext(), "Changes saved successfully")
+                    } else {
+
+                        CustomToastMaker().showToast(requireContext(), "Failed to save changes")
+                    }
+                }
+            }
+        } else {
+            // Show custom toast message
+           CustomToastMaker().showToast(requireContext(), "No changes made")
+        }
     }
 
     private fun showPictureDialog() {
-        val pictureDialog = AlertDialog.Builder(activity)
-        pictureDialog.setTitle("Select Action")
-        val pictureDialogItems = arrayOf("Select photo from gallery", "Capture photo from camera")
-        pictureDialog.setItems(pictureDialogItems
-        ) { _, which ->
-            when (which) {
-                0 -> choosePhotoFromGallery()
-                1 -> takePhotoFromCamera()
-            }
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_select_image)
+
+        val btnGallery = dialog.findViewById<TextView>(R.id.galleryText)
+        val btnCamera = dialog.findViewById<TextView>(R.id.photoCameraText)
+
+        btnGallery.setOnClickListener {
+            choosePhotoFromGallery()
+            dialog.dismiss()
         }
-        pictureDialog.show()
+
+        btnCamera.setOnClickListener {
+            takePhotoFromCamera()
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun choosePhotoFromGallery() {
@@ -126,6 +202,61 @@ class EditProfileFragment : Fragment() {
     private fun takePhotoFromCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(intent, CAMERA)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            when (requestCode) {
+                GALLERY -> {
+                    val contentURI = data.data
+                    FirebaseStorageManager.uploadImage(contentURI!!) { imagePath ->
+                        UserManager.getCurrentUser()?.profilePictureUrl= imagePath
+                        FirebaseDatabaseManager.getInstance().updateUser(UserManager.getCurrentUser()!!)
+                        {
+                            // Show custom toast message
+                            if(it) {
+                                CustomToastMaker().showToast(
+                                    requireContext(),
+                                    "Profile picture updated successfully"
+                                )
+                                Glide.with(this)
+                                    .load(UserManager.getCurrentUser()?.profilePictureUrl)
+                                    .into(userProfilePicture)
+                            }
+                            else
+                                CustomToastMaker().showToast(requireContext(), "Failed to update profile picture")
+                        }
+                    }
+                }
+                CAMERA -> {
+                    val thumbnail = data.extras?.get("data") as Bitmap
+                    // getting bitmap path from bitmap
+                    val bytes = ByteArrayOutputStream()
+                    thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+                    val path = MediaStore.Images.Media.insertImage(context?.contentResolver, thumbnail, "Title", null)
+                    val contentURI = Uri.parse(path)
+                    FirebaseStorageManager.uploadImage(contentURI) { imagePath ->
+                        UserManager.getCurrentUser()?.profilePictureUrl = imagePath
+                        FirebaseDatabaseManager.getInstance().updateUser(UserManager.getCurrentUser()!!)
+                        {
+
+                            if(it) {
+                                CustomToastMaker().showToast(
+                                    requireContext(),
+                                    "Profile picture updated successfully"
+                                )
+                                Glide.with(this)
+                                    .load(UserManager.getCurrentUser()?.profilePictureUrl)
+                                    .into(userProfilePicture)
+                            }else
+                                CustomToastMaker().showToast(requireContext(), "Failed to update profile picture")
+                        }
+                    }
+                }
+            }
+        }
     }
 
     companion object {
