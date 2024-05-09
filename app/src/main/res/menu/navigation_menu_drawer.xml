@@ -2,19 +2,29 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/settingsButton"
-        android:title="Profile"
+        android:title="Settings"
+        android:icon="@drawable/settings"
         />
 
     <item android:id="@+id/monthlyRankingsButton"
-        android:title="Tasks"
+        android:title="Monthly Rankings"
+        android:icon="@drawable/rankings"
+        android:iconTint="@color/black"
+
         />
     <item android:id="@+id/popularPLaylistsButton"
-        android:title="Settings"
+        android:title="Popular Playlists"
+        android:icon="@drawable/rankings"
+        android:iconTint="@color/black"
         />
 
     <item android:id="@+id/notificataionsButton"
-        android:title="About"
+        android:title="Notifications"
+        android:icon = "@drawable/notifications"
+        android:iconTint="@color/black"
 
         />
+
+
 
 </menu>

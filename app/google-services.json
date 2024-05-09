@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "136008811213",
+    "firebase_url": "https://surmaiya-default-rtdb.firebaseio.com",
+    "project_id": "surmaiya",
+    "storage_bucket": "surmaiya.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:136008811213:android:e877a19aa650d6b7529f84",
+        "android_client_info": {
+          "package_name": "com.smd.surmaiya"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBT_iTKPlQSI3P25f8sske0C9ztBlI9RiE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

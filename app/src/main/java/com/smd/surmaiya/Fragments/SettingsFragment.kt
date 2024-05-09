@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.smd.surmaiya.HelperClasses.FragmentNavigationHelper
 import com.smd.surmaiya.HelperClasses.Navigator
+import com.smd.surmaiya.HelperClasses.SideBarNavigationHelper
 import com.smd.surmaiya.R
 import com.smd.surmaiya.activities.NotificationsActivity
 import com.smd.surmaiya.activities.ResetPasswordActivity
@@ -49,12 +50,14 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initializeViews()
         setUpOnClickListeners(requireActivity())
+        SideBarNavigationHelper(requireActivity()).openDrawerOnMenuClick(view, requireActivity())
+        SideBarNavigationHelper(requireActivity()).setupNavigationView(requireActivity().findViewById(R.id.drawer_layout))
     }
 
 
-    private lateinit var backButton: ImageView
+//    private lateinit var backButton: ImageView
     fun initializeViews() {
-        backButton = view?.findViewById(R.id.backButton)!!
+//        backButton = view?.findViewById(R.id.backButton)!!
 
     }
 
@@ -71,9 +74,9 @@ class SettingsFragment : Fragment() {
         view?.findViewById<View>(R.id.equalizerTextView)?.setOnClickListener {
             FragmentNavigationHelper(activity).loadFragment(EqualizerFragment())
         }
-        backButton.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
-        }
+//        backButton.setOnClickListener {
+//            requireActivity().supportFragmentManager.popBackStack()
+//        }
 
     }
 

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.smd.surmaiya.HelperClasses.SideBarNavigationHelper
 import com.smd.surmaiya.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -20,7 +21,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class LibraryFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private lateinit var backButton: ImageView
+//    private lateinit var backButton: ImageView
     private lateinit var addToPlaylist: ImageView
 
     override fun onCreateView(
@@ -35,17 +36,19 @@ class LibraryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initializeViews()
         setOnClickListeners()
+        SideBarNavigationHelper(requireActivity()).openDrawerOnMenuClick(view, requireActivity())
+        SideBarNavigationHelper(requireActivity()).setupNavigationView(requireActivity().findViewById(R.id.drawer_layout))
 
     }
     fun initializeViews(){
-        backButton=view?.findViewById(R.id.backButton)!!
+//        backButton=view?.findViewById(R.id.backButton)!!
         addToPlaylist=view?.findViewById(R.id.addToPlaylist)!!
     }
 
     fun setOnClickListeners(){
-        backButton.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
-        }
+//        backButton.setOnClickListener {
+//            requireActivity().supportFragmentManager.popBackStack()
+//        }
         addToPlaylist.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction().replace(R.id.fragment_container, AddToPlaylistFragment()).addToBackStack(null).commit()
         }

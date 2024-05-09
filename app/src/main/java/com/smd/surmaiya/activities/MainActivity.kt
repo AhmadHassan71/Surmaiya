@@ -7,7 +7,10 @@ import android.os.Handler
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.smd.surmaiya.Fragments.EditProfileFragment
+import com.smd.surmaiya.HelperClasses.Navigator
 import com.smd.surmaiya.ManagerClasses.NotificationsManager
+import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 
 
@@ -23,15 +26,18 @@ class MainActivity : AppCompatActivity() {
 //            finish()
 //        }
 //        else {
-        Handler().postDelayed(Runnable {
-
-            NotificationsManager.getInstance().createNotificationChannel(this)
-            startActivity(Intent(this@MainActivity, LoginOrSignupActivity::class.java))
-
-            finish()
-        }, MainActivity.SPLASH_DELAY)
+//        Handler().postDelayed(Runnable {
+//
+//            NotificationsManager.getInstance().createNotificationChannel(this)
+//            startActivity(Intent(this@MainActivity, LoginOrSignupActivity::class.java))
+//
+//            finish()
+//        }, MainActivity.SPLASH_DELAY)
 //        }
+
+        startActivity(Intent(this@MainActivity, HomeActivity::class.java))
     }
+
     companion object {
         private const val SPLASH_DELAY: Long = 2000 // 2 seconds
     }
