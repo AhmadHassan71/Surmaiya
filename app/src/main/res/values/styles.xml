@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="navBarTextStyle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/nav_bar_text_color</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+
     <style name="cr27_5">
 		<item name="cornerSize">27.5dp</item>
     </style>
@@ -37,6 +43,8 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
+    <!-- Base application theme. -->
 
+        <!-- Customize your theme here. -->
 
 </resources>
