@@ -48,7 +48,7 @@ class AddAlbumFragment : Fragment() {
 
     private lateinit var cancelButton: Button
     fun initializeViews() {
-        cancelButton = view?.findViewById(R.id.cancelButton)!!
+        cancelButton = requireView().findViewById(R.id.cancelButton)!!
 
     }
 

@@ -2,6 +2,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.smd.surmaiya.Fragments.AddAlbumFragment
 import com.smd.surmaiya.Fragments.HomeFragment
 import com.smd.surmaiya.Fragments.LibraryFragment
 import com.smd.surmaiya.Fragments.SearchFragment
@@ -40,6 +41,7 @@ class BottomNavigationHelper(private val activity: AppCompatActivity) {
                 }
                 R.id.navigation_upload -> {
                     Log.d("BottomNavigationHelper", "Upload Fragment loaded")
+                    loadFragment(AddAlbumFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
                 else -> return@setOnNavigationItemSelectedListener false
