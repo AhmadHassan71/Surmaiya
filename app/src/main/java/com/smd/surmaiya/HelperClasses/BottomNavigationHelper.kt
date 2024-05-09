@@ -5,12 +5,22 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.smd.surmaiya.Fragments.HomeFragment
 import com.smd.surmaiya.Fragments.LibraryFragment
 import com.smd.surmaiya.Fragments.SearchFragment
+import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
+import com.smd.surmaiya.itemClasses.UserType
 
 class BottomNavigationHelper(private val activity: AppCompatActivity) {
 
     fun setUpBottomNavigation() {
+
         val bottomNavigationView = activity.findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
+
+        val currentUser = UserManager.getCurrentUser()
+        val menu = bottomNavigationView.menu
+        val artistItem = menu.findItem(R.id.navigation_upload)
+        artistItem.isVisible = currentUser?.userType == UserType.ARTIST
+
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
@@ -26,6 +36,10 @@ class BottomNavigationHelper(private val activity: AppCompatActivity) {
                 R.id.navigation_library -> {
                     loadFragment(LibraryFragment())
                     Log.d("BottomNavigationHelper", "Library Fragment loaded")
+                    return@setOnNavigationItemSelectedListener true
+                }
+                R.id.navigation_upload -> {
+                    Log.d("BottomNavigationHelper", "Upload Fragment loaded")
                     return@setOnNavigationItemSelectedListener true
                 }
                 else -> return@setOnNavigationItemSelectedListener false
