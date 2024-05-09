@@ -26,7 +26,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class LibraryFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private lateinit var backButton: ImageView
+//    private lateinit var backButton: ImageView
     private lateinit var addToPlaylist: ImageView
     private lateinit var filterRecyclerView: RecyclerView
     private lateinit var librarySongRecyclerView: RecyclerView
@@ -45,13 +45,15 @@ class LibraryFragment : Fragment() {
         initializeViews()
         setOnClickListeners()
         setUpRecyclerView()
+
         SideBarNavigationHelper(requireActivity()).openDrawerOnMenuClick(view, requireActivity())
         SideBarNavigationHelper(requireActivity()).setupNavigationView(requireActivity().findViewById(R.id.drawer_layout))
+        SideBarNavigationHelper(requireActivity()).openDrawerOnMenuClick(view, requireActivity())
 
     }
 
     fun initializeViews() {
-        backButton = view?.findViewById(R.id.backButton)!!
+//        backButton = view?.findViewById(R.id.backButton)!!
         addToPlaylist = view?.findViewById(R.id.addToPlaylist)!!
         filterRecyclerView = view?.findViewById(R.id.searchFilterRecyclerView)!!
 
@@ -87,9 +89,9 @@ class LibraryFragment : Fragment() {
     }
 
     fun setOnClickListeners() {
-        backButton.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
-        }
+//        backButton.setOnClickListener {
+//            requireActivity().supportFragmentManager.popBackStack()
+//        }
         addToPlaylist.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, AddToPlaylistFragment()).addToBackStack(null)
