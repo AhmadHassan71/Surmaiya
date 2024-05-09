@@ -1,13 +1,16 @@
 package com.smd.surmaiya.Fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.smd.surmaiya.R
+import com.smd.surmaiya.adapters.AlbumAddSongAdapter
+import com.smd.surmaiya.itemClasses.SongNew
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -23,6 +26,8 @@ class AddAlbumFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var cancelButton: Button
+    private lateinit var albumAddSongRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,17 +45,47 @@ class AddAlbumFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_add_album, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initializeViews()
-        setUpOnClickListeners()
-    }
 
-    private lateinit var cancelButton: Button
     fun initializeViews() {
         cancelButton = view?.findViewById(R.id.cancelButton)!!
-
+        albumAddSongRecyclerView = view?.findViewById(R.id.albumAddSongRecyclerView)!!
     }
+
+    fun setUpRecyclerView() {
+        // Create dummy data for testing
+        val albumItems = mutableListOf(
+
+            SongNew(
+                songName="Song 2",
+                artistName = "Artist 2",
+                songCoverImageResource="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwN1QCgcXpfMoVDku3LvtHv1xEi5IONNOp2z_Q4IGE2TA4GCm4EXxvN9B7keyJaeWLPLA&usqp=CAU"
+            ),
+            SongNew(
+                songName="Song 2",
+                artistName = "Artist 2",
+                songCoverImageResource="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwN1QCgcXpfMoVDku3LvtHv1xEi5IONNOp2z_Q4IGE2TA4GCm4EXxvN9B7keyJaeWLPLA&usqp=CAU"
+            ),
+            SongNew(
+                songName="Song 2",
+                artistName = "Artist 2",
+                songCoverImageResource="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwN1QCgcXpfMoVDku3LvtHv1xEi5IONNOp2z_Q4IGE2TA4GCm4EXxvN9B7keyJaeWLPLA&usqp=CAU"
+            ),
+
+            )
+
+        // Set the adapter for the RecyclerView
+        albumAddSongRecyclerView.adapter = AlbumAddSongAdapter(albumItems)
+
+        // Set the layout manager for the RecyclerView
+        albumAddSongRecyclerView.layoutManager = LinearLayoutManager(context)
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initializeViews() // Move this line here
+        setUpOnClickListeners()
+        setUpRecyclerView()
+    }
+
 
     fun setUpOnClickListeners() {
 

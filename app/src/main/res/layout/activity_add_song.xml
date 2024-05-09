@@ -195,8 +195,8 @@
 				android:textColor="#FFFFFF"
 				android:textSize="20sp" />
 
-			<TextView
-
+			<EditText
+				android:background="@null"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginHorizontal="82dp"
@@ -212,13 +212,15 @@
 				android:layout_marginHorizontal="62dp"
 				android:layout_marginBottom="25dp"
 				android:background="#FF8A9A9D"
-				android:orientation="vertical"></LinearLayout>
+				android:orientation="vertical">
 
-			<TextView
+			</LinearLayout>
 
+			<EditText
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginHorizontal="81dp"
+				android:background="@null"
 				android:layout_marginBottom="5dp"
 				android:text="Name of Artists"
 				android:textColor="#8A9A9D"

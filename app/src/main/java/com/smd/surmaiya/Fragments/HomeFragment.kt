@@ -99,7 +99,7 @@ class HomeFragment : Fragment() {
         }
 
         yourPlaylistTextView.setOnClickListener {
-            this.context?.let { it1 -> FragmentNavigationHelper(requireActivity()).loadFragment(SettingsFragment())}
+            this.context?.let { it1 -> FragmentNavigationHelper(requireActivity()).loadFragment(AddAlbumFragment())}
         }
 
     }
