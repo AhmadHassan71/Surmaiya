@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -14,11 +15,14 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import com.smd.surmaiya.Fragments.SettingsFragment
 import com.smd.surmaiya.Fragments.YourUserFragment
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.activities.LoginActivity
+import com.smd.surmaiya.activities.LoginOrSignupActivity
 import com.smd.surmaiya.itemClasses.UserType
 
 class SideBarNavigationHelper(private val activity: Activity) {
@@ -108,9 +112,27 @@ class SideBarNavigationHelper(private val activity: Activity) {
 
     private fun handleLogout(activity: Activity){
         val logout = activity.findViewById<TextView>(R.id.logoutTextView)
+
         logout.setOnClickListener {
-//            UserManager.logout()
-            val intent = Intent(activity, LoginActivity::class.java)
+
+            val mAuth = FirebaseAuth.getInstance()
+
+            UserManager.saveUserLoggedInSP(false, activity.getSharedPreferences("USER_LOGIN",
+                AppCompatActivity.MODE_PRIVATE
+            ))
+            UserManager.saveUserEmailSP("", activity.getSharedPreferences("USER_LOGIN",
+                AppCompatActivity.MODE_PRIVATE
+            ))
+            mAuth.signOut()
+
+            FirebaseMessaging.getInstance().deleteToken().addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Log.d("Logout", "Token deleted")
+                }
+            }
+
+
+            val intent = Intent(activity, LoginOrSignupActivity::class.java)
             ContextCompat.startActivity(activity, intent, null)
         }
     }
