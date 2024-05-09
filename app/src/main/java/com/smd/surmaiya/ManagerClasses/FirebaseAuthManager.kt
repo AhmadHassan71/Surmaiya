@@ -4,7 +4,10 @@ import android.content.ContentValues
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.smd.surmaiya.itemClasses.User
 import com.google.firebase.messaging.FirebaseMessaging
 import com.smd.surmaiya.HelperClasses.CustomToastMaker
@@ -46,6 +49,42 @@ class FirebaseAuthManager(private val activity: AppCompatActivity) {
                 }
             }
 
+    }
+
+    fun checkEmailAvailability(email: String, completion: (Boolean) -> Unit) {
+        val database = FirebaseDatabase.getInstance()
+        val usersRef = database.getReference("users")
+
+        usersRef.orderByChild("email").equalTo(email).addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val isAvailable = snapshot.childrenCount.toInt() == 0
+                completion(isAvailable)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle database error
+                completion(false)
+            }
+        })
+    }
+
+    fun checkPhoneAvailability(phone: String, completion: (Boolean) -> Unit) {
+        val database = FirebaseDatabase.getInstance()
+        val usersRef = database.getReference("users")
+
+        usersRef.orderByChild("phone").equalTo(phone).addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val isAvailable = snapshot.childrenCount.toInt() == 0
+                completion(isAvailable)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle database error
+                completion(false)
+            }
+        })
     }
 
     fun addFcmTokenToUser(

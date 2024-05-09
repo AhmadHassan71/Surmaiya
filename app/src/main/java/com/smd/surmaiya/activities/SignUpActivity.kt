@@ -46,6 +46,7 @@ import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.smd.surmaiya.HelperClasses.CustomToastMaker
 import com.smd.surmaiya.HelperClasses.Navigator
+import com.smd.surmaiya.ManagerClasses.FirebaseAuthManager
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
@@ -231,6 +232,25 @@ class SignUpActivity : AppCompatActivity() {
             confirmPasswordEditText.requestFocus()
             CallBack(false)
             return
+        }
+
+        FirebaseAuthManager(this).checkEmailAvailability(email) { isEmailAvailable ->
+            if (!isEmailAvailable) {
+                emailEditText.error = "Email is already in use"
+                emailEditText.requestFocus()
+                CallBack(false)
+            }
+            return@checkEmailAvailability
+        }
+
+        FirebaseAuthManager(this).checkPhoneAvailability(phoneNumber) { isPhoneAvailable->
+            if (!isPhoneAvailable) {
+                emailEditText.error = "Email is already in use"
+                emailEditText.requestFocus()
+                CallBack(false)
+
+            }
+            return@checkPhoneAvailability
         }
 
         CallBack(true)
