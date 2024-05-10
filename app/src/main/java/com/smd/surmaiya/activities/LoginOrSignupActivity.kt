@@ -1,47 +1,64 @@
 package com.smd.surmaiya.activities
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.smd.surmaiya.HelperClasses.Navigator
 import com.smd.surmaiya.R
 
 class LoginOrSignupActivity : AppCompatActivity() {
     private lateinit var loginTextView: TextView
     private lateinit var signUpButton: Button
+    private val REQUEST_BLUETOOTH_PERMISSIONS = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_or_signup)
-        val loginTextView = findViewById<TextView>(R.id.LoginTextView)
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_CONNECT), REQUEST_BLUETOOTH_PERMISSIONS)
+        }
 
         initalizeViews()
         setUpOnClickListeners()
     }
 
-    fun initalizeViews()
-    {
+    fun initalizeViews() {
         loginTextView = findViewById(R.id.LoginTextView)
         signUpButton = findViewById(R.id.signUpButton)
     }
 
-    fun setUpOnClickListeners()
-    {
-        loginTextView.setOnClickListener{
-            startActivity(intent)
+    fun setUpOnClickListeners() {
+        loginTextView.setOnClickListener {
             Navigator.navigateToActivity(this, LoginActivity::class.java)
-
         }
-        val signUpButton = findViewById<Button>(R.id.signUpButton)
 
-        signUpButton.setOnClickListener{
-            val intent = Intent(this, SignUpActivity::class.java)
-            startActivity(intent)
+        signUpButton.setOnClickListener {
             Navigator.navigateToActivity(this, SignUpActivity::class.java)
         }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_BLUETOOTH_PERMISSIONS -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    // permissions were granted, continue with your operation
+                } else {
+                    // permissions were denied, disable the functionality that depends on these permissions.
+                }
+                return
+            }
+            else -> {
+                // Ignore all other requests.
+            }
+        }
+    }
 }

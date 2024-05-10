@@ -59,6 +59,16 @@ class MusicService : Service() {
         exoPlayer?.playWhenReady = false
     }
 
+    fun resumeSong() {
+        exoPlayer?.playWhenReady = true
+    }
+
+    fun getProgress(): Int {
+        val duration = exoPlayer?.duration ?: 0
+        val position = exoPlayer?.currentPosition ?: 0
+        return ((position * 100 / duration)/2).toInt()
+    }
+
     fun stopMusic() {
         exoPlayer?.stop()
     }

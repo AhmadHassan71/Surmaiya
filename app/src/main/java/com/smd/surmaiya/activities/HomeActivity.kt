@@ -9,6 +9,7 @@ import com.smd.surmaiya.Fragments.HomeFragment
 import com.smd.surmaiya.Fragments.PlayerBottomSheetDialogFragment
 import com.smd.surmaiya.ManagerClasses.MusicServiceManager
 import com.smd.surmaiya.R
+import com.smd.surmaiya.itemClasses.Song
 
 class HomeActivity : AppCompatActivity() {
 
@@ -17,10 +18,7 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        MusicServiceManager.bindService(this) {
-            val songUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/surmaiya.appspot.com/o/Albums%2F-NxT2KMTSCLHqgBYpBCj%2F5a9cc003-ad95-4e95-b157-1cdc94946806%2FSongs%2F06ff2cb6-3f1f-403c-ac03-b0e5cd98bb9d.mp3?alt=media&token=ec0729e0-66a9-4fa9-b0c4-64103ec619fa")
-            MusicServiceManager.playSong(songUri)
-        }
+        MusicServiceManager.bindService(this)
 
         BottomNavigationHelper(this).loadFragment(HomeFragment())
         BottomNavigationHelper(this).setUpBottomNavigation()
@@ -35,7 +33,23 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun showPlayerBottomSheetDialog() {
+        val song = Song(
+            id = "songId",
+            songName = "Dawn Fm",
+            artist = "The Weeknd",
+            album = "Dawn",
+            duration = "songDuration",
+            coverArtUrl = "https://firebasestorage.googleapis.com/v0/b/surmaiya.appspot.com/o/images%2F7ab62641-54ad-44a1-b7e3-77274463ce93?alt=media&token=186691b8-4444-4521-bfe4-2c851157e934",
+            songUrl = "https://firebasestorage.googleapis.com/v0/b/surmaiya.appspot.com/o/Albums%2F-NxSBbl5FJxYcIbgjYzK%2Fd46f24fd-5e32-495a-b21f-958f79a1e55d%2FSongs%2F5f9289cf-bcee-4fd7-8194-41b92a3bcdca.mp3?alt=media&token=17723146-5bd6-465e-9dd6-6d0456160416",
+            releaseDate = "releaseDate",
+            numListeners = 0,
+            genres = listOf("genre1", "genre2"),
+            albumName = "albumName"
+        )
         val playerBottomSheetDialogFragment = PlayerBottomSheetDialogFragment()
+        val bundle = Bundle()
+        bundle.putParcelable("song", song)
+        playerBottomSheetDialogFragment.arguments = bundle
         playerBottomSheetDialogFragment.show(supportFragmentManager, playerBottomSheetDialogFragment.tag)
     }
 

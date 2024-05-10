@@ -14,17 +14,14 @@ object MusicServiceManager {
     private var musicService: MusicService? = null
     private var isBound = false
     private lateinit var serviceConnection: ServiceConnection
-    private var onServiceConnected: (() -> Unit)? = null
 
-    fun bindService(context: Context, onServiceConnected: (() -> Unit)? = null) {
-        this.onServiceConnected = onServiceConnected
+    fun bindService(context: Context) {
         if (!isBound) {
             serviceConnection = object : ServiceConnection {
                 override fun onServiceConnected(className: ComponentName, service: IBinder) {
                     val binder = service as MusicService.MusicBinder
                     musicService = binder.getService()
                     isBound = true
-                    this@MusicServiceManager.onServiceConnected?.invoke()
                 }
 
                 override fun onServiceDisconnected(arg0: ComponentName) {
@@ -50,6 +47,15 @@ object MusicServiceManager {
         Log.d("playSong musicservice manager", "playSong: , ${uri.toString()}")
         musicService?.playSong(uri)
     }
+
+    fun pauseSong() {
+        musicService?.pauseMusic()
+    }
+
+    fun resumeSong() {
+        musicService?.resumeSong()
+    }
+
     fun getService(): MusicService? {
         return musicService
     }
