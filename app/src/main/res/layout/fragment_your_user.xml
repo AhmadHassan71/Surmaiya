@@ -123,9 +123,9 @@
                     android:text="melissajohns@gmail.com"
                     android:textColor="@color/white"
                     android:textSize="15sp"
-                    app:layout_constraintEnd_toEndOf="@+id/otherUserProfilePicture"
-                    app:layout_constraintStart_toStartOf="@+id/otherUserProfilePicture"
-                    app:layout_constraintTop_toBottomOf="@+id/otherUserProfilePicture" />
+                    app:layout_constraintEnd_toEndOf="@+id/yourUserProfilePicture"
+                    app:layout_constraintStart_toStartOf="@+id/yourUserProfilePicture"
+                    app:layout_constraintTop_toBottomOf="@+id/yourUserProfilePicture" />
 
                 <TextView
                     android:id="@+id/profileText"
@@ -142,7 +142,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/otherUserProfilePicture"
+                    android:id="@+id/yourUserProfilePicture"
                     android:layout_width="120dp"
                     android:layout_height="98dp"
                     android:layout_marginTop="8dp"
@@ -164,8 +164,8 @@
                     android:text="Melissa Johns"
                     android:textColor="@color/white"
                     android:textSize="24sp"
-                    app:layout_constraintEnd_toEndOf="@+id/otherUserProfilePicture"
-                    app:layout_constraintStart_toStartOf="@+id/otherUserProfilePicture"
+                    app:layout_constraintEnd_toEndOf="@+id/yourUserProfilePicture"
+                    app:layout_constraintStart_toStartOf="@+id/yourUserProfilePicture"
                     app:layout_constraintTop_toBottomOf="@+id/userEmail" />
 
                 <ImageView

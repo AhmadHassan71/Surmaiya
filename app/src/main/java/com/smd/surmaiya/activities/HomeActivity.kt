@@ -19,6 +19,7 @@ import com.smd.surmaiya.Fragments.HomeFragment
 import com.smd.surmaiya.Fragments.PlayerBottomSheetDialogFragment
 import com.smd.surmaiya.Fragments.SearchFragment
 import com.smd.surmaiya.HelperClasses.Navigator
+import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.adapters.ListItemAdapter
 import com.smd.surmaiya.adapters.PlaylistAdapter
 import com.smd.surmaiya.adapters.RecentlyPlayedAdapter
@@ -38,6 +39,7 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
         BottomNavigationHelper(this).loadFragment(HomeFragment())
         BottomNavigationHelper(this).setUpBottomNavigation()
+
 
         val musicPlayer = findViewById<View>(R.id.music_player)
         musicPlayer.setOnClickListener {

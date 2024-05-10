@@ -5,6 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import com.bumptech.glide.Glide
+import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -38,6 +42,46 @@ class YourUserFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_your_user, container, false)
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        prepareClickListeners(view)
+        prepareUserInformation(view)
+
+
+    }
+
+    private fun prepareClickListeners(view: View) {
+        val backButton = view.findViewById<ImageView>(R.id.backButton)
+        backButton.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
+        val editProfileButton = view.findViewById<ImageView>(R.id.dotsButton)
+        editProfileButton.setOnClickListener {
+            val editProfileFragment = EditProfileFragment()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, editProfileFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+    }
+
+    private fun prepareUserInformation(view: View) {
+        val profilePic = view.findViewById<ImageView>(R.id.yourUserProfilePicture)
+        Glide.with(requireActivity())
+            .load(UserManager.getCurrentUser()?.profilePictureUrl)
+            .into(profilePic)
+
+        val username = view.findViewById<TextView>(R.id.username)
+        username.text = UserManager.getCurrentUser()?.name
+
+        val email = view.findViewById<TextView>(R.id.userEmail)
+        email.text = UserManager.getCurrentUser()?.email
+
     }
 
     companion object {

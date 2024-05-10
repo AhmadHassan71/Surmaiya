@@ -106,7 +106,13 @@ class SideBarNavigationHelper(private val activity: Activity) {
     private fun handleViewProfile(activity: Activity){
         val viewProfile = activity.findViewById<TextView>(R.id.viewProfile)
         viewProfile.setOnClickListener {
-            FragmentHelper((activity as AppCompatActivity).supportFragmentManager, activity).loadFragment(YourUserFragment())
+            val fragmentHelper = FragmentHelper((activity as AppCompatActivity).supportFragmentManager, activity)
+            // close the drawer after a delay
+            fragmentHelper.closeDrawerWithDelay(activity.findViewById<DrawerLayout>(R.id.drawer_layout), 300)
+            Handler(Looper.getMainLooper()).postDelayed({
+
+                fragmentHelper.loadFragment(YourUserFragment())
+            }, 300)
         }
     }
 

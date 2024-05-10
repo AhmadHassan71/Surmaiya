@@ -2,6 +2,7 @@ package com.smd.surmaiya.ManagerClasses
 
 import android.net.Uri
 import android.util.Log
+import com.google.android.gms.tasks.Task
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.util.*
@@ -42,4 +43,38 @@ object FirebaseStorageManager {
                 Log.e("FirebaseStorageManager", "Image upload failed: ${it.message}")
             }
     }
+    fun uploadToFirebaseStorage(filePath: Uri, path: String): String {
+        Log.d("AddSongFragment", "Uploading to Firebase Storage")
+
+        // Create a storage reference
+        val storageRef = FirebaseStorage.getInstance().reference.child(path)
+
+        var downloadUrl =""
+
+        // Upload the file
+        val uploadTask = storageRef.putFile(filePath).addOnSuccessListener {
+            /// Handle successful uploads
+            Log.d("AddSongFragment", "Upload succeeded")
+            //get download URL
+            storageRef.downloadUrl.addOnSuccessListener {
+                downloadUrl=it.toString()
+            }.addOnFailureListener {
+                Log.d("AddSongFragment", "Failed to get download URL")
+            }
+        }
+
+        // Register observers to listen for when the download is done or if it fails
+        uploadTask.addOnFailureListener {
+            // Handle unsuccessful uploads
+            Log.d("AddSongFragment", "Upload failed")
+        }.addOnSuccessListener { taskSnapshot ->
+            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+            Log.d("AddSongFragment", "Upload succeeded")
+        }
+
+        return downloadUrl
+
+    }
+
+
 }

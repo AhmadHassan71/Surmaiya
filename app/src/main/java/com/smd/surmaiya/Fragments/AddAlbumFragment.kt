@@ -47,9 +47,11 @@ class AddAlbumFragment : Fragment() {
 
 
     fun initializeViews() {
+
         cancelButton = view?.findViewById(R.id.cancelButton)!!
         albumAddSongRecyclerView = view?.findViewById(R.id.albumAddSongRecyclerView)!!
     }
+
 
     fun setUpRecyclerView() {
         // Create dummy data for testing
