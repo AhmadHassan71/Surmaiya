@@ -5,11 +5,12 @@ data class Song(
     val id: String,
     val songName: String,
     val artist:String,
-    val album: String,
+    var album: String,
     val duration: String,
-    val coverArtUrl:String,
-    val songUrl: String,
+    var coverArtUrl:String,
+    var songUrl: String,
     val releaseDate: String,
     val numListeners: Int,
-    val genres: List<String>
+    val genres: List<String>,
+    var albumName: String
 )

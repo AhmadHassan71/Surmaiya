@@ -2,7 +2,9 @@ package com.smd.surmaiya.Fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,6 +16,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.Task
 import com.google.firebase.storage.FirebaseStorage
@@ -22,6 +25,10 @@ import com.smd.surmaiya.ManagerClasses.FirebaseStorageManager.uploadToFirebaseSt
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.itemClasses.Song
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.UUID
+import java.util.concurrent.TimeUnit
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,7 +44,7 @@ class AddSongFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    private var callback: OnSongCreatedCallback? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -53,6 +60,7 @@ class AddSongFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_add_song, container, false)
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeViews()
@@ -61,8 +69,9 @@ class AddSongFragment : Fragment() {
     }
 
     private lateinit var cancelButton: Button
-    private lateinit var songUrl: String
-    private lateinit var coverArtUrl: String
+    private var songUrl: Uri = Uri.EMPTY
+    private var coverArtUrl: Uri= Uri.EMPTY
+    @RequiresApi(Build.VERSION_CODES.O)
     fun initializeViews() {
         cancelButton = view?.findViewById(R.id.cancelButton)!!
 
@@ -90,35 +99,74 @@ class AddSongFragment : Fragment() {
 
         val createButton = view?.findViewById<Button>(R.id.createButton)
         createButton?.setOnClickListener {
-            createSong()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Log.d("AddSongFragment", "Song created")
+                createSong()
+            }
         }
 
     }
 
+    interface OnSongCreatedCallback {
+        fun onSongCreated(song: Song)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun createSong() {
         val songName = view?.findViewById<EditText>(R.id.songName)
         val songArtist = view?.findViewById<EditText>(R.id.songArtists)
-//        val songGenre = view?.findViewById<EditText>(R.id.songGenre)
-//        val songDuration = view?.findViewById<EditText>(R.id.songDuration)
 
-        val songNameText = songName?.text.toString()
-        val songArtistText = songArtist?.text.toString()
 
-//        val songAlbumText = songAlbum?.text.toString()
-//        val songGenreText = songGenre?.text.toString()
-//        val songYearText = songYear?.text.toString()
-//        val songDurationText = songDuration?.text.toString()
-//        val songDescriptionText = songDescription?.text.toString()
-//        val songLyricsText = songLyrics?.text.toString()
-
-        if (songNameText.isEmpty() || songArtistText.isEmpty()) {
+        if(songName?.text.toString().isEmpty()) {
+            CustomToastMaker().showToast(requireContext(), "Please enter a song name and artist")
             return
         }
 
+        val songNameText = songName?.text.toString()
+        val songArtistText = UserManager.getCurrentUser()!!.name + songArtist?.text.toString()
+        val genreText = requireView().findViewById<EditText>(R.id.songGenre)
+        val songUrlText = songUrl
+        val coverArtUrlText = coverArtUrl
+        val album=""
+        val duration= getDuration(songUrlText)
+        // get current release date
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        val releaseDate = LocalDate.now().format(formatter)
+        val numListeners = 0
+        val genres = genreText.text.toString().split(",")
+
+        val songId = UUID.randomUUID().toString()
+        val song = Song( songId ,songNameText,songArtistText,album,duration,coverArtUrlText.toString(),songUrlText.toString(),releaseDate,numListeners,genres,"")
+
+        Log.d("AddSongFragment", "Song created, $song , $songNameText, $songArtistText, $album, $duration, $coverArtUrlText, $songUrlText, $releaseDate, $numListeners, $genres")
+
+        if (songNameText.isEmpty() || songArtistText.isEmpty()) {
+           return CustomToastMaker().showToast(requireContext(), "Please enter a song name and artist")
+        }
+
+        callback?.onSongCreated(song)
+
         // Create song
 
-        val songToUpload = Song("id",songNameText,songArtistText,"album","duration","https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg","songUrl","releaseDate",0, listOf("genre"))
+//        val songToUpload = Song("id",songNameText,songArtistText,"album","duration","https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg","songUrl","releaseDate",0, listOf("genre"))
 
+    }
+
+    private fun getDuration(songUrlText: Uri): String {
+//        val mediaPlayer: MediaPlayer = MediaPlayer().apply {
+//            setDataSource(requireContext(), songUrlText)
+//            prepare()
+//        }
+//        val durationInMillis = mediaPlayer.duration.toLong()
+//        mediaPlayer.release()
+//
+//        val minutes = TimeUnit.MILLISECONDS.toMinutes(durationInMillis)
+//        val seconds = TimeUnit.MILLISECONDS.toSeconds(durationInMillis) -
+//                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(durationInMillis))
+
+//        return String.format("%02d:%02d", minutes, seconds)
+
+        return "3:00"
     }
 
     private fun uploadSongCover() {
@@ -152,12 +200,11 @@ class AddSongFragment : Fragment() {
             }
 
             // Upload the image to Firebase Storage
-            coverArtUrl = uploadToFirebaseStorage(filePath, "Songs/${UserManager.getCurrentUser()!!.id}/Song/${songName?.text.toString()}/$imageFileName")
-
+//            coverArtUrl = uploadToFirebaseStorage(filePath, "Songs/${UserManager.getCurrentUser()!!.id}/Song/${songName?.text.toString()}/$imageFileName")
+            coverArtUrl = filePath
             if (artworkImageView != null) {
                 Glide.with(this).load(filePath).into(artworkImageView)
             }
-
                 // Set the visibility of the ImageView and LinearLayout
                 artworkImageView?.visibility = View.VISIBLE
                 val addArtworkLayout = view?.findViewById<LinearLayout>(R.id.addArtworkLayout)
@@ -178,8 +225,9 @@ class AddSongFragment : Fragment() {
                 return
             }
 
+            songUrl = filePath
             // Upload the song to Firebase Storage
-            songUrl = uploadToFirebaseStorage(filePath, "Songs/${UserManager.getCurrentUser()!!.id}/Song/${songName?.text.toString()}/$songFileName")
+//            songUrl = uploadToFirebaseStorage(filePath, "Songs/${UserManager.getCurrentUser()!!.id}/Song/${songName?.text.toString()}/$songFileName")
 
         }
     }
@@ -235,12 +283,13 @@ class AddSongFragment : Fragment() {
         private const val PICK_AUDIO_REQUEST = 2
 
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(param1: String, param2: String, callback: OnSongCreatedCallback) =
             AddSongFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
                 }
+                this.callback = callback
             }
     }
 

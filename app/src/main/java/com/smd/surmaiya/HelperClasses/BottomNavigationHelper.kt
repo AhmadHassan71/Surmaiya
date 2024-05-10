@@ -42,7 +42,7 @@ class BottomNavigationHelper(private val activity: AppCompatActivity) {
                 }
                 R.id.navigation_upload -> {
                     Log.d("BottomNavigationHelper", "Upload Fragment loaded")
-                    loadFragment(AddSongFragment())
+                    loadFragment(AddAlbumFragment())
                     return@setOnNavigationItemSelectedListener true
                 }
                 else -> return@setOnNavigationItemSelectedListener false

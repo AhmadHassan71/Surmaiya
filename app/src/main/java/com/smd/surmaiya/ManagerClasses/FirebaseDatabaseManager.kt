@@ -4,8 +4,11 @@ import android.content.ContentValues
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.FirebaseDatabase
+import com.smd.surmaiya.itemClasses.Album
+import com.smd.surmaiya.itemClasses.Song
 import com.smd.surmaiya.itemClasses.User
 import java.security.MessageDigest
+import java.util.UUID
 
 
 object FirebaseDatabaseManager {
@@ -68,6 +71,27 @@ object FirebaseDatabaseManager {
                 Log.e(ContentValues.TAG, "Error updating user data: ${e.message}")
                 callback(false)
             }
+    }
+
+    fun uploadAlbumAndSongs(album: Album, songs: List<Song>) {
+        val database = FirebaseDatabase.getInstance()
+        // Upload the album
+        val albumRef = database.getReference("Albums").child(album.id)
+        albumRef.setValue(album)
+
+
+        // Upload the songs
+        for (song in songs) {
+            val songRef = database.getReference("Songs").child(song.id)
+            songRef.setValue(song)
+
+            // Update the genres
+            for (genre in song.genres) {
+                val genreId = UUID.randomUUID().toString()
+                val genreRef = database.getReference("Genres").child(genre).child("id")
+                genreRef.setValue(genreId)
+            }
+        }
     }
 
 }

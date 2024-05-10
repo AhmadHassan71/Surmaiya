@@ -3,6 +3,7 @@ package com.smd.surmaiya.ManagerClasses
 import android.net.Uri
 import android.util.Log
 import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.util.*
@@ -43,21 +44,20 @@ object FirebaseStorageManager {
                 Log.e("FirebaseStorageManager", "Image upload failed: ${it.message}")
             }
     }
-    fun uploadToFirebaseStorage(filePath: Uri, path: String): String {
+    fun uploadToFirebaseStorage(filePath: Uri, path: String, onSuccess: (String) -> Unit) {
         Log.d("AddSongFragment", "Uploading to Firebase Storage")
 
         // Create a storage reference
         val storageRef = FirebaseStorage.getInstance().reference.child(path)
 
-        var downloadUrl =""
-
         // Upload the file
         val uploadTask = storageRef.putFile(filePath).addOnSuccessListener {
-            /// Handle successful uploads
             Log.d("AddSongFragment", "Upload succeeded")
-            //get download URL
-            storageRef.downloadUrl.addOnSuccessListener {
-                downloadUrl=it.toString()
+
+            // Get the download URL
+            storageRef.downloadUrl.addOnSuccessListener { uri ->
+                Log.d("AddSongFragment", "Got download URL: $uri")
+                onSuccess(uri.toString()) // Call the onSuccess callback with the download URL
             }.addOnFailureListener {
                 Log.d("AddSongFragment", "Failed to get download URL")
             }
@@ -65,15 +65,8 @@ object FirebaseStorageManager {
 
         // Register observers to listen for when the download is done or if it fails
         uploadTask.addOnFailureListener {
-            // Handle unsuccessful uploads
             Log.d("AddSongFragment", "Upload failed")
-        }.addOnSuccessListener { taskSnapshot ->
-            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-            Log.d("AddSongFragment", "Upload succeeded")
         }
-
-        return downloadUrl
-
     }
 
 
