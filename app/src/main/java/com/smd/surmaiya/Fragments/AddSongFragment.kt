@@ -2,6 +2,7 @@ package com.smd.surmaiya.Fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -73,7 +74,8 @@ class AddSongFragment : Fragment() {
             uploadSongCover()
         }
 
-
+        val songFileTextView = requireView().findViewById<TextView>(R.id.songFile)
+        songFileTextView.isSelected = true
 
         val addSong = view?.findViewById<ImageView>(R.id.addSong)
         addSong?.setOnClickListener {
@@ -146,8 +148,44 @@ class AddSongFragment : Fragment() {
 
         if (requestCode == PICK_AUDIO_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
             val filePath = data.data!!
+            val songFileName = getFileName(filePath)
+            val songFileTextView = requireView().findViewById<TextView>(R.id.songFile)
+            // Set the text of the TextView to the songFileName's first 20 characters
+            val substringLength = if (songFileName?.length!! > 30) 30 else songFileName.length
+            songFileTextView.text =  songFileName
+//                buildString {
+//                append(songFileName.substring(0, substringLength))
+//                append("...")
+//            }
+            // Set the visibility of the TextView and ImageView
+            songFileTextView.visibility = View.VISIBLE
+
             // TODO: Upload the audio to Firebase Storage and get the download URL
         }
+    }
+
+    private fun getFileName(uri: Uri): String? {
+        var result: String? = null
+        if (uri.scheme == "content") {
+            val cursor = activity?.contentResolver?.query(uri, null, null, null, null)
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndexOrThrow(android.provider.OpenableColumns.DISPLAY_NAME))
+                }
+            } finally {
+                cursor?.close()
+            }
+        }
+        if (result == null) {
+            result = uri.path
+            val cut = result?.lastIndexOf('/')
+            if (cut != -1) {
+                if (cut != null) {
+                    result = result?.substring(cut + 1)
+                }
+            }
+        }
+        return result
     }
     fun setUpOnClickListeners() {
 
