@@ -96,7 +96,9 @@ class AddSongFragment : Fragment() {
 
         val createButton = view?.findViewById<Button>(R.id.createButton)
         createButton?.setOnClickListener {
-            createSong()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                createSong()
+            }
         }
 
     }
