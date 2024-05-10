@@ -156,3 +156,4 @@ class FirebaseAuthManager(private val activity: AppCompatActivity) {
             }
     }
 }
+

@@ -1,12 +1,27 @@
 package com.smd.surmaiya.Fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.google.android.material.imageview.ShapeableImageView
+import com.google.firebase.database.FirebaseDatabase
+import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager.fetchSongFromFirebase
+import com.smd.surmaiya.ManagerClasses.PlaylistManager
 import com.smd.surmaiya.R
+import com.smd.surmaiya.adapters.AlbumAddSongAdapter
+import com.smd.surmaiya.adapters.AlbumSongAdapter
+import com.smd.surmaiya.adapters.PlaylistAdapter
+import com.smd.surmaiya.itemClasses.Playlist
+import com.smd.surmaiya.itemClasses.Song
+import com.smd.surmaiya.itemClasses.SongNew
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -23,6 +38,13 @@ class PlaylistSearchFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var editPlaylist: ImageView
+    private lateinit var playlistSearch: ImageView
+    private lateinit var playlistRecyclerView: RecyclerView
+    private lateinit var playlistAdapter: AlbumAddSongAdapter
+    private lateinit var playlistCover: ShapeableImageView
+    private lateinit var playlistName: TextView
+    private lateinit var followers: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -43,7 +65,57 @@ class PlaylistSearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initializeViews()
         setUpOnClickListeners()
+        setupRecyclerView()
     }
+
+    private fun setupRecyclerView() {
+        val playlist = PlaylistManager.getPlaylists()
+
+        if (playlist != null) {
+            playlistCover = view?.findViewById(R.id.playlistCover)!!
+            playlistName = view?.findViewById(R.id.playlistName)!!
+            followers = view?.findViewById<TextView>(R.id.followers)!!
+
+            Glide.with(this)
+                .load(playlist.coverArtUrl)
+                .into(playlistCover)
+            playlistName.text = playlist.playlistName
+            followers.text = playlist.followers.toString() + " Followers"
+        }
+
+        val songsList = mutableListOf<Song>()
+        val songIds = extractSongIdsFromPlaylist(playlist)
+
+        playlistRecyclerView = view?.findViewById(R.id.playlistRecyclerView)!!
+        playlistRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        for (songId in songIds) {
+            fetchSongFromFirebase(songId.toString()) { song ->
+                songsList.add(song)
+                val newSongsList = mutableListOf<SongNew>()
+                for (song in songsList) {
+                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
+                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
+                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
+                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
+                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
+                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
+                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
+                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
+                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
+
+                }
+                playlistAdapter = AlbumAddSongAdapter(newSongsList)
+                playlistRecyclerView.adapter = playlistAdapter
+                playlistAdapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    private fun extractSongIdsFromPlaylist(playlist: Playlist?): List<Any> {
+        return playlist?.songids?.values?.toList() ?: listOf()
+    }
+
 
     private lateinit var backButton: ImageView
     fun initializeViews() {

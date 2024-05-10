@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.FirebaseDatabase
 import com.smd.surmaiya.itemClasses.Album
+import com.smd.surmaiya.itemClasses.Playlist
 import com.smd.surmaiya.itemClasses.Song
 import com.smd.surmaiya.itemClasses.User
 import java.security.MessageDigest
@@ -91,6 +92,44 @@ object FirebaseDatabaseManager {
                 val genreRef = database.getReference("Genres").child(genre).child("id")
                 genreRef.setValue(genreId)
             }
+        }
+    }
+
+    fun getPlaylists(callback: (List<Playlist>) -> Unit) {
+        val playlistRef = database.getReference("Playlist")
+        playlistRef.get().addOnSuccessListener { snapshot ->
+            val playlists = mutableListOf<Playlist>()
+            val objectsMap = snapshot.value as Map<*, *>
+            for ((_, value) in objectsMap) {
+                val playlistMap = value as Map<*, *>
+                val playlist = Playlist(
+                    playlistMap["playlsitId"] as String,
+                    playlistMap["playlistName"] as String,
+                    playlistMap["songids"] as Map<String, Any>,
+                    playlistMap["coverArtUrl"] as String,
+                    playlistMap["userIds"] as Map<String, Any>,
+                    (playlistMap["dateAdded"] as Map<String, Any>)["date"] as String,
+                    playlistMap["followers"] as Long,
+                    playlistMap["visibility"] as String
+                )
+                playlists.add(playlist)
+            }
+            callback(playlists)
+        }
+    }
+
+    fun fetchSongFromFirebase(songId: String, callback: (Song) -> Unit) {
+        val songRef = FirebaseDatabase.getInstance().getReference("Songs").child(songId)
+        songRef.get().addOnSuccessListener { snapshot ->
+            val song = snapshot.getValue(Song::class.java)
+            if (song != null) {
+                Log.d("FirebaseSong", "Fetched song with ID: $songId")
+                callback(song)
+            } else {
+                Log.d("FirebaseSong", "No song found with ID: $songId")
+            }
+        }.addOnFailureListener { exception ->
+            Log.d("FirebaseSong", "Failed to fetch song with ID: $songId", exception)
         }
     }
 

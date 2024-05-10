@@ -2,6 +2,7 @@ package com.smd.surmaiya.Fragments
 
 import BottomNavigationHelper
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,12 +12,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.smd.surmaiya.HelperClasses.FragmentHelper
 import com.smd.surmaiya.HelperClasses.FragmentNavigationHelper
 import com.smd.surmaiya.HelperClasses.Navigator
 import com.smd.surmaiya.HelperClasses.SideBarNavigationHelper
+import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
+import com.smd.surmaiya.ManagerClasses.PlaylistManager
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.activities.MonthlyRankingActivity
@@ -108,22 +113,23 @@ class HomeFragment : Fragment() {
         yourPlaylistsRecyclerView.layoutManager = LinearLayoutManager(this.context,
             LinearLayoutManager.HORIZONTAL,false)
 
-        val playlistData = preparePlaylistData()  // Replace with your data loading logic
-        val playlistAdapter = PlaylistAdapter(playlistData)
-        yourPlaylistsRecyclerView.adapter = playlistAdapter
+        FirebaseDatabaseManager.getPlaylists { playlists ->
+            val playlistAdapter = PlaylistAdapter(playlists, object : PlaylistAdapter.OnItemClickListener {
+                override fun onItemClick(position: Int) {
+                    // Handle item click
+                    // pass the playlist object to the next fragment
+                    val playlist = playlists[position]
+                    PlaylistManager.addPlaylist(playlist)
+                    FragmentHelper(requireActivity().supportFragmentManager,requireContext()).loadFragment(PlaylistSearchFragment())
+                }
+                override fun onItemChanged(position: Int) {
+                    // Handle item change
+                }
+            })
+            yourPlaylistsRecyclerView.adapter = playlistAdapter
+        }
     }
 
-    private fun preparePlaylistData(): List<Playlist> {
-        val playlists = mutableListOf<Playlist>()
-        // Add your playlists here
-        playlists.add(Playlist(R.drawable.playlist, "Playlist Name", 80))
-        playlists.add(Playlist(R.drawable.playlist, "Playlist Name", 80))
-        playlists.add(Playlist(R.drawable.playlist, "Playlist Name", 80))
-        playlists.add(Playlist(R.drawable.playlist, "Playlist Name", 80 ))
-
-        // ... add more playlists
-        return playlists
-    }
 
 
     private fun prepareTopAlbums() {
@@ -183,10 +189,10 @@ class HomeFragment : Fragment() {
 
     private fun prepareSongData(): List<Song> {
         val songs = mutableListOf<Song>()
-        songs.add(Song("id", "Song Name", "Artist", "Album", "Duration", "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg", "songUrl", "releaseDate", 0, listOf("genre")))
-        songs.add(Song("id", "Song Name", "Artist", "Album", "Duration", "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg", "songUrl", "releaseDate", 0, listOf("genre")))
-        songs.add(Song("id", "Song Name", "Artist", "Album", "Duration", "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg", "songUrl", "releaseDate", 0, listOf("genre")))
-        songs.add(Song("id", "Song Name", "Artist", "Album", "Duration", "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg", "songUrl", "releaseDate", 0, listOf("genre")))
+        songs.add(Song("id", "Song Name", "Artist", "Album", "Duration", "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg", "songUrl", "releaseDate", 0, listOf("genre"),"Album Name"))
+        songs.add(Song("id", "Song Name", "Artist", "Album", "Duration", "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg", "songUrl", "releaseDate", 0, listOf("genre"),"Album Name"))
+        songs.add(Song("id", "Song Name", "Artist", "Album", "Duration", "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg", "songUrl", "releaseDate", 0, listOf("genre"),"Album Name"))
+        songs.add(Song("id", "Song Name", "Artist", "Album", "Duration", "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg", "songUrl", "releaseDate", 0, listOf("genre"), "Album Name"))
 
         return songs
     }

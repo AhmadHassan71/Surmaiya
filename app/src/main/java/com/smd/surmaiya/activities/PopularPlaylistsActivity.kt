@@ -46,10 +46,10 @@ class PopularPlaylistsActivity : AppCompatActivity() {
     private fun preparePlaylistData(): List<Playlist> {
         val playlists = mutableListOf<Playlist>()
         // Add your playlists here
-        playlists.add(Playlist(R.drawable.popular_playlist, "Playlist Name", 80))
-        playlists.add(Playlist(R.drawable.popular_playlist, "Playlist Name", 80))
-        playlists.add(Playlist(R.drawable.popular_playlist, "Playlist Name", 80))
-        playlists.add(Playlist(R.drawable.popular_playlist, "Playlist Name", 80))
+//        playlists.add(Playlist(R.drawable.popular_playlist, "Playlist Name", 80))
+//        playlists.add(Playlist(R.drawable.popular_playlist, "Playlist Name", 80))
+//        playlists.add(Playlist(R.drawable.popular_playlist, "Playlist Name", 80))
+//        playlists.add(Playlist(R.drawable.popular_playlist, "Playlist Name", 80))
 
         // ... add more playlists
         return playlists
