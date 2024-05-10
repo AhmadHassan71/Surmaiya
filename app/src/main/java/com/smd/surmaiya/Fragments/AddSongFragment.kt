@@ -15,8 +15,10 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.google.android.gms.tasks.Task
 import com.google.firebase.storage.FirebaseStorage
 import com.smd.surmaiya.HelperClasses.CustomToastMaker
+import com.smd.surmaiya.ManagerClasses.FirebaseStorageManager.uploadToFirebaseStorage
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.itemClasses.Song
@@ -59,6 +61,8 @@ class AddSongFragment : Fragment() {
     }
 
     private lateinit var cancelButton: Button
+    private lateinit var songUrl: String
+    private lateinit var coverArtUrl: String
     fun initializeViews() {
         cancelButton = view?.findViewById(R.id.cancelButton)!!
 
@@ -146,8 +150,9 @@ class AddSongFragment : Fragment() {
                 CustomToastMaker().showToast(requireContext(), "Please enter a song name")
                 return
             }
+
             // Upload the image to Firebase Storage
-            uploadToFirebaseStorage(filePath, "Songs/${UserManager.getCurrentUser()!!.id}/Song/${songName?.text.toString()}/$imageFileName")
+            coverArtUrl = uploadToFirebaseStorage(filePath, "Songs/${UserManager.getCurrentUser()!!.id}/Song/${songName?.text.toString()}/$imageFileName")
 
             if (artworkImageView != null) {
                 Glide.with(this).load(filePath).into(artworkImageView)
@@ -172,33 +177,14 @@ class AddSongFragment : Fragment() {
                 CustomToastMaker().showToast(requireContext(), "Please enter a song name")
                 return
             }
+
             // Upload the song to Firebase Storage
-            uploadToFirebaseStorage(filePath, "Songs/${UserManager.getCurrentUser()!!.id}/Song/${songName?.text.toString()}/$songFileName")
+            songUrl = uploadToFirebaseStorage(filePath, "Songs/${UserManager.getCurrentUser()!!.id}/Song/${songName?.text.toString()}/$songFileName")
+
         }
     }
 
-    private fun uploadToFirebaseStorage(filePath: Uri, path: String) {
-        Log.d("AddSongFragment", "Uploading to Firebase Storage")
 
-
-
-
-        // Create a storage reference
-        val storageRef = FirebaseStorage.getInstance().reference.child(path)
-
-        // Upload the file
-        val uploadTask = storageRef.putFile(filePath)
-
-        // Register observers to listen for when the download is done or if it fails
-        uploadTask.addOnFailureListener {
-            // Handle unsuccessful uploads
-            Log.d("AddSongFragment", "Upload failed")
-        }.addOnSuccessListener { taskSnapshot ->
-            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-
-            Log.d("AddSongFragment", "Upload succeeded")
-        }
-    }
 
     private fun getFileName(uri: Uri): String? {
         var result: String? = null
