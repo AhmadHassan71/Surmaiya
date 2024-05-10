@@ -13,21 +13,41 @@
         android:background="@drawable/yellow_gradient_background"
         android:clipChildren="false"
         android:clipToPadding="false">
-
+        <LinearLayout
+            android:id="@+id/layout_artwork1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="95dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_header"
+            >
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="20dp"
+            >
+            <ImageView
+                android:id="@+id/artworkImageView"
+                android:layout_width="220dp"
+                android:layout_height="180dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:background="@drawable/art_work_background"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layout_header" />
+        </androidx.cardview.widget.CardView>
         <LinearLayout
             android:id="@+id/layout_artwork"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="101dp"
-            android:layout_marginStart="95dp"
-            android:layout_marginTop="20dp"
             android:background="@drawable/art_work_background"
             android:gravity="center_horizontal"
             android:orientation="vertical"
             android:paddingTop="49dp"
             android:paddingBottom="32dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_header">
+         >
 
             <TextView
                 android:id="@+id/text_add_artwork"
@@ -48,7 +68,7 @@
                 android:textColor="#303030"
                 android:textSize="40sp" />
         </LinearLayout>
-
+        </LinearLayout>
         <LinearLayout
             android:id="@+id/layout_header"
             android:layout_width="409dp"
@@ -63,7 +83,10 @@
             <ImageView
                 android:id="@+id/image_left_arrow"
                 android:layout_width="48dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_marginEnd="79dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/left_arrow" />
 
             <TextView
                 android:id="@+id/text_header_add_song"
@@ -194,7 +217,7 @@
             android:textColor="#FFFFFF"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_artwork" />
+            app:layout_constraintTop_toBottomOf="@id/layout_artwork1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

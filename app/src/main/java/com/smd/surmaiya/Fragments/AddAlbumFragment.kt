@@ -1,11 +1,18 @@
 package com.smd.surmaiya.Fragments
 
 import android.net.Uri
+import android.app.Activity
+import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +20,11 @@ import com.google.android.gms.tasks.Tasks
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.FirebaseStorageManager
 import com.smd.surmaiya.ManagerClasses.UserManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.smd.surmaiya.HelperClasses.CustomToastMaker
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.AlbumAddSongAdapter
 import com.smd.surmaiya.itemClasses.Album
@@ -39,6 +51,10 @@ class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
     private val songList = mutableListOf<SongNew>()
     private var songsToSendFirebase= mutableListOf<Song>()
     private lateinit var albumAddSongAdapter: AlbumAddSongAdapter
+    private lateinit var albumNameEditText: EditText
+    private lateinit var albumArtworkImageView: ImageView
+    private lateinit var layout_artwork: LinearLayout
+    private var coverArtUrl: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,6 +126,9 @@ class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
 
         cancelButton = view?.findViewById(R.id.cancelButton)!!
         albumAddSongRecyclerView = view?.findViewById(R.id.albumAddSongRecyclerView)!!
+        albumNameEditText = view?.findViewById(R.id.edit_name)!!
+        albumArtworkImageView = view?.findViewById(R.id.artworkImageView)!!
+        layout_artwork = view?.findViewById(R.id.layout_artwork)!!
     }
 
     override fun onSongCreated(song: Song) {
@@ -141,6 +160,7 @@ class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
     }
 
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeViews() // Move this line here
@@ -154,10 +174,126 @@ class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
         cancelButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
+        layout_artwork.setOnClickListener {
+            // Open the gallery to select an image
+            uploadAlbumCover()
+
+        }
+        val backButton = view?.findViewById<ImageView>(R.id.backButton)
+        backButton?.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+        val createButton = view?.findViewById<Button>(R.id.button_create)
+        if (createButton != null) {
+            createButton.setOnClickListener {
+            }
+        }
 
     }
 
+
+    private fun uploadAlbumCover() {
+        val intent = Intent().apply {
+            type = "image/*"
+            action = Intent.ACTION_GET_CONTENT
+        }
+        startActivityForResult(
+            Intent.createChooser(intent, "Select Picture"),
+            AddAlbumFragment.PICK_IMAGE_REQUEST
+        )
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
+            val filePath = data.data!!
+            // Use the downloadUrl here
+
+            val artworkImageView = requireView().findViewById<ImageView>(R.id.artworkImageView)
+            val imageFileName = getFileName(filePath)
+            val songName = view?.findViewById<EditText>(R.id.edit_name)
+            if (songName?.text.toString().isEmpty()) {
+                CustomToastMaker().showToast(requireContext(), "Please enter a song name")
+                return
+            }
+
+            // Upload the image to Firebase Storage
+//            coverArtUrl = uploadToFirebaseStorage(filePath, "Songs/${UserManager.getCurrentUser()!!.id}/Song/${songName?.text.toString()}/$imageFileName")
+            coverArtUrl = filePath
+            if (artworkImageView != null) {
+                Glide.with(this).load(filePath).into(artworkImageView)
+            }
+            // Set the visibility of the ImageView and LinearLayout
+            Glide.with(this)
+                .load(filePath)
+                .listener(object : RequestListener<Drawable> {
+
+
+                    override fun onResourceReady(
+                        resource: Drawable,
+                        model: Any,
+                        target: com.bumptech.glide.request.target.Target<Drawable>?,
+                        dataSource: DataSource,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        return false // Allow calling onResourceReady on the Target.
+                    }
+
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: com.bumptech.glide.request.target.Target<Drawable>,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        Log.e("GLIDE", "Load failed", e)
+                        // You can also log specific causes:
+                        for (rootCause in e!!.rootCauses) {
+                            Log.e("GLIDE", "Root cause", rootCause)
+                        }
+                        // Or, to log all details of the failure:
+                        return false // Allow calling onLoadFailed on the Target.
+                    }
+
+                })
+                .into(artworkImageView)
+            artworkImageView?.visibility = View.VISIBLE
+            val addArtworkLayout = view?.findViewById<LinearLayout>(R.id.layout_artwork)
+            addArtworkLayout?.visibility = View.GONE
+
+        }
+
+
+    }
+
+    private fun getFileName(uri: Uri): String? {
+        var result: String? = null
+        if (uri.scheme == "content") {
+            val cursor = activity?.contentResolver?.query(uri, null, null, null, null)
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result =
+                        cursor.getString(cursor.getColumnIndexOrThrow(android.provider.OpenableColumns.DISPLAY_NAME))
+                }
+            } finally {
+                cursor?.close()
+            }
+        }
+        if (result == null) {
+            result = uri.path
+            val cut = result?.lastIndexOf('/')
+            if (cut != -1) {
+                if (cut != null) {
+                    result = result?.substring(cut + 1)
+                }
+            }
+        }
+        return result
+    }
+
     companion object {
+        private const val PICK_IMAGE_REQUEST = 1
+
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
