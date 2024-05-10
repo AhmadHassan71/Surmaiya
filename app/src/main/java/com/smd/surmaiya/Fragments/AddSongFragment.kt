@@ -68,8 +68,8 @@ class AddSongFragment : Fragment() {
     }
 
     private lateinit var cancelButton: Button
-    private lateinit var songUrl: Uri
-    private lateinit var coverArtUrl: Uri
+    private var songUrl: Uri = Uri.EMPTY
+    private var coverArtUrl: Uri= Uri.EMPTY
     @RequiresApi(Build.VERSION_CODES.O)
     fun initializeViews() {
         cancelButton = view?.findViewById(R.id.cancelButton)!!
@@ -99,6 +99,7 @@ class AddSongFragment : Fragment() {
         val createButton = view?.findViewById<Button>(R.id.createButton)
         createButton?.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Log.d("AddSongFragment", "Song created")
                 createSong()
             }
         }
@@ -115,14 +116,14 @@ class AddSongFragment : Fragment() {
         val songArtist = view?.findViewById<EditText>(R.id.songArtists)
 
 
-        if(songName?.text.toString().isEmpty() || songArtist?.text.toString().isEmpty()) {
+        if(songName?.text.toString().isEmpty()) {
             CustomToastMaker().showToast(requireContext(), "Please enter a song name and artist")
             return
         }
 
         val songNameText = songName?.text.toString()
         val songArtistText = UserManager.getCurrentUser()!!.name + songArtist?.text.toString()
-        val genreText = requireView().findViewById<EditText>(R.id.genreTextView)
+        val genreText = requireView().findViewById<EditText>(R.id.songGenre)
         val songUrlText = songUrl
         val coverArtUrlText = coverArtUrl
         val album=""
@@ -136,10 +137,13 @@ class AddSongFragment : Fragment() {
 
         val song = Song("id",songNameText,songArtistText,album,duration,coverArtUrlText.toString(),songUrlText.toString(),releaseDate,numListeners,genres)
 
+        Log.d("AddSongFragment", "Song created, $song , $songNameText, $songArtistText, $album, $duration, $coverArtUrlText, $songUrlText, $releaseDate, $numListeners, $genres")
 
         if (songNameText.isEmpty() || songArtistText.isEmpty()) {
-            callback?.onSongCreated(song)
+           return CustomToastMaker().showToast(requireContext(), "Please enter a song name and artist")
         }
+
+        callback?.onSongCreated(song)
 
         // Create song
 
@@ -148,18 +152,20 @@ class AddSongFragment : Fragment() {
     }
 
     private fun getDuration(songUrlText: Uri): String {
-        val mediaPlayer: MediaPlayer = MediaPlayer().apply {
-            setDataSource(requireContext(), songUrlText)
-            prepare()
-        }
-        val durationInMillis = mediaPlayer.duration.toLong()
-        mediaPlayer.release()
+//        val mediaPlayer: MediaPlayer = MediaPlayer().apply {
+//            setDataSource(requireContext(), songUrlText)
+//            prepare()
+//        }
+//        val durationInMillis = mediaPlayer.duration.toLong()
+//        mediaPlayer.release()
+//
+//        val minutes = TimeUnit.MILLISECONDS.toMinutes(durationInMillis)
+//        val seconds = TimeUnit.MILLISECONDS.toSeconds(durationInMillis) -
+//                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(durationInMillis))
 
-        val minutes = TimeUnit.MILLISECONDS.toMinutes(durationInMillis)
-        val seconds = TimeUnit.MILLISECONDS.toSeconds(durationInMillis) -
-                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(durationInMillis))
+//        return String.format("%02d:%02d", minutes, seconds)
 
-        return String.format("%02d:%02d", minutes, seconds)
+        return "3:00"
     }
 
     private fun uploadSongCover() {

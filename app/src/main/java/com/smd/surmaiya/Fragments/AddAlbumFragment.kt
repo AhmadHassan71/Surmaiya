@@ -4,6 +4,7 @@ import android.net.Uri
 import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,11 +27,15 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.smd.surmaiya.HelperClasses.CustomToastMaker
+import com.smd.surmaiya.HelperClasses.FragmentHelper
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.AlbumAddSongAdapter
 import com.smd.surmaiya.itemClasses.Album
 import com.smd.surmaiya.itemClasses.Song
 import com.smd.surmaiya.itemClasses.SongNew
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 // TODO: Rename parameter arguments, choose names that match
@@ -55,6 +61,7 @@ class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
     private lateinit var albumArtworkImageView: ImageView
     private lateinit var layout_artwork: LinearLayout
     private var coverArtUrl: Uri? = null
+    private lateinit var addSongButton: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,13 +80,17 @@ class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun uploadSongs() {
         // Create the Album object
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        val releaseDate = LocalDate.now().format(formatter)
+
         val album = Album(
             id = UUID.randomUUID().toString(),
-            name = "albumName",
-            coverArtUrl = "",
-            releaseDate = "releaseDate",
+            name = albumNameEditText.text.toString(),
+            coverArtUrl = coverArtUrl.toString(),
+            releaseDate = releaseDate,
             songIds = songsToSendFirebase.map { it.id },
             null,
             artists = songsToSendFirebase.map { it.artist }
@@ -129,6 +140,7 @@ class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
         albumNameEditText = view?.findViewById(R.id.edit_name)!!
         albumArtworkImageView = view?.findViewById(R.id.artworkImageView)!!
         layout_artwork = view?.findViewById(R.id.layout_artwork)!!
+        addSongButton = view?.findViewById(R.id.image_plus)!!
     }
 
     override fun onSongCreated(song: Song) {
@@ -148,6 +160,7 @@ class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
         albumAddSongAdapter.notifyDataSetChanged()
     }
 
+
     fun setUpRecyclerView() {
         // Initialize the adapter with the songList
         albumAddSongAdapter = AlbumAddSongAdapter(songList)
@@ -161,6 +174,7 @@ class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
 
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeViews() // Move this line here
@@ -169,6 +183,7 @@ class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun setUpOnClickListeners() {
 
         cancelButton.setOnClickListener {
@@ -186,7 +201,34 @@ class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
         val createButton = view?.findViewById<Button>(R.id.button_create)
         if (createButton != null) {
             createButton.setOnClickListener {
+                uploadSongs()
             }
+        }
+
+        addSongButton.setOnClickListener {
+            val addSongFragment = AddSongFragment.newInstance("", "", object : AddSongFragment.OnSongCreatedCallback {
+                override fun onSongCreated(song: Song) {
+                    // Convert the Song object to SongNew object
+                    val songNew = SongNew(
+                        songName = song.songName,
+                        artistName = song.artist,
+                        songCoverImageResource = song.coverArtUrl
+                    )
+
+                    songsToSendFirebase.add(song)
+
+                    // Add the created song to the songList
+                    songList.add(songNew)
+
+                    // Notify the adapter that the data set has changed
+                    albumAddSongAdapter.notifyDataSetChanged()
+
+                    requireActivity().supportFragmentManager.popBackStack()
+
+                }
+            })
+            val fragmentHelper = FragmentHelper(requireActivity().supportFragmentManager,requireContext())
+            fragmentHelper.loadFragment(addSongFragment)
         }
 
     }
