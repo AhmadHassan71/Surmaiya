@@ -136,6 +136,11 @@ class AddSongFragment : Fragment() {
             val filePath = data.data!!
                 // Use the downloadUrl here
                 val artworkImageView = requireView().findViewById<ImageView>(R.id.artworkImageView)
+            val imageFileName = getFileName(filePath)
+
+            // Upload the image to Firebase Storage
+            uploadToFirebaseStorage("Songs/${UserManager.getCurrentUser()!!.id}/$imageFileName")
+
             if (artworkImageView != null) {
                 Glide.with(this).load(filePath).into(artworkImageView)
             }
@@ -150,18 +155,17 @@ class AddSongFragment : Fragment() {
             val filePath = data.data!!
             val songFileName = getFileName(filePath)
             val songFileTextView = requireView().findViewById<TextView>(R.id.songFile)
-            // Set the text of the TextView to the songFileName's first 20 characters
-            val substringLength = if (songFileName?.length!! > 30) 30 else songFileName.length
             songFileTextView.text =  songFileName
-//                buildString {
-//                append(songFileName.substring(0, substringLength))
-//                append("...")
-//            }
-            // Set the visibility of the TextView and ImageView
             songFileTextView.visibility = View.VISIBLE
 
-            // TODO: Upload the audio to Firebase Storage and get the download URL
+            // Upload the song to Firebase Storage
+            uploadToFirebaseStorage("Songs/${UserManager.getCurrentUser()!!.id}/$songFileName")
         }
+    }
+
+    private fun uploadToFirebaseStorage(filePath: String) {
+        Log.d("AddSongFragment", "Uploading to Firebase Storage")
+
     }
 
     private fun getFileName(uri: Uri): String? {
