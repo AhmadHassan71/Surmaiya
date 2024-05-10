@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.google.firebase.storage.FirebaseStorage
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.itemClasses.Song
@@ -139,7 +140,7 @@ class AddSongFragment : Fragment() {
             val imageFileName = getFileName(filePath)
 
             // Upload the image to Firebase Storage
-            uploadToFirebaseStorage("Songs/${UserManager.getCurrentUser()!!.id}/$imageFileName")
+            uploadToFirebaseStorage(filePath, "Songs/${UserManager.getCurrentUser()!!.id}/$imageFileName")
 
             if (artworkImageView != null) {
                 Glide.with(this).load(filePath).into(artworkImageView)
@@ -159,13 +160,28 @@ class AddSongFragment : Fragment() {
             songFileTextView.visibility = View.VISIBLE
 
             // Upload the song to Firebase Storage
-            uploadToFirebaseStorage("Songs/${UserManager.getCurrentUser()!!.id}/$songFileName")
+            uploadToFirebaseStorage(filePath, "Songs/${UserManager.getCurrentUser()!!.id}/$songFileName")
         }
     }
 
-    private fun uploadToFirebaseStorage(filePath: String) {
+    private fun uploadToFirebaseStorage(filePath: Uri, path: String) {
         Log.d("AddSongFragment", "Uploading to Firebase Storage")
 
+        // Create a storage reference
+        val storageRef = FirebaseStorage.getInstance().reference.child(path)
+
+        // Upload the file
+        val uploadTask = storageRef.putFile(filePath)
+
+        // Register observers to listen for when the download is done or if it fails
+        uploadTask.addOnFailureListener {
+            // Handle unsuccessful uploads
+            Log.d("AddSongFragment", "Upload failed")
+        }.addOnSuccessListener { taskSnapshot ->
+            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+            
+            Log.d("AddSongFragment", "Upload succeeded")
+        }
     }
 
     private fun getFileName(uri: Uri): String? {
