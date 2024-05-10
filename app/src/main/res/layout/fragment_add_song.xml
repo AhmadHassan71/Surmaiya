@@ -161,7 +161,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="81dp"
                     android:layout_marginBottom="5dp"
-                    android:hint="Name of Artists"
+                    android:hint="Featured Artists"
                     android:layout_gravity="center"
                     android:fontFamily="@font/poppins_medium"
                     android:background="@null"
