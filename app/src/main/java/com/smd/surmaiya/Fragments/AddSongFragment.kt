@@ -16,6 +16,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.google.firebase.storage.FirebaseStorage
+import com.smd.surmaiya.HelperClasses.CustomToastMaker
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.itemClasses.Song
@@ -98,6 +99,7 @@ class AddSongFragment : Fragment() {
 
         val songNameText = songName?.text.toString()
         val songArtistText = songArtist?.text.toString()
+
 //        val songAlbumText = songAlbum?.text.toString()
 //        val songGenreText = songGenre?.text.toString()
 //        val songYearText = songYear?.text.toString()
@@ -139,8 +141,13 @@ class AddSongFragment : Fragment() {
                 val artworkImageView = requireView().findViewById<ImageView>(R.id.artworkImageView)
             val imageFileName = getFileName(filePath)
 
+            val songName = view?.findViewById<EditText>(R.id.songName)
+            if(songName?.text.toString().isEmpty()) {
+                CustomToastMaker().showToast(requireContext(), "Please enter a song name")
+                return
+            }
             // Upload the image to Firebase Storage
-            uploadToFirebaseStorage(filePath, "Songs/${UserManager.getCurrentUser()!!.id}/$imageFileName")
+            uploadToFirebaseStorage(filePath, "Songs/${UserManager.getCurrentUser()!!.id}/Song/${songName?.text.toString()}/$imageFileName")
 
             if (artworkImageView != null) {
                 Glide.with(this).load(filePath).into(artworkImageView)
@@ -159,13 +166,22 @@ class AddSongFragment : Fragment() {
             songFileTextView.text =  songFileName
             songFileTextView.visibility = View.VISIBLE
 
+
+            val songName = view?.findViewById<EditText>(R.id.songName)
+            if(songName?.text.toString().isEmpty()) {
+                CustomToastMaker().showToast(requireContext(), "Please enter a song name")
+                return
+            }
             // Upload the song to Firebase Storage
-            uploadToFirebaseStorage(filePath, "Songs/${UserManager.getCurrentUser()!!.id}/$songFileName")
+            uploadToFirebaseStorage(filePath, "Songs/${UserManager.getCurrentUser()!!.id}/Song/${songName?.text.toString()}/$songFileName")
         }
     }
 
     private fun uploadToFirebaseStorage(filePath: Uri, path: String) {
         Log.d("AddSongFragment", "Uploading to Firebase Storage")
+
+
+
 
         // Create a storage reference
         val storageRef = FirebaseStorage.getInstance().reference.child(path)
@@ -179,7 +195,7 @@ class AddSongFragment : Fragment() {
             Log.d("AddSongFragment", "Upload failed")
         }.addOnSuccessListener { taskSnapshot ->
             // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-            
+
             Log.d("AddSongFragment", "Upload succeeded")
         }
     }
