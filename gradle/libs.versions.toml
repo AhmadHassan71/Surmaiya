@@ -13,6 +13,8 @@ googleGmsGoogleServices = "4.4.1"
 firebaseAuth = "23.0.0"
 firebaseMessaging = "24.0.0"
 firebaseDatabase = "21.0.0"
+firebaseAuthKtx = "23.0.0"
+googleServices = "4.4.1"
 firebaseStorage = "21.0.0"
 
 [libraries]
@@ -27,6 +29,8 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
+firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
+google-services = { group = "com.google.gms", name = "google-services", version.ref = "googleServices" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 
 [plugins]

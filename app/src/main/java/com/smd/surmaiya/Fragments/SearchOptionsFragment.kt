@@ -1,11 +1,15 @@
 package com.smd.surmaiya.Fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.smd.surmaiya.R
+import com.smd.surmaiya.adapters.SearchItemAdapter
+import com.smd.surmaiya.itemClasses.SongNew
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,7 +25,9 @@ class SearchOptionsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    private lateinit var searchSongRecyclerView: RecyclerView
+    private lateinit var searchSongAdapter: SearchItemAdapter
+    private var songList: MutableList<SongNew> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -37,6 +43,32 @@ class SearchOptionsFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_search_options, container, false)
     }
+
+    fun initializeViews() {
+        searchSongRecyclerView = view?.findViewById(R.id.SearchItemRecyclerView)!!
+        songList = mutableListOf(
+            SongNew(
+                "https://preview.redd.it/the-full-key-visual-for-bleach-tybw-the-separation-v0-ifguzaidwgkb1.jpg?auto=webp&s=c3c7385837b8d5f1f449a989320cd15cc4eef49e",
+                "Song 1",
+                "Faraz Deutsch"
+            ),
+            SongNew(
+                "https://preview.redd.it/the-full-key-visual-for-bleach-tybw-the-separation-v0-ifguzaidwgkb1.jpg?auto=webp&s=c3c7385837b8d5f1f449a989320cd15cc4eef49e",
+                "Song 2",
+                "Ahmad Deutsch"
+            ),
+        )
+        searchSongAdapter = SearchItemAdapter(songList)
+        searchSongRecyclerView.adapter = searchSongAdapter
+        searchSongRecyclerView.layoutManager = LinearLayoutManager(context)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initializeViews()
+
+    }
+
 
     companion object {
         /**

@@ -24,7 +24,6 @@ import com.smd.surmaiya.HelperClasses.Navigator
 import com.smd.surmaiya.ManagerClasses.FirebaseAuthManager
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
-import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 

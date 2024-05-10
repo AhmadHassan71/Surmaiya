@@ -1,13 +1,18 @@
 package com.smd.surmaiya.Fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.smd.surmaiya.HelperClasses.SideBarNavigationHelper
 import com.smd.surmaiya.R
+import com.smd.surmaiya.adapters.LibraryFilterAdapter
+import com.smd.surmaiya.adapters.SearchItemAdapter
+import com.smd.surmaiya.itemClasses.SongNew
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -23,7 +28,10 @@ class LibraryFragment : Fragment() {
     // TODO: Rename and change types of parameters
 //    private lateinit var backButton: ImageView
     private lateinit var addToPlaylist: ImageView
-
+    private lateinit var filterRecyclerView: RecyclerView
+    private lateinit var librarySongRecyclerView: RecyclerView
+    private lateinit var librarySongAdapter: SearchItemAdapter
+    private var songList: MutableList<SongNew> = mutableListOf()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,21 +44,58 @@ class LibraryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initializeViews()
         setOnClickListeners()
+        setUpRecyclerView()
+
         SideBarNavigationHelper(requireActivity()).openDrawerOnMenuClick(view, requireActivity())
         SideBarNavigationHelper(requireActivity()).setupNavigationView(requireActivity().findViewById(R.id.drawer_layout))
+        SideBarNavigationHelper(requireActivity()).openDrawerOnMenuClick(view, requireActivity())
 
     }
-    fun initializeViews(){
-//        backButton=view?.findViewById(R.id.backButton)!!
-        addToPlaylist=view?.findViewById(R.id.addToPlaylist)!!
+
+    fun initializeViews() {
+//        backButton = view?.findViewById(R.id.backButton)!!
+        addToPlaylist = view?.findViewById(R.id.addToPlaylist)!!
+        filterRecyclerView = view?.findViewById(R.id.searchFilterRecyclerView)!!
+
     }
 
-    fun setOnClickListeners(){
+    fun setUpRecyclerView() {
+        // Create dummy data for testing
+        val filterItems = mutableListOf(
+            "Item 1",
+            "Item 2",
+            "Item 3"
+        )
+        filterRecyclerView.adapter = LibraryFilterAdapter(filterItems)
+        filterRecyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+        librarySongRecyclerView = view?.findViewById(R.id.librarySongRecyclerView)!!
+        songList = mutableListOf(
+            SongNew(
+                "https://preview.redd.it/the-full-key-visual-for-bleach-tybw-the-separation-v0-ifguzaidwgkb1.jpg?auto=webp&s=c3c7385837b8d5f1f449a989320cd15cc4eef49e",
+                "Song 1",
+                "Faraz Deutsch"
+            ),
+            SongNew(
+                "https://preview.redd.it/the-full-key-visual-for-bleach-tybw-the-separation-v0-ifguzaidwgkb1.jpg?auto=webp&s=c3c7385837b8d5f1f449a989320cd15cc4eef49e",
+                "Song 2",
+                "Ahmad Deutsch"
+            ),
+        )
+        librarySongAdapter = SearchItemAdapter(songList)
+        librarySongRecyclerView.adapter = librarySongAdapter
+        librarySongRecyclerView.layoutManager = LinearLayoutManager(context)
+    }
+
+    fun setOnClickListeners() {
 //        backButton.setOnClickListener {
 //            requireActivity().supportFragmentManager.popBackStack()
 //        }
         addToPlaylist.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.fragment_container, AddToPlaylistFragment()).addToBackStack(null).commit()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, AddToPlaylistFragment()).addToBackStack(null)
+                .commit()
         }
     }
 

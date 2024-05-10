@@ -40,8 +40,6 @@ class HomeActivity : AppCompatActivity() {
         BottomNavigationHelper(this).loadFragment(HomeFragment())
         BottomNavigationHelper(this).setUpBottomNavigation()
 
-        // Get the current user
-
 
         val musicPlayer = findViewById<View>(R.id.music_player)
         musicPlayer.setOnClickListener {

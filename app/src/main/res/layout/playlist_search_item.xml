@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_marginBottom="10dp"
+    android:gravity="center_vertical">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageView"
+        android:layout_width="84dp"
+        android:layout_height="82dp"
+        android:layout_marginEnd="21dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/lofi"
+        app:shapeAppearanceOverlay="@style/cr5" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Lofi Lofi"
+            android:textColor="#170C0C"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="62 songs"
+            android:textColor="#00A136"
+            android:textSize="15sp" />
+    </LinearLayout>
+</LinearLayout>
