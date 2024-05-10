@@ -1,209 +1,203 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.AddAlbumFragment">
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/linearLayout4"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/yellow_gradient_background"
         android:clipChildren="false"
         android:clipToPadding="false">
 
+        <LinearLayout
+            android:id="@+id/layout_artwork"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="101dp"
+            android:layout_marginStart="95dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/art_work_background"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="49dp"
+            android:paddingBottom="32dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_header">
 
-        <ScrollView
-            android:id="@+id/scrollView5"
+            <TextView
+                android:id="@+id/text_add_artwork"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="14dp"
+                android:layout_marginBottom="14dp"
+                android:text="Add Artwork"
+                android:textColor="#303030"
+                android:textSize="24sp" />
 
-            android:layout_width="443dp"
-            android:layout_height="607dp"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:fillViewport="true"
-            android:paddingTop="37dp"
-            android:paddingBottom="0dp"
+            <TextView
+                android:id="@+id/text_plus"
+                android:layout_width="36dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="86dp"
+                android:text="+"
+                android:textColor="#303030"
+                android:textSize="40sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_header"
+            android:layout_width="409dp"
+            android:layout_height="47dp"
+            android:layout_marginHorizontal="28dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="1dp"
+            android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/image_left_arrow"
+                android:layout_width="48dp"
                 android:layout_height="match_parent"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                android:orientation="vertical">
+                android:layout_marginEnd="79dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/left_arrow" />
 
-                <LinearLayout
+            <TextView
+                android:id="@+id/text_header_add_song"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:text="Add Song"
+                android:textColor="#00A136"
+                android:textSize="32sp" />
+        </LinearLayout>
 
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="28dp"
-                    android:layout_marginBottom="67dp"
-                    android:orientation="horizontal">
+        <TextView
+            android:id="@+id/text_new_album"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="146dp"
+            android:layout_marginStart="133dp"
+            android:layout_marginTop="10dp"
+            android:text="New Album"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_quality" />
 
-                    <ImageView
+        <EditText
+            android:id="@+id/edit_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="82dp"
+            android:layout_marginStart="82dp"
+            android:layout_marginTop="20dp"
+            android:background="@null"
+            android:text="Name"
+            android:textColor="#8A9A9D"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_new_album"/>
 
-                        android:layout_width="48dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="79dp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/left_arrow" />
+        <LinearLayout
+            android:id="@+id/layout_divider1"
+            android:layout_width="266dp"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="62dp"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="5dp"
+            android:background="#FF8A9A9D"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_name"/>
 
-                    <TextView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/albumAddSongRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="60dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/layout_divider1" />
 
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_weight="1"
-                        android:text="Add Song"
-                        android:textColor="#00A136"
-                        android:textSize="32sp" />
-                </LinearLayout>
+        <LinearLayout
+            android:id="@+id/layout_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_add_song">
 
-                <LinearLayout
+            <Button
+                android:id="@+id/cancelButton"
+                android:layout_width="72dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="150dp"
+                android:background="@drawable/cancel_background"
+                android:text="Cancel"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                tools:layout_editor_absoluteX="-34dp"
+                tools:layout_editor_absoluteY="779dp" />
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="101dp"
-                    android:layout_marginBottom="11dp"
-                    android:background="@drawable/art_work_background"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    android:paddingTop="49dp"
-                    android:paddingBottom="32dp">
+            <Button
+                android:id="@+id/button_create"
+                android:layout_width="85dp"
+                android:layout_height="31dp"
+                android:background="@drawable/green_round"
+                android:text="Create"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="14dp" />
 
-                    <TextView
+        </LinearLayout>
 
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="14dp"
-                        android:layout_marginBottom="14dp"
-                        android:text="Add Artwork"
-                        android:textColor="#303030"
-                        android:textSize="24sp" />
+        <TextView
+            android:id="@+id/text_add_song"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="10dp"
+            android:text="Add Song"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/albumAddSongRecyclerView" />
 
-                    <TextView
+        <ImageView
+            android:id="@+id/image_plus"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="81dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/albumAddSongRecyclerView"
+            app:srcCompat="@drawable/plus"
+            app:tint="@color/white" />
 
-                        android:layout_width="36dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="86dp"
-                        android:text="+"
-                        android:textColor="#303030"
-                        android:textSize="40sp" />
-                </LinearLayout>
-
-                <TextView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="120dp"
-                    android:layout_marginBottom="52dp"
-                    android:text="(300x300) minimum quality"
-                    android:textColor="#FFFFFF"
-                    android:textSize="13sp" />
-
-                <TextView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="146dp"
-                    android:layout_marginBottom="27dp"
-                    android:text="New Album"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp" />
-
-                <EditText
-                    android:background="@null"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="82dp"
-                    android:layout_marginBottom="5dp"
-                    android:text="Name"
-                    android:textColor="#8A9A9D"
-                    android:textSize="16sp" />
-
-                <LinearLayout
-
-                    android:layout_width="266dp"
-                    android:layout_height="1dp"
-                    android:layout_marginHorizontal="62dp"
-                    android:layout_marginBottom="25dp"
-                    android:background="#FF8A9A9D"
-                    android:orientation="vertical"></LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/albumAddSongRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="60dp"
-                    android:layout_marginBottom="27dp"/>
-                <LinearLayout
-                    android:id="@+id/rnk1v5r9v4ca"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="60dp"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="80dp"
-
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/roapzpns2osb"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Add Song"
-                        android:textColor="#FFFFFF"
-                        android:textSize="14sp" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
-
-                    <ImageView
-                        android:id="@+id/imageView15"
-                        android:layout_width="20sp"
-                        android:layout_height="20sp"
-                        app:tint="@color/white"
-                        app:srcCompat="@drawable/plus" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/cancelButton"
-                        android:layout_width="72dp"
-                        android:layout_height="32dp"
-                        android:layout_marginEnd="150dp"
-                        android:layout_marginStart="50dp"
-                        android:background="@drawable/cancel_background"
-                        android:text="Cancel"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        tools:layout_editor_absoluteX="-34dp"
-                        tools:layout_editor_absoluteY="779dp" />
-
-                    <Button
-                        android:layout_width="85dp"
-                        android:layout_height="31dp"
-                        android:background="@drawable/green_round"
-
-                        android:text="Create"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:textSize="14dp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-        </ScrollView>
+        <TextView
+            android:id="@+id/text_quality"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="120dp"
+            android:layout_marginStart="128dp"
+            android:layout_marginTop="10dp"
+            android:text="(300x300) minimum quality"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_artwork" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
