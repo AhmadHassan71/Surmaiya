@@ -5,7 +5,7 @@ data class Album(
     val name: String,
     var coverArtUrl: String,
     val releaseDate: String,
-    val songIds: List<String>,
+    val songIds: MutableList<String>,
     val songs: List<Song>?,
     val artists: List<String>
 )

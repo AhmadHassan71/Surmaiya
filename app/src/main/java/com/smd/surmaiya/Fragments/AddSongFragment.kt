@@ -27,6 +27,7 @@ import com.smd.surmaiya.R
 import com.smd.surmaiya.itemClasses.Song
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 // TODO: Rename parameter arguments, choose names that match
@@ -134,8 +135,8 @@ class AddSongFragment : Fragment() {
         val numListeners = 0
         val genres = genreText.text.toString().split(",")
 
-
-        val song = Song("id",songNameText,songArtistText,album,duration,coverArtUrlText.toString(),songUrlText.toString(),releaseDate,numListeners,genres)
+        val songId = UUID.randomUUID().toString()
+        val song = Song( songId ,songNameText,songArtistText,album,duration,coverArtUrlText.toString(),songUrlText.toString(),releaseDate,numListeners,genres,"")
 
         Log.d("AddSongFragment", "Song created, $song , $songNameText, $songArtistText, $album, $duration, $coverArtUrlText, $songUrlText, $releaseDate, $numListeners, $genres")
 
@@ -204,7 +205,6 @@ class AddSongFragment : Fragment() {
             if (artworkImageView != null) {
                 Glide.with(this).load(filePath).into(artworkImageView)
             }
-
                 // Set the visibility of the ImageView and LinearLayout
                 artworkImageView?.visibility = View.VISIBLE
                 val addArtworkLayout = view?.findViewById<LinearLayout>(R.id.addArtworkLayout)

@@ -91,7 +91,7 @@ class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
             name = albumNameEditText.text.toString(),
             coverArtUrl = coverArtUrl.toString(),
             releaseDate = releaseDate,
-            songIds = songsToSendFirebase.map { it.id },
+            songIds = mutableListOf(),
             null,
             artists = songsToSendFirebase.map { it.artist }
         )
@@ -102,7 +102,7 @@ class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
         // Upload the album cover art to Firebase Storage
         FirebaseStorageManager.uploadToFirebaseStorage(
             Uri.parse(album.coverArtUrl),
-            "Albums/${UserManager.getCurrentUser()!!.id}/Albums/${album.id}/${album.coverArtUrl}.jpg"
+            "Albums/${UserManager.getCurrentUser()!!.id}/${album.id}/${album.id}.jpg"
         ) { url ->
             // Set the coverArtUrl of the album
             album.coverArtUrl = url
@@ -114,15 +114,16 @@ class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
             for (song in songs) {
                 FirebaseStorageManager.uploadToFirebaseStorage(
                     Uri.parse(song.songUrl),
-                    "Albums/${UserManager.getCurrentUser()!!.id}/Albums/${album.id}/Songs/${song.songUrl}.mp3"
+                    "Albums/${UserManager.getCurrentUser()!!.id}/${album.id}/Songs/${song.id}.mp3"
                 ){ uri ->
                     // Set the coverArtUrl of the song
                     song.coverArtUrl = album.coverArtUrl
+                    song.album = album.id
                     song.songUrl = uri.toString()
-
+                    album.songIds.add(song.id)
+                    song.albumName= album.name
                     // Increment the counter
                     completedTasks++
-
                     // Check if all tasks are completed
                     if (completedTasks == songs.size) {
                         // Upload the album and songs to Firebase Database

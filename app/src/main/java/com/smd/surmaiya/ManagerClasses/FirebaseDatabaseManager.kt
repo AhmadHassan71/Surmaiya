@@ -8,6 +8,7 @@ import com.smd.surmaiya.itemClasses.Album
 import com.smd.surmaiya.itemClasses.Song
 import com.smd.surmaiya.itemClasses.User
 import java.security.MessageDigest
+import java.util.UUID
 
 
 object FirebaseDatabaseManager {
@@ -78,6 +79,7 @@ object FirebaseDatabaseManager {
         val albumRef = database.getReference("Albums").child(album.id)
         albumRef.setValue(album)
 
+
         // Upload the songs
         for (song in songs) {
             val songRef = database.getReference("Songs").child(song.id)
@@ -85,8 +87,9 @@ object FirebaseDatabaseManager {
 
             // Update the genres
             for (genre in song.genres) {
-                val genreRef = database.getReference("Genres").child(genre).child(song.id)
-                genreRef.setValue(true)
+                val genreId = UUID.randomUUID().toString()
+                val genreRef = database.getReference("Genres").child(genre).child("id")
+                genreRef.setValue(genreId)
             }
         }
     }
