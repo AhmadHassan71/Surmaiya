@@ -75,7 +75,9 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
         val playingDeviceTextView: TextView = view.findViewById(R.id.playingDeviceTextView)
         val connectedAudioDevice = ConnectedAudioDevice()
-        playingDeviceTextView.text = connectedAudioDevice.getConnectedAudioDevice(requireContext())
+        playingDeviceTextView.text  = connectedAudioDevice.getConnectedAudioDevice(requireContext()).first
+        // set the device start drawable
+        playingDeviceTextView.setCompoundDrawablesWithIntrinsicBounds(connectedAudioDevice.getConnectedAudioDevice(requireContext()).second, 0, 0, 0)
 
 
         Glide.with(requireContext())

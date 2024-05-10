@@ -13,12 +13,12 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.smd.surmaiya.R
 
 class ConnectedAudioDevice {
 
-
     @RequiresApi(Build.VERSION_CODES.S)
-    fun getConnectedAudioDevice(context: Context): String {
+    fun getConnectedAudioDevice(context: Context): Pair<String, Int> {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(context as Activity, arrayOf(Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_CONNECT), 0)
@@ -37,12 +37,12 @@ class ConnectedAudioDevice {
                 device.type == AudioDeviceInfo.TYPE_WIRED_HEADSET) {
                 pairedDevices.forEach { pairedDevice ->
                     if (pairedDevice.address == device.address) {
-                        return pairedDevice.name
+                        return Pair(pairedDevice.name, R.drawable.headphones)
                     }
                 }
             }
         }
 
-        return "Device speaker"
+        return Pair("Device speaker", R.drawable.mobile_alt_1_svgrepo_com)
     }
 }

@@ -53,6 +53,10 @@
         app:layout_constraintTop_toBottomOf="@+id/dropdownButton" />
 
     <TextView
+        android:gravity="center_vertical"
+        android:drawableTint="#99EE3900"
+        android:drawableStart="@drawable/mobile_alt_1_svgrepo_com"
+        android:drawablePadding="5dp"
         android:id="@+id/playingDeviceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
