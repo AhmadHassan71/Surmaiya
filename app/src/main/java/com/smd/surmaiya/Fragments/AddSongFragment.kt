@@ -43,7 +43,7 @@ class AddSongFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    private var callback: OnSongCreatedCallback? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -59,6 +59,7 @@ class AddSongFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_add_song, container, false)
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeViews()
@@ -69,6 +70,7 @@ class AddSongFragment : Fragment() {
     private lateinit var cancelButton: Button
     private lateinit var songUrl: Uri
     private lateinit var coverArtUrl: Uri
+    @RequiresApi(Build.VERSION_CODES.O)
     fun initializeViews() {
         cancelButton = view?.findViewById(R.id.cancelButton)!!
 
@@ -96,17 +98,21 @@ class AddSongFragment : Fragment() {
 
         val createButton = view?.findViewById<Button>(R.id.createButton)
         createButton?.setOnClickListener {
-            createSong()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                createSong()
+            }
         }
 
+    }
+
+    interface OnSongCreatedCallback {
+        fun onSongCreated(song: Song)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createSong() {
         val songName = view?.findViewById<EditText>(R.id.songName)
         val songArtist = view?.findViewById<EditText>(R.id.songArtists)
-//        val songGenre = view?.findViewById<EditText>(R.id.songGenre)
-//        val songDuration = view?.findViewById<EditText>(R.id.songDuration)
 
 
         if(songName?.text.toString().isEmpty() || songArtist?.text.toString().isEmpty()) {
@@ -132,7 +138,7 @@ class AddSongFragment : Fragment() {
 
 
         if (songNameText.isEmpty() || songArtistText.isEmpty()) {
-            return
+            callback?.onSongCreated(song)
         }
 
         // Create song
@@ -271,12 +277,13 @@ class AddSongFragment : Fragment() {
         private const val PICK_AUDIO_REQUEST = 2
 
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(param1: String, param2: String, callback: OnSongCreatedCallback) =
             AddSongFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
                 }
+                this.callback = callback
             }
     }
 

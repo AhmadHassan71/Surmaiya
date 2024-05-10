@@ -63,7 +63,7 @@
             <ImageView
                 android:id="@+id/image_left_arrow"
                 android:layout_width="48dp"
-                android:layout_height="match_parent"
+                android:layout_height="match_parent"/>
 
             <TextView
                 android:id="@+id/text_header_add_song"

@@ -1,5 +1,6 @@
 package com.smd.surmaiya.Fragments
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +9,16 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.tasks.Tasks
+import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
+import com.smd.surmaiya.ManagerClasses.FirebaseStorageManager
+import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.AlbumAddSongAdapter
+import com.smd.surmaiya.itemClasses.Album
+import com.smd.surmaiya.itemClasses.Song
 import com.smd.surmaiya.itemClasses.SongNew
+import java.util.UUID
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,12 +30,15 @@ private const val ARG_PARAM2 = "param2"
  * Use the [AddAlbumFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class AddAlbumFragment : Fragment() {
+class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var cancelButton: Button
     private lateinit var albumAddSongRecyclerView: RecyclerView
+    private val songList = mutableListOf<SongNew>()
+    private var songsToSendFirebase= mutableListOf<Song>()
+    private lateinit var albumAddSongAdapter: AlbumAddSongAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,41 +57,90 @@ class AddAlbumFragment : Fragment() {
     }
 
 
+    private fun uploadSongs() {
+        // Create the Album object
+        val album = Album(
+            id = UUID.randomUUID().toString(),
+            name = "albumName",
+            coverArtUrl = "",
+            releaseDate = "releaseDate",
+            songIds = songsToSendFirebase.map { it.id },
+            null,
+            artists = songsToSendFirebase.map { it.artist }
+        )
+
+        // Create a copy of the songsToSendFirebase list
+        val songs = songsToSendFirebase.toList()
+
+        // Upload the album cover art to Firebase Storage
+        FirebaseStorageManager.uploadToFirebaseStorage(
+            Uri.parse(album.coverArtUrl),
+            "Albums/${UserManager.getCurrentUser()!!.id}/Albums/${album.id}/${album.coverArtUrl}.jpg"
+        ) { url ->
+            // Set the coverArtUrl of the album
+            album.coverArtUrl = url
+
+            // Counter to track the completion of each song upload
+            var completedTasks = 0
+
+            // Upload the songs to Firebase Storage
+            for (song in songs) {
+                FirebaseStorageManager.uploadToFirebaseStorage(
+                    Uri.parse(song.songUrl),
+                    "Albums/${UserManager.getCurrentUser()!!.id}/Albums/${album.id}/Songs/${song.songUrl}.mp3"
+                ){ uri ->
+                    // Set the coverArtUrl of the song
+                    song.coverArtUrl = album.coverArtUrl
+                    song.songUrl = uri.toString()
+
+                    // Increment the counter
+                    completedTasks++
+
+                    // Check if all tasks are completed
+                    if (completedTasks == songs.size) {
+                        // Upload the album and songs to Firebase Database
+                        FirebaseDatabaseManager.uploadAlbumAndSongs(album, songs)
+                    }
+                }
+            }
+        }
+    }
+
     fun initializeViews() {
 
         cancelButton = view?.findViewById(R.id.cancelButton)!!
         albumAddSongRecyclerView = view?.findViewById(R.id.albumAddSongRecyclerView)!!
     }
 
+    override fun onSongCreated(song: Song) {
+        // Convert the Song object to SongNew object
+        val songNew = SongNew(
+            songName = song.songName,
+            artistName = song.artist,
+            songCoverImageResource = song.coverArtUrl
+        )
+
+        songsToSendFirebase.add(song)
+
+        // Add the created song to the songList
+        songList.add(songNew)
+
+        // Notify the adapter that the data set has changed
+        albumAddSongAdapter.notifyDataSetChanged()
+    }
 
     fun setUpRecyclerView() {
-        // Create dummy data for testing
-        val albumItems = mutableListOf(
-
-            SongNew(
-                songName="Song 2",
-                artistName = "Artist 2",
-                songCoverImageResource="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwN1QCgcXpfMoVDku3LvtHv1xEi5IONNOp2z_Q4IGE2TA4GCm4EXxvN9B7keyJaeWLPLA&usqp=CAU"
-            ),
-            SongNew(
-                songName="Song 2",
-                artistName = "Artist 2",
-                songCoverImageResource="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwN1QCgcXpfMoVDku3LvtHv1xEi5IONNOp2z_Q4IGE2TA4GCm4EXxvN9B7keyJaeWLPLA&usqp=CAU"
-            ),
-            SongNew(
-                songName="Song 2",
-                artistName = "Artist 2",
-                songCoverImageResource="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwN1QCgcXpfMoVDku3LvtHv1xEi5IONNOp2z_Q4IGE2TA4GCm4EXxvN9B7keyJaeWLPLA&usqp=CAU"
-            ),
-
-            )
+        // Initialize the adapter with the songList
+        albumAddSongAdapter = AlbumAddSongAdapter(songList)
 
         // Set the adapter for the RecyclerView
-        albumAddSongRecyclerView.adapter = AlbumAddSongAdapter(albumItems)
+        albumAddSongRecyclerView.adapter = albumAddSongAdapter
 
         // Set the layout manager for the RecyclerView
         albumAddSongRecyclerView.layoutManager = LinearLayoutManager(context)
     }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initializeViews() // Move this line here

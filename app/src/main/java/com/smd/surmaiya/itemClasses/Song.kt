@@ -7,8 +7,8 @@ data class Song(
     val artist:String,
     val album: String,
     val duration: String,
-    val coverArtUrl:String,
-    val songUrl: String,
+    var coverArtUrl:String,
+    var songUrl: String,
     val releaseDate: String,
     val numListeners: Int,
     val genres: List<String>
