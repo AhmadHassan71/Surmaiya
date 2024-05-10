@@ -1,5 +1,7 @@
 package com.smd.surmaiya.Fragments
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,6 +13,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.itemClasses.Song
@@ -109,16 +112,43 @@ class AddSongFragment : Fragment() {
 
     }
 
-    private fun uploadSong() {
-        Log.d("AddSongFragment", "uploadSong: ")
-        return
-    }
-
     private fun uploadSongCover() {
-        Log.d("AddSongFragment", "uploadSongCover: ")
-        return
+        val intent = Intent().apply {
+            type = "image/*"
+            action = Intent.ACTION_GET_CONTENT
+        }
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST)
     }
 
+    private fun uploadSong() {
+        val intent = Intent().apply {
+            type = "audio/*"
+            action = Intent.ACTION_GET_CONTENT
+        }
+        startActivityForResult(Intent.createChooser(intent, "Select Audio"), PICK_AUDIO_REQUEST)
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
+            val filePath = data.data!!
+                // Use the downloadUrl here
+                val artworkImageView = requireView().findViewById<ImageView>(R.id.artworkImageView)
+            if (artworkImageView != null) {
+                Glide.with(this).load(filePath).into(artworkImageView)
+            }
+
+                // Set the visibility of the ImageView and LinearLayout
+                artworkImageView?.visibility = View.VISIBLE
+                val addArtworkLayout = view?.findViewById<LinearLayout>(R.id.addArtworkLayout)
+                addArtworkLayout?.visibility = View.GONE
+        }
+
+        if (requestCode == PICK_AUDIO_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
+            val filePath = data.data!!
+            // TODO: Upload the audio to Firebase Storage and get the download URL
+        }
+    }
     fun setUpOnClickListeners() {
 
         cancelButton.setOnClickListener {
@@ -141,6 +171,9 @@ class AddSongFragment : Fragment() {
          * @return A new instance of fragment AddSongFragment.
          */
         // TODO: Rename and change types and number of parameters
+        private const val PICK_IMAGE_REQUEST = 1
+        private const val PICK_AUDIO_REQUEST = 2
+
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             AddSongFragment().apply {
@@ -150,4 +183,5 @@ class AddSongFragment : Fragment() {
                 }
             }
     }
+
 }
