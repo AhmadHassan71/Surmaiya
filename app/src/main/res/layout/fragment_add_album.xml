@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:text="Add Song"
+                android:text="Add Album"
                 android:textColor="#00A136"
                 android:textSize="32sp" />
         </LinearLayout>
