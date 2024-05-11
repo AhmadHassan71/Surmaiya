@@ -1,14 +1,23 @@
 package com.smd.surmaiya.activities
 
 import BottomNavigationHelper
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.palette.graphics.Palette
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.smd.surmaiya.Fragments.HomeFragment
 import com.smd.surmaiya.Fragments.PlayerBottomSheetDialogFragment
 import com.smd.surmaiya.HelperClasses.ConnectedAudioDevice
@@ -25,6 +34,11 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var pauseButton: ImageView
     private lateinit var likeButton: ImageView
     private lateinit var musicPlayer: View
+    private lateinit var albumImageView: ImageView
+    private lateinit var viewBackGround: LinearLayout
+    private lateinit var progressBar: ProgressBar
+
+
 
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -48,6 +62,10 @@ class HomeActivity : AppCompatActivity() {
         playButton = findViewById(R.id.playButton)
         pauseButton = findViewById(R.id.pauseButton)
         likeButton = findViewById(R.id.likeButton)
+        // Initialize views
+        albumImageView = findViewById(R.id.albumImageView)
+        viewBackGround = findViewById(R.id.viewBackGround)
+        progressBar = findViewById(R.id.progressBar)
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -82,6 +100,32 @@ class HomeActivity : AppCompatActivity() {
         playingDeviceTextView.text = connectedAudioDevice.getConnectedAudioDevice(this).first
         deviceImage.setImageResource(connectedAudioDevice.getConnectedAudioDevice(this).second)
 
+        // Load album image
+        Glide.with(this)
+            .load(song.coverArtUrl)
+            .into(albumImageView)
+
+        Glide.with(this)
+            .asBitmap()
+            .load(song.coverArtUrl)
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    Palette.from(resource).generate { palette ->
+                        // Get the muted color from the palette
+                        val mutedColor = palette?.mutedSwatch?.rgb ?: Color.parseColor("#550A1C")
+
+                        // Set the background color of the viewBackGround
+                        viewBackGround.setBackgroundColor(mutedColor)
+                    }
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {
+                    // Handle case where the Bitmap load is cleared
+                }
+            })
+
+        progressBar.post(updateProgressRunnable)
+
 
         val playerBottomSheetDialogFragment = PlayerBottomSheetDialogFragment()
         val bundle = Bundle()
@@ -90,6 +134,14 @@ class HomeActivity : AppCompatActivity() {
         playerBottomSheetDialogFragment.show(supportFragmentManager, playerBottomSheetDialogFragment.tag)
     }
 
+
+    private val updateProgressRunnable = object : Runnable {
+        override fun run() {
+            val progress = MusicServiceManager.getService()?.getProgress() ?: 0
+            progressBar.progress = progress
+            progressBar.postDelayed(this, 2) // Update progress every second
+        }
+    }
 
     override fun onDestroy() {
         super.onDestroy()

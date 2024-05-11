@@ -151,6 +151,7 @@
 
 
             <ProgressBar
+                android:id="@+id/progressBar"
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
                 android:progress="20"
@@ -169,7 +170,6 @@
             android:layout_alignParentRight="true"
             android:layout_marginTop="55dp"
             android:layout_marginEnd="0dp"
-            android:background="@color/closed_player"
             android:clipChildren="false"
             android:clipToPadding="false"
             android:orientation="vertical" />
