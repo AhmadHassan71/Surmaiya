@@ -5,26 +5,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipChildren="false"
         android:clipToPadding="false"
+        android:layout_marginHorizontal="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
+
         app:layout_constraintStart_toStartOf="parent"
         >
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipChildren="false"
+
             android:clipToPadding="false"
             android:orientation="vertical" />
 
         <LinearLayout
-
+            android:id="@+id/viewBackGround"
             android:layout_width="428dp"
-            android:layout_height="62dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="0dp"
             android:layout_marginTop="0dp"
             android:background="@color/closed_player"
@@ -32,6 +37,7 @@
             android:clipToPadding="false"
             android:orientation="vertical"
             android:paddingHorizontal="6dp">
+
 
             <LinearLayout
 
@@ -43,19 +49,25 @@
                 android:clipToPadding="false"
                 android:orientation="horizontal">
 
-                <com.google.android.material.imageview.ShapeableImageView
-
-                    android:layout_width="37dp"
-                    android:layout_height="37dp"
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginEnd="11dp"
+                    app:cardCornerRadius="12dp"
+                    >
+                <ImageView
+                    android:id="@+id/albumImageView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:scaleType="fitXY"
                     android:src="@drawable/genre_image" />
+
+                </androidx.cardview.widget.CardView>
 
                 <LinearLayout
 
                     android:layout_width="227dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
                     android:layout_marginEnd="6dp"
                     android:clipChildren="false"
                     android:clipToPadding="false"
@@ -63,11 +75,13 @@
 
                     <TextView
 
+                        android:id="@+id/songNameTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
+                        android:layout_marginStart="8dp"
                         android:fontFamily="@font/avenirnext_bold"
-                        android:text="From Me to You - Mono / Remastered"
+                        android:text="From Me to You"
                         android:textColor="#FFFFFF"
                         android:textSize="12.5sp" />
 
@@ -82,18 +96,21 @@
                         android:orientation="horizontal">
 
                         <ImageView
-
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:backgroundTint="#17B54E"
+                            android:id="@+id/deviceImage"
+                            android:layout_width="30dp"
+                            android:layout_height="28dp"
                             android:layout_marginEnd="2dp"
                             android:scaleType="fitXY"
-                            android:src="@drawable/bluetooth" />
+                            android:background="@drawable/mobile_alt_1_svgrepo_com" />
 
                         <TextView
 
+                            android:id="@+id/playingDeviceTextView"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+
                             android:fontFamily="@font/avenirnext_bold"
                             android:text="BEATSPILL+"
                             android:textColor="#17B54E"
@@ -103,28 +120,43 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:id="@+id/imageView12"
+                    android:id="@+id/likeButton"
                     android:layout_width="42dp"
                     android:layout_height="33dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="15dp"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/bluetooth" />
+                    android:layout_marginEnd="5dp"
+                    app:srcCompat="@drawable/heart_empty" />
 
                 <ImageView
-                    android:id="@+id/imageView11"
+                    android:id="@+id/pauseButton"
+                    android:layout_width="35dp"
+                    android:layout_height="34dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="5dp"
+                    app:srcCompat="@drawable/pause" />
+
+                <ImageView
+                    android:id="@+id/playButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_weight="1"
-                    app:srcCompat="@android:drawable/ic_media_pause" />
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/player_play" />
 
             </LinearLayout>
 
-            <LinearLayout
 
-                android:layout_width="213dp"
-                android:layout_height="3dp"
-                android:background="@drawable/progress"
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:progress="20"
+                android:max="100"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:progressTint="@color/white"
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:orientation="vertical" />
@@ -142,4 +174,7 @@
             android:clipToPadding="false"
             android:orientation="vertical" />
     </RelativeLayout>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

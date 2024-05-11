@@ -121,6 +121,10 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
             pauseButton.visibility = View.GONE
             playButton.visibility = View.VISIBLE
         }
+
+        dropDownButton?.setOnClickListener {
+            dismiss() // This will close the bottom sheet when the dropdown button is clicked
+        }
     }
 
     private fun loadSongCoverImage(coverArtUrl: String?) {
