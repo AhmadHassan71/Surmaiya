@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.AddToPlaylistFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -15,18 +14,17 @@
             android:id="@+id/searchPlaylist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="19dp"
-            android:layout_marginStart="19dp"
-            android:layout_marginTop="144dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
 
-            android:layout_marginEnd="19dp"
             android:background="@drawable/search_background"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingHorizontal="15dp"
             android:paddingVertical="11dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/createNewPlaylist">
 
             <ImageView
                 android:layout_width="21dp"
@@ -40,7 +38,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
-                android:text="Artists, songs, or podcasts"
+                android:fontFamily="@font/satoshi_regular"
+                android:textFontWeight="600"
+                android:hint="Artists, songs, or podcasts"
                 android:textColor="#131313"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -51,20 +51,21 @@
             android:layout_height="51dp"
             android:layout_marginHorizontal="111dp"
             android:layout_marginStart="121dp"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/green_round"
             android:elevation="10dp"
             android:gravity="center_horizontal"
             android:orientation="vertical"
             android:paddingVertical="12dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/textView3">
 
             <TextView
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="New Playlist"
+                android:fontFamily="@font/satoshi_bold"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -86,23 +87,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="141dp"
-            android:layout_marginTop="29dp"
             android:layout_weight="1"
             android:text="Add to Playlist"
+            android:fontFamily="@font/satoshi_bold"
+
             android:textColor="#00A136"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/backButton" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/playlistSearchRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="37dp"
-            android:layout_marginStart="36dp"
-            android:layout_marginTop="220dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/searchPlaylist" />
     </androidx.constraintlayout.widget.ConstraintLayout>>
 
 </FrameLayout>

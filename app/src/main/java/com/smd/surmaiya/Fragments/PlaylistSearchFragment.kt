@@ -1,7 +1,6 @@
 package com.smd.surmaiya.Fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,13 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
-import com.google.firebase.database.FirebaseDatabase
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager.fetchSongFromFirebase
 import com.smd.surmaiya.ManagerClasses.PlaylistManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.AlbumAddSongAdapter
-import com.smd.surmaiya.adapters.AlbumSongAdapter
-import com.smd.surmaiya.adapters.PlaylistAdapter
 import com.smd.surmaiya.itemClasses.Playlist
 import com.smd.surmaiya.itemClasses.Song
 import com.smd.surmaiya.itemClasses.SongNew
@@ -57,7 +53,7 @@ class PlaylistSearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_playlist_search, container, false)
     }
 
@@ -69,8 +65,16 @@ class PlaylistSearchFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        val playlist = PlaylistManager.getPlaylists()
+        val playlist = getPlaylist()
+        setupPlaylistDetails(playlist)
+        setupSongsListForPlaylist(playlist)
+    }
 
+    private fun getPlaylist(): Playlist? {
+        return PlaylistManager.getPlaylists()
+    }
+
+    private fun setupPlaylistDetails(playlist: Playlist?) {
         if (playlist != null) {
             playlistCover = view?.findViewById(R.id.playlistCover)!!
             playlistName = view?.findViewById(R.id.playlistName)!!
@@ -80,9 +84,11 @@ class PlaylistSearchFragment : Fragment() {
                 .load(playlist.coverArtUrl)
                 .into(playlistCover)
             playlistName.text = playlist.playlistName
-            followers.text = playlist.followers.toString() + " Followers"
+            "${playlist.followers} Followers".also { followers.text = it }
         }
+    }
 
+    private fun setupSongsListForPlaylist(playlist: Playlist?) {
         val songsList = mutableListOf<Song>()
         val songIds = extractSongIdsFromPlaylist(playlist)
 
@@ -92,24 +98,24 @@ class PlaylistSearchFragment : Fragment() {
         for (songId in songIds) {
             fetchSongFromFirebase(songId.toString()) { song ->
                 songsList.add(song)
-                val newSongsList = mutableListOf<SongNew>()
-                for (song in songsList) {
-                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
-                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
-                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
-                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
-                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
-                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
-                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
-                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
-                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
-
-                }
-                playlistAdapter = AlbumAddSongAdapter(newSongsList)
-                playlistRecyclerView.adapter = playlistAdapter
-                playlistAdapter.notifyDataSetChanged()
+                val newSongsList = createNewSongsList(songsList)
+                setupAdapter(newSongsList)
             }
         }
+    }
+
+    private fun createNewSongsList(songsList: MutableList<Song>): MutableList<SongNew> {
+        val newSongsList = mutableListOf<SongNew>()
+        for (songs in songsList) {
+            newSongsList.add(SongNew(songs.coverArtUrl,songs.songName,songs.artist))
+        }
+        return newSongsList
+    }
+
+    private fun setupAdapter(newSongsList: MutableList<SongNew>) {
+        playlistAdapter = AlbumAddSongAdapter(newSongsList)
+        playlistRecyclerView.adapter = playlistAdapter
+        playlistAdapter.notifyDataSetChanged()
     }
 
     private fun extractSongIdsFromPlaylist(playlist: Playlist?): List<Any> {

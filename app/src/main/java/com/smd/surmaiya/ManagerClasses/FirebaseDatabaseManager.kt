@@ -113,6 +113,8 @@ object FirebaseDatabaseManager {
                     playlistMap["visibility"] as String
                 )
                 playlists.add(playlist)
+                Log.d("FirebasePlaylist", "Fetched playlist with ID: ${playlist.playlsitId}")
+                Log.d("FirebasePlaylist", "Fetched playlist with name: $playlist")
             }
             callback(playlists)
         }
@@ -130,6 +132,34 @@ object FirebaseDatabaseManager {
             }
         }.addOnFailureListener { exception ->
             Log.d("FirebaseSong", "Failed to fetch song with ID: $songId", exception)
+        }
+    }
+
+    fun fetchAllSongsFromFirebase(callback: (List<Song>) -> Unit) {
+        val songRef = FirebaseDatabase.getInstance().getReference("Songs")
+        songRef.get().addOnSuccessListener { snapshot ->
+            Log.d("FirebaseSong", "Fetched all songs ${snapshot.value}")
+            val songs = mutableListOf<Song>()
+            val objectsMap = snapshot.value as Map<*, *>
+            for ((_, value) in objectsMap) {
+                val songMap = value as Map<*, *>
+                val song = Song(
+                    songMap["id"] as String,
+                    songMap["songName"] as String,
+                    songMap["artist"] as String,
+                    songMap["album"] as String,
+                    songMap["duration"] as String,
+                    songMap["coverArtUrl"] as String,
+                    songMap["songUrl"] as String,
+                    songMap["releaseDate"] as String,
+                    (songMap["numListeners"] as Long).toInt(),
+                    songMap["genres"] as List<String>,
+                    songMap["album"] as String,
+
+                )
+                songs.add(song)
+            }
+            callback(songs)
         }
     }
 
