@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.smd.surmaiya.itemClasses.Album
+import com.smd.surmaiya.itemClasses.Playlist
 import com.smd.surmaiya.itemClasses.Song
 import com.smd.surmaiya.itemClasses.User
 import java.security.MessageDigest
@@ -96,6 +97,87 @@ object FirebaseDatabaseManager {
             }
         }
     }
+    fun getPlaylists(callback: (List<Playlist>) -> Unit) {
+        val playlistRef = database.getReference("Playlist")
+        playlistRef.get().addOnSuccessListener { snapshot ->
+            Log.d("FirebasePlaylist", "Fetched all playlists ${snapshot.value}")
+            val playlists = mutableListOf<Playlist>()
+            val objectsMap = snapshot.value as Map<*, *>
+            for ((_, value) in objectsMap) {
+                val playlistMap = value as Map<*, *>
+                val playlist = Playlist(
+                    playlistMap["playlsitId"] as String,
+                    playlistMap["playlistName"] as String,
+                    playlistMap["songIds"] as List<String>,
+                    playlistMap["coverArtUrl"] as String,
+                    playlistMap["userIds"] as List<String>,
+                    playlistMap["dateAdded"] as List<String>,
+                    playlistMap["followers"] as Long,
+                    playlistMap["visibility"] as String
+                )
+                playlists.add(playlist)
+                Log.d("FirebasePlaylist", "Fetched playlist with ID: ${playlist.playlsitId}")
+                Log.d("FirebasePlaylist", "Fetched playlist with name: ${playlist.playlistName}")
+            }
+            callback(playlists)
+        }
+    }
+
+    fun uploadPlaylistToFirebase(playlist: Playlist) {
+        val playlistId = database.getReference("Playlist").push().key
+        val playlistRef = database.getReference("Playlist").child(playlistId!!)
+        playlist.playlsitId = playlistId
+        playlistRef.setValue(playlist)
+            .addOnSuccessListener {
+                Log.d("FirebasePlaylist", "Playlist uploaded successfully with ID: ${playlist.playlsitId}")
+            }
+            .addOnFailureListener { e ->
+                Log.e(ContentValues.TAG, "Error uploading playlist: ${e.message}")
+            }
+    }
+
+    fun fetchSongFromFirebase(songId: String, callback: (Song) -> Unit) {
+        val songRef = FirebaseDatabase.getInstance().getReference("Songs").child(songId)
+        songRef.get().addOnSuccessListener { snapshot ->
+            val song = snapshot.getValue(Song::class.java)
+            if (song != null) {
+                Log.d("FirebaseSong", "Fetched song with ID: $songId")
+                callback(song)
+            } else {
+                Log.d("FirebaseSong", "No song found with ID: $songId")
+            }
+        }.addOnFailureListener { exception ->
+            Log.d("FirebaseSong", "Failed to fetch song with ID: $songId", exception)
+        }
+    }
+
+    fun fetchAllSongsFromFirebase(callback: (List<Song>) -> Unit) {
+        val songRef = FirebaseDatabase.getInstance().getReference("Songs")
+        songRef.get().addOnSuccessListener { snapshot ->
+            Log.d("FirebaseSong", "Fetched all songs ${snapshot.value}")
+            val songs = mutableListOf<Song>()
+            val objectsMap = snapshot.value as Map<*, *>
+            for ((_, value) in objectsMap) {
+                val songMap = value as Map<*, *>
+                val song = Song(
+                    songMap["id"] as String,
+                    songMap["songName"] as String,
+                    songMap["artist"] as String,
+                    songMap["album"] as String,
+                    songMap["duration"] as String,
+                    songMap["coverArtUrl"] as String,
+                    songMap["songUrl"] as String,
+                    songMap["releaseDate"] as String,
+                    (songMap["numListeners"] as Long).toInt(),
+                    songMap["genres"] as List<String>,
+                    songMap["album"] as String,
+
+                    )
+                songs.add(song)
+            }
+            callback(songs)
+        }
+    }
     fun getAllGenres(callback: (List<String>) -> Unit) {
         val myRef = database.getReference("Genres")
         val genreList = mutableListOf<String>()
@@ -136,6 +218,34 @@ object FirebaseDatabaseManager {
             }
         })
     }
-
+    fun getPlaylistsByUserId(userId: String, callback: (List<Playlist>) -> Unit) {
+        val playlistsRef = database.getReference("Playlist")
+        playlistsRef.get().addOnSuccessListener { snapshot ->
+            val playlists = mutableListOf<Playlist>()
+            val objectsMap = snapshot.value as Map<*, *>
+            for ((_, value) in objectsMap) {
+                val playlistMap = value as Map<*, *>
+                val playlistUserIds = playlistMap["userIds"] as List<String>
+                if (playlistUserIds.contains(userId)) {
+                    val playlist = Playlist(
+                        playlistMap["playlsitId"] as String,
+                        playlistMap["playlistName"] as String,
+                        playlistMap["songIds"] as List<String>,
+                        playlistMap["coverArtUrl"] as String,
+                        playlistUserIds,
+                        playlistMap["dateAdded"] as List<String>,
+                        playlistMap["followers"] as Long,
+                        playlistMap["visibility"] as String
+                    )
+                    playlists.add(playlist)
+                    Log.d("FirebasePlaylist", "Fetched playlist with ID: ${playlist.playlsitId} for user ID: $userId")
+                }
+            }
+            callback(playlists)
+        }.addOnFailureListener { exception ->
+            Log.e("FirebasePlaylist", "Failed to fetch playlists for user ID: $userId", exception)
+            callback(emptyList())
+        }
+    }
 }
 

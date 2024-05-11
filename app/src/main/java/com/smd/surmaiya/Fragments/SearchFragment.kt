@@ -16,7 +16,6 @@ class SearchFragment : Fragment() {
 
     private lateinit var searchBar: SearchView
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,14 +39,11 @@ class SearchFragment : Fragment() {
                     .addToBackStack(null)
                     .commit()
                 return false
-
             }
-
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText!!.isEmpty()) {
                     return false
                 }
-
                 val searchResultsFragment = SearchResultsFragment()
                 val bundle = Bundle()
                 bundle.putString("search_query", newText)

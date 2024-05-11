@@ -207,7 +207,7 @@
             app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/publicPlaylistsReecylerView"
+            android:id="@+id/publicPlaylistsRecylerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

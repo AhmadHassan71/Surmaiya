@@ -1,11 +1,17 @@
 package com.smd.surmaiya.Fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.R
+import com.smd.surmaiya.adapters.PlaylistAdapter
+import com.smd.surmaiya.itemClasses.Playlist
+import de.hdodenhof.circleimageview.CircleImageView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +27,9 @@ class OtherUserFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var userProfileImage: CircleImageView
+    private lateinit var playlistRecyclerView: RecyclerView
+    private lateinit var playlistAdapter: PlaylistAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,12 +39,38 @@ class OtherUserFragment : Fragment() {
         }
     }
 
+    fun intializeViews(view: View) {
+        userProfileImage = view.findViewById(R.id.yourUserProfilePicture)
+        playlistRecyclerView = view.findViewById(R.id.PlaylistsRecylerView)
+    }
+
+    private fun setUpRecyclerView() {
+        val playlists = listOf<Playlist>()
+        playlistAdapter = PlaylistAdapter(playlists, object : PlaylistAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                // Handle item click
+            }
+            override fun onItemChanged(position: Int) {
+                // Handle item changed
+            }
+        })
+//        FirebaseDatabaseManager.getPlaylistsByUserId()
+        playlistRecyclerView.layoutManager = LinearLayoutManager(context)
+        playlistRecyclerView.adapter = playlistAdapter
+    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_other_user, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        intializeViews(view)
+        setUpRecyclerView()
     }
 
     companion object {

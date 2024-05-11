@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.smd.surmaiya.R
 import com.smd.surmaiya.itemClasses.Playlist
 
@@ -20,9 +21,14 @@ class PopularPlaylistAdapter(private val playlists: List<Playlist>) :
 
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
         val currentPlaylist = playlists[position]
-        holder.playlistCoverImageView.setImageResource(currentPlaylist.imageResource)
+
+        Glide.with(holder.playlistCoverImageView.context)
+            .load(currentPlaylist.coverArtUrl)
+            .into(holder.playlistCoverImageView)
+
         holder.playlistNameTextView.text = currentPlaylist.playlistName
-        holder.songsNumberTextView.text = "${currentPlaylist.numberOfSongs} songs"
+        val songsNumber = currentPlaylist.songIds.size
+        holder.songsNumberTextView.text = "${songsNumber} songs"
     }
 
     override fun getItemCount() = playlists.size
