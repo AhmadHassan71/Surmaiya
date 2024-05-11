@@ -50,12 +50,12 @@ class SearchOptionsFragment : Fragment() {
             SongNew(
                 "https://preview.redd.it/the-full-key-visual-for-bleach-tybw-the-separation-v0-ifguzaidwgkb1.jpg?auto=webp&s=c3c7385837b8d5f1f449a989320cd15cc4eef49e",
                 "Song 1",
-                "Faraz Deutsch"
+                "Faraz Deutsch","1"
             ),
             SongNew(
                 "https://preview.redd.it/the-full-key-visual-for-bleach-tybw-the-separation-v0-ifguzaidwgkb1.jpg?auto=webp&s=c3c7385837b8d5f1f449a989320cd15cc4eef49e",
                 "Song 2",
-                "Ahmad Deutsch"
+                "Ahmad Deutsch","2"
             ),
         )
         searchSongAdapter = SearchItemAdapter(songList)

@@ -1,16 +1,19 @@
 package com.smd.surmaiya.Fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
+import com.smd.surmaiya.HelperClasses.FragmentHelper
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager.fetchSongFromFirebase
 import com.smd.surmaiya.ManagerClasses.PlaylistManager
 import com.smd.surmaiya.R
@@ -33,13 +36,19 @@ class PlaylistSearchFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private lateinit var editPlaylist: ImageView
     private lateinit var playlistSearch: ImageView
     private lateinit var playlistRecyclerView: RecyclerView
     private lateinit var playlistAdapter: AlbumAddSongAdapter
     private lateinit var playlistCover: ShapeableImageView
     private lateinit var playlistName: TextView
     private lateinit var followers: TextView
+    private lateinit var followImage: ImageView
+    private lateinit var playlistDescription: TextView
+    private lateinit var addSong: ImageView
+    private lateinit var addUserToPlaylist: ImageView
+    private lateinit var editPlaylist: ImageView
+    private lateinit var downloadPlaylist: ImageView
+    private var isLiked: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,11 +88,13 @@ class PlaylistSearchFragment : Fragment() {
             playlistCover = view?.findViewById(R.id.playlistCover)!!
             playlistName = view?.findViewById(R.id.playlistName)!!
             followers = view?.findViewById<TextView>(R.id.followers)!!
+            playlistDescription = view?.findViewById(R.id.playlistDescription)!!
 
             Glide.with(this)
                 .load(playlist.coverArtUrl)
                 .into(playlistCover)
             playlistName.text = playlist.playlistName
+            playlistDescription.text = playlist.playlistDescription
             "${playlist.followers} Followers".also { followers.text = it }
         }
     }
@@ -124,11 +135,12 @@ class PlaylistSearchFragment : Fragment() {
     }
     private fun createNewSongsList(songsList: MutableList<Song>): MutableList<SongNew> {
         val newSongsList = mutableListOf<SongNew>()
-        for (songs in songsList) {
-            newSongsList.add(SongNew(songs.coverArtUrl,songs.songName,songs.artist))
+        for (song in songsList) {
+            newSongsList.add(SongNew(song.coverArtUrl, song.songName, song.artist, song.id))
         }
         return newSongsList
     }
+
 
     private fun setupAdapter(newSongsList: MutableList<SongNew>) {
         playlistAdapter = AlbumAddSongAdapter(newSongsList)
@@ -148,6 +160,11 @@ class PlaylistSearchFragment : Fragment() {
     fun initializeViews() {
         backButton = view?.findViewById(R.id.backButton)!!
         editPlaylist = view?.findViewById(R.id.editPlaylist)!!
+        playlistDescription = view?.findViewById(R.id.playlistDescription)!!
+        followImage = view?.findViewById(R.id.likeImageView)!!
+        addSong = view?.findViewById(R.id.addToPlaylist)!!
+        addUserToPlaylist = view?.findViewById(R.id.addUserToPlaylist)!!
+        downloadPlaylist = view?.findViewById(R.id.downloadPlaylist)!!
     }
 
     fun setUpOnClickListeners() {
@@ -158,9 +175,59 @@ class PlaylistSearchFragment : Fragment() {
         editPlaylist.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction().replace(R.id.fragment_container, EditPlaylistFragment()).addToBackStack(null).commit()
         }
+        followImage.setOnClickListener {
+//            followImage.setImageResource(R.drawable.ic_baseline_favorite_24)
+            if(isLiked) {
+                followImage.setImageResource(R.drawable.heart)
+                isLiked = false
+            }
+            else {
+                followImage.setImageResource(R.drawable.heart_filled)
+                isLiked = true
+            }
+
+        }
+        addSong.setOnClickListener {
+
+
+            val bundle = Bundle()
+            bundle.putString("selectedPlaylistId", PlaylistManager.getPlaylists()!!.playlsitId) // Replace with the actual ID of the selected playlist
+
+            val addToPlaylistFragment = AddToPlaylistFragment()
+            addToPlaylistFragment.arguments = bundle
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, addToPlaylistFragment)
+                .addToBackStack(null)
+                .commit()
+            FragmentHelper(requireActivity().supportFragmentManager,requireContext()).loadFragment(AddToPlaylistFragment())
+        }
+        addUserToPlaylist.setOnClickListener {
+//            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.fragment_container, AddUserToPlaylistFragment()).addToBackStack(null).commit()
+            showEnterEmailDialog(requireView())
+        }
+        downloadPlaylist.setOnClickListener {
+//            downloadPlaylist.setImageResource(R.drawable.ic_baseline_cloud_download_24)
+
+        }
 
     }
-        companion object {
+
+    private fun showEnterEmailDialog(view : View) {
+        val builder = AlertDialog.Builder(requireActivity())
+        val inflater = requireActivity().layoutInflater
+        val dialogView = inflater.inflate(R.layout.dialog_add_collaborator, null)
+        builder.setView(dialogView)
+        val dialog = builder.create()
+        dialog.window?.setBackgroundDrawableResource(R.drawable.dialog_round_corners)
+        val inviteButton = dialogView.findViewById<Button>(R.id.sendInviteButton)
+        inviteButton.setOnClickListener {
+
+        }
+        dialog.show()
+    }
+
+    companion object {
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
