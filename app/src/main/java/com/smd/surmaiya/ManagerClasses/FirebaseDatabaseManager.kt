@@ -4,9 +4,11 @@ import android.content.ContentValues
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.FirebaseDatabase
+import com.smd.surmaiya.HelperClasses.CustomToastMaker
 import com.smd.surmaiya.itemClasses.Album
 import com.smd.surmaiya.itemClasses.Playlist
 import com.smd.surmaiya.itemClasses.Song
+import com.smd.surmaiya.itemClasses.SongNew
 import com.smd.surmaiya.itemClasses.User
 import java.security.MessageDigest
 import java.util.UUID
@@ -189,6 +191,46 @@ object FirebaseDatabaseManager {
                 songs.add(song)
             }
             callback(songs)
+        }
+    }
+
+    fun updateSongInFirebase(song: SongNew, callback: (Boolean) -> Unit) {
+        val userId = UserManager.getCurrentUser()!!.id
+        val songRef = database.getReference("LikedSongs").child(userId)
+
+        songRef.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val snapshot = task.result
+                val likedSongs = snapshot.value as? MutableList<String> ?: mutableListOf()
+                if (!likedSongs.contains(song.songId)) {
+                    likedSongs.add(song.songId)
+                } else {
+                    likedSongs.remove(song.songId)
+                }
+
+                songRef.setValue(likedSongs)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Log.d("FirebaseSong", "Song updated successfully with ID: ${song.songId}")
+                            callback(true)
+                        } else {
+                            Log.e(ContentValues.TAG, "Error updating song: ${task.exception?.message}")
+                            callback(false)
+                        }
+                    }
+            } else {
+                Log.e(ContentValues.TAG, "Error fetching liked songs: ${task.exception?.message}")
+                callback(false)
+            }
+        }
+    }
+
+    fun getLikedSongsFromFirebase(callback: (List<String>) -> Unit) {
+        val userId = UserManager.getCurrentUser()!!.id
+        val songRef = database.getReference("LikedSongs").child(userId)
+        songRef.get().addOnSuccessListener { snapshot ->
+            val likedSongs = snapshot.value as? List<String> ?: listOf()
+            callback(likedSongs)
         }
     }
 

@@ -168,6 +168,9 @@ class PlaylistSearchFragment : Fragment() {
         addUserToPlaylist = view?.findViewById(R.id.addUserToPlaylist)!!
         downloadPlaylist = view?.findViewById(R.id.downloadPlaylist)!!
 
+        if(getPlaylist()!!.followers > 0) {
+            followImage.setImageResource(R.drawable.heart_filled)
+        }
 
     }
 
