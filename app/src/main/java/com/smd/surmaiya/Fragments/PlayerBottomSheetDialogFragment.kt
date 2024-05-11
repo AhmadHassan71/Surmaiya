@@ -5,6 +5,8 @@ import android.app.Dialog
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.LinearGradient
+import android.graphics.Shader
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
@@ -156,7 +158,7 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
             val vibrantColor = it.vibrantSwatch?.rgb ?: Color.parseColor("#EFE198")
             val playingDeviceTextView: TextView = view?.findViewById(R.id.playingDeviceTextView) as TextView
 
-            val colors = intArrayOf(lightMutedColor, vibrantColor, darkMutedColor)
+            val colors = intArrayOf(lightMutedColor, mutedColor, darkMutedColor)
 
 
             val gradientDrawable = GradientDrawable(
@@ -171,9 +173,22 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
                 threeDots?.backgroundTintList = ColorStateList.valueOf(darkMutedColor)
                 dropDownButton?.backgroundTintList = ColorStateList.valueOf(darkMutedColor)
                 closeArrow?.backgroundTintList = ColorStateList.valueOf(lightMutedColor)
-                songNameTextView?.setTextColor(darkVibrantColor)
+                val lightVibrantColor = it.lightVibrantSwatch?.rgb ?: Color.parseColor("#EFE198")
+                val darkVibrantColor = it.darkVibrantSwatch?.rgb ?: Color.parseColor("#EFE198")
+
+                // Existing code...
+
+                // Create a LinearGradient with the light vibrant and dark vibrant colors
+                val paint = songNameTextView.paint
+                val width = paint.measureText(songNameTextView.text.toString())
+                val textShader: Shader = LinearGradient(0f, 0f, width, songNameTextView.textSize,
+                    intArrayOf(darkVibrantColor, mutedColor),
+                    null,
+                    Shader.TileMode.CLAMP)
+                paint.shader = textShader
+                songNameTextView.invalidate()
                 artistNameTextView?.setTextColor(darkVibrantColor)
-                playingDeviceTextView.setTextColor(mutedColor)
+                playingDeviceTextView.setTextColor(darkVibrantColor)
                 playerBarLinearLayout?.setBackgroundColor(lightMutedColor)
                 threeDots?.backgroundTintList = ColorStateList.valueOf(darkMutedColor)
 
