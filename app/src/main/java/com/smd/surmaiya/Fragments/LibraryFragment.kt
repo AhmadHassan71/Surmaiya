@@ -12,6 +12,7 @@ import com.smd.surmaiya.HelperClasses.SideBarNavigationHelper
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.LibraryFilterAdapter
 import com.smd.surmaiya.adapters.SearchItemAdapter
+import com.smd.surmaiya.itemClasses.Song
 import com.smd.surmaiya.itemClasses.SongNew
 
 // TODO: Rename parameter arguments, choose names that match
@@ -31,7 +32,7 @@ class LibraryFragment : Fragment() {
     private lateinit var filterRecyclerView: RecyclerView
     private lateinit var librarySongRecyclerView: RecyclerView
     private lateinit var librarySongAdapter: SearchItemAdapter
-    private var songList: MutableList<SongNew> = mutableListOf()
+    private var songList: MutableList<Song> = mutableListOf()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -71,18 +72,7 @@ class LibraryFragment : Fragment() {
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         librarySongRecyclerView = view?.findViewById(R.id.librarySongRecyclerView)!!
-        songList = mutableListOf(
-            SongNew(
-                "https://preview.redd.it/the-full-key-visual-for-bleach-tybw-the-separation-v0-ifguzaidwgkb1.jpg?auto=webp&s=c3c7385837b8d5f1f449a989320cd15cc4eef49e",
-                "Song 1",
-                "Faraz Deutsch"
-            ),
-            SongNew(
-                "https://preview.redd.it/the-full-key-visual-for-bleach-tybw-the-separation-v0-ifguzaidwgkb1.jpg?auto=webp&s=c3c7385837b8d5f1f449a989320cd15cc4eef49e",
-                "Song 2",
-                "Ahmad Deutsch"
-            ),
-        )
+        songList = mutableListOf()
         librarySongAdapter = SearchItemAdapter(songList)
         librarySongRecyclerView.adapter = librarySongAdapter
         librarySongRecyclerView.layoutManager = LinearLayoutManager(context)

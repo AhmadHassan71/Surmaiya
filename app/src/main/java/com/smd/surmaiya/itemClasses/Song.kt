@@ -13,4 +13,6 @@ data class Song(
     val numListeners: Int,
     val genres: List<String>,
     var albumName: String
-)
+){
+    constructor():this("","","","","","","","",0, listOf(""),"")
+}

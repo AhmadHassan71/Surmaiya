@@ -8,9 +8,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.smd.surmaiya.R
+import com.smd.surmaiya.itemClasses.Song
 import com.smd.surmaiya.itemClasses.SongNew
 
-class SearchItemAdapter(private val searchItems: MutableList<SongNew>) :
+class SearchItemAdapter(private val searchItems: MutableList<Song>) :
     RecyclerView.Adapter<SearchItemAdapter.MyViewHolder>() {
 
     class MyViewHolder(val linearLayout: LinearLayout) : RecyclerView.ViewHolder(linearLayout)
@@ -28,12 +29,10 @@ class SearchItemAdapter(private val searchItems: MutableList<SongNew>) :
         val songArtistNameTextView = holder.linearLayout.findViewById<TextView>(R.id.textView2)
         val songImageView = holder.linearLayout.findViewById<ImageView>(R.id.songCoverImageView)
         songNameTextView.text = searchItems[position].songName
-        songArtistNameTextView.text = searchItems[position].artistName
-        if (searchItems[position].songCoverImageResource != null) {
-
+        songArtistNameTextView.text = searchItems[position].artist
+        if (searchItems[position].coverArtUrl != null) {
             Glide.with(holder.linearLayout.context)
-                .load(searchItems[position].songCoverImageResource).into(songImageView)
-
+                .load(searchItems[position].coverArtUrl).into(songImageView)
         }
     }
 

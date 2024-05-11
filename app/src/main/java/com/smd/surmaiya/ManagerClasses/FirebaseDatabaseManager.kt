@@ -3,7 +3,10 @@ package com.smd.surmaiya.ManagerClasses
 import android.content.ContentValues
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.smd.surmaiya.itemClasses.Album
 import com.smd.surmaiya.itemClasses.Song
 import com.smd.surmaiya.itemClasses.User
@@ -92,6 +95,46 @@ object FirebaseDatabaseManager {
                 genreRef.setValue(genreId)
             }
         }
+    }
+    fun getAllGenres(callback: (List<String>) -> Unit) {
+        val myRef = database.getReference("Genres")
+        val genreList = mutableListOf<String>()
+
+        myRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (postSnapshot in dataSnapshot.children) {
+                    val genre = postSnapshot.key
+                    if (genre != null) {
+                        genreList.add(genre)
+                    }
+                }
+                callback(genreList)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(ContentValues.TAG, "Error fetching genres: ${databaseError.message}")
+            }
+        })
+    }
+    fun getAllSongs(callback: (List<Song>) -> Unit) {
+        val myRef = database.getReference("Songs")
+        val songList = mutableListOf<Song>()
+
+        myRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (postSnapshot in dataSnapshot.children) {
+                    val song = postSnapshot.getValue(Song::class.java)
+                    if (song != null) {
+                        songList.add(song)
+                    }
+                }
+                callback(songList)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(ContentValues.TAG, "Error fetching songs: ${databaseError.message}")
+            }
+        })
     }
 
 }
