@@ -1,6 +1,7 @@
 package com.smd.surmaiya.HelperClasses
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
@@ -20,9 +21,11 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.smd.surmaiya.Fragments.SettingsFragment
 import com.smd.surmaiya.Fragments.YourUserFragment
 import com.smd.surmaiya.ManagerClasses.UserManager
+import com.smd.surmaiya.ManagerClasses.UserManager.showGuestDialog
 import com.smd.surmaiya.R
 import com.smd.surmaiya.activities.LoginActivity
 import com.smd.surmaiya.activities.LoginOrSignupActivity
+import com.smd.surmaiya.itemClasses.User
 import com.smd.surmaiya.itemClasses.UserType
 
 class SideBarNavigationHelper(private val activity: Activity) {
@@ -47,6 +50,10 @@ class SideBarNavigationHelper(private val activity: Activity) {
 
             when (menuItem.itemId) {
                 R.id.settingsButton -> {
+                    if(UserManager.getCurrentUser()== null){
+                        showGuestDialog(activity)
+                        return@setNavigationItemSelectedListener false
+                    }
                     fragmentHelper.closeDrawerWithDelay(drawerLayout, 300) // delay in milliseconds
                     Handler(Looper.getMainLooper()).postDelayed({
                         fragmentHelper.loadFragment(SettingsFragment())
@@ -60,6 +67,10 @@ class SideBarNavigationHelper(private val activity: Activity) {
                     true
                 }
                 R.id.notificataionsButton -> {
+                    if(UserManager.getCurrentUser()== null){
+                        showGuestDialog(activity)
+                        return@setNavigationItemSelectedListener false
+                    }
 
                     true
                 }
@@ -74,6 +85,8 @@ class SideBarNavigationHelper(private val activity: Activity) {
 
     }
 
+
+
     fun openDrawerOnMenuClick(view: View, activity: Activity?) {
         val menuOpener = view.findViewById<ImageView>(R.id.menu_opener)
         val drawerLayout = activity?.findViewById<DrawerLayout>(R.id.drawer_layout)
@@ -85,7 +98,13 @@ class SideBarNavigationHelper(private val activity: Activity) {
 
     private fun prepareUsername(activity: Activity){
         val userName = activity.findViewById<TextView>(R.id.userName)
-
+        if(UserManager.getCurrentUser()== null){
+            userName.text = "GUEST USER"
+            activity.findViewById<ImageView>(R.id.profilePic).visibility = View.GONE
+            val viewProfile = activity.findViewById<TextView>(R.id.viewProfile)
+            viewProfile.visibility = View.GONE
+            return
+        }
         if (UserManager.getCurrentUser()?.name == null) {
             userName.text = "User"
             return
