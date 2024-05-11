@@ -10,6 +10,7 @@ import android.graphics.Shader
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.LayerDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.*
@@ -191,6 +192,20 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
                 playingDeviceTextView.setTextColor(darkVibrantColor)
                 playerBarLinearLayout?.setBackgroundColor(lightMutedColor)
                 threeDots?.backgroundTintList = ColorStateList.valueOf(darkMutedColor)
+
+
+                // Calculate the complementary color
+                val red = 255 - Color.red(darkVibrantColor)
+                val green = 255 - Color.green(darkVibrantColor)
+                val blue = 255 - Color.blue(darkVibrantColor)
+                val complementaryColor = Color.rgb(red, green, blue)
+
+                // Set the progress tint
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    progressBar.progressTintList = ColorStateList.valueOf(complementaryColor)
+
+                }
+
 
                 val connectedAudioDevice = ConnectedAudioDevice()
                 playingDeviceTextView.text  = connectedAudioDevice.getConnectedAudioDevice(requireContext()).first
