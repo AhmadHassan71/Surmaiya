@@ -12,12 +12,12 @@ import com.smd.surmaiya.R
 class LoginOrSignupActivity : AppCompatActivity() {
     private lateinit var loginTextView: TextView
     private lateinit var signUpButton: Button
-
+    private lateinit var guestSignInTextView: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login_or_signup)
         val loginTextView = findViewById<TextView>(R.id.LoginTextView)
-
+        guestSignInTextView = findViewById<TextView>(R.id.guestSignInTextView)
         initalizeViews()
         setUpOnClickListeners()
     }
@@ -41,6 +41,12 @@ class LoginOrSignupActivity : AppCompatActivity() {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
             Navigator.navigateToActivity(this, SignUpActivity::class.java)
+        }
+
+        guestSignInTextView.setOnClickListener{
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+            Navigator.navigateToActivity(this, HomeActivity::class.java)
         }
     }
 

@@ -79,15 +79,7 @@ class AddSongFragment : Fragment() {
         val addArtworkTextViewTitle = view?.findViewById<TextView>(R.id.addArtworkTextViewTitle)
         val addArtworkTextView = view?.findViewById<TextView>(R.id.addArtworkTextView)
 
-        addArtworkTextView?.setOnClickListener {
-            uploadSongCover()
-        }
-        addArtworkTextViewTitle?.setOnClickListener {
-            uploadSongCover()
-        }
-        addArtworkLayout?.setOnClickListener {
-            uploadSongCover()
-        }
+        layoutOnClickListeners(addArtworkTextView, addArtworkTextViewTitle, addArtworkLayout)
 
         val songFileTextView = requireView().findViewById<TextView>(R.id.songFile)
         songFileTextView.isSelected = true
@@ -105,6 +97,22 @@ class AddSongFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun layoutOnClickListeners(
+        addArtworkTextView: TextView?,
+        addArtworkTextViewTitle: TextView?,
+        addArtworkLayout: LinearLayout?
+    ) {
+        addArtworkTextView?.setOnClickListener {
+            uploadSongCover()
+        }
+        addArtworkTextViewTitle?.setOnClickListener {
+            uploadSongCover()
+        }
+        addArtworkLayout?.setOnClickListener {
+            uploadSongCover()
+        }
     }
 
     interface OnSongCreatedCallback {

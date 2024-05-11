@@ -1,5 +1,6 @@
 package com.smd.surmaiya.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -31,6 +32,8 @@ class AlbumAddSongAdapter(private val myDataset: MutableList<SongNew>) :
         Glide.with(holder.linearLayout.context).load(myDataset[position].songCoverImageResource).into(
             imageView
         )
+        holder.itemView.setBackgroundColor(Color.parseColor("#F3CC00"))
+        holder.itemView.elevation = 0f
 
     }
 

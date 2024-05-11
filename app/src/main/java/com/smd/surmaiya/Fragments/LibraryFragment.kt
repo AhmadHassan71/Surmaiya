@@ -1,19 +1,24 @@
 package com.smd.surmaiya.Fragments
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.smd.surmaiya.HelperClasses.SideBarNavigationHelper
+import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.LibraryFilterAdapter
 import com.smd.surmaiya.adapters.SearchItemAdapter
 import com.smd.surmaiya.itemClasses.Song
 import com.smd.surmaiya.itemClasses.SongNew
+import com.smd.surmaiya.itemClasses.UserType
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -83,9 +88,11 @@ class LibraryFragment : Fragment() {
 //            requireActivity().supportFragmentManager.popBackStack()
 //        }
         addToPlaylist.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
+
+                requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, AddToPlaylistFragment()).addToBackStack(null)
                 .commit()
+
         }
     }
 
