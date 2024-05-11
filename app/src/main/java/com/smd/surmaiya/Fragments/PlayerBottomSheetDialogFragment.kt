@@ -35,7 +35,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     private lateinit var song: Song
-    private lateinit var progressBar: ProgressBar
+    private lateinit var progressBar: SeekBar
     private lateinit var pauseButton: ImageView
     private lateinit var playButton: ImageView
     private lateinit var songNameTextView: TextView
@@ -126,6 +126,26 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
         dropDownButton?.setOnClickListener {
             dismiss() // This will close the bottom sheet when the dropdown button is clicked
         }
+
+        progressBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    val duration = MusicServiceManager.getService()?.exoPlayer?.duration ?: 0
+                    val newProgress = (progress / 100.0) * duration
+                    MusicServiceManager.getService()?.exoPlayer?.seekTo(newProgress.toLong())
+
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                //pause runable
+                progressBar.removeCallbacks(updateProgressRunnable)
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                progressBar.post(updateProgressRunnable)
+            }
+        })
     }
 
     private fun loadSongCoverImage(coverArtUrl: String?) {
@@ -246,6 +266,16 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
         bottomSheetBehavior.peekHeight = resources.displayMetrics.heightPixels
     }
 
+    override fun onResume() {
+        super.onResume()
+        progressBar.post(updateProgressRunnable)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        progressBar.removeCallbacks(updateProgressRunnable)
+    }
+
 
 
     companion object {
@@ -264,7 +294,7 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
             var progress = MusicServiceManager.getService()?.getProgress() ?: 0
             progress/=2
             progressBar.progress = progress
-            progressBar.postDelayed(this, 5)
+            progressBar.postDelayed(this, 2000)
         }
     }
 }

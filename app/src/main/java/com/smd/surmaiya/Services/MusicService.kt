@@ -32,7 +32,7 @@ import com.smd.surmaiya.itemClasses.Song
 
 class MusicService : Service() {
 
-    private var exoPlayer: SimpleExoPlayer? = null
+    var exoPlayer: SimpleExoPlayer? = null
     private var mediaSession: MediaSessionCompat? = null
     private val songManager = SongManager.getInstance()
     private var albumArtBitmap: Bitmap? = null
@@ -160,7 +160,7 @@ class MusicService : Service() {
         }
 
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
-        handler.postDelayed(updateProgressRunnable, 5000) // Update progress every second
+        handler.postDelayed(updateProgressRunnable, 10000) // Update progress every second
     }
 
 

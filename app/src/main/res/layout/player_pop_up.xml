@@ -190,8 +190,7 @@
             android:layout_gravity="center"
             android:elevation="10dp">
 
-            <ProgressBar
-
+            <SeekBar
                 android:id="@+id/progressBar"
                 style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_width="450dp"

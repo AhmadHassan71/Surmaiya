@@ -120,6 +120,7 @@ class HomeActivity : AppCompatActivity() {
         SongManager.getInstance().addToQueue(song)
         MusicServiceManager.playSong(song)
         songNameTextView.text = song.songName
+        songNameTextView.requestFocus()
 
 
         val connectedAudioDevice = ConnectedAudioDevice()
@@ -173,11 +174,13 @@ class HomeActivity : AppCompatActivity() {
     }
 
 
+
+
     private val updateProgressRunnable = object : Runnable {
         override fun run() {
             var progress = MusicServiceManager.getService()?.getProgress()  ?: 0
             progressBar.progress = progress
-            progressBar.postDelayed(this, 2) // Update progress every second
+            progressBar.postDelayed(this, 1000) // Update progress every second
         }
     }
 
