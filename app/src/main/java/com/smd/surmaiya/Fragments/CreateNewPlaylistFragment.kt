@@ -177,7 +177,7 @@ class   CreateNewPlaylistFragment : Fragment() {
 
         createButton.setOnClickListener {
             buildPlaylistObject()
-            FragmentHelper(requireActivity().supportFragmentManager,requireContext()).loadFragment(HomeFragment())
+            FragmentHelper(requireActivity().supportFragmentManager,requireContext()).loadFragment(LibraryFragment())
         }
 
 
