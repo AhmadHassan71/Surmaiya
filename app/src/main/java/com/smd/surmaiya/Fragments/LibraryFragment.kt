@@ -37,7 +37,7 @@ class LibraryFragment : Fragment() {
     private lateinit var filterRecyclerView: RecyclerView
     private lateinit var librarySongRecyclerView: RecyclerView
     private lateinit var librarySongAdapter: SearchItemAdapter
-    private var songList: MutableList<Song> = mutableListOf()
+    private var songList: MutableList<SongNew> = mutableListOf()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

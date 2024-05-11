@@ -1,8 +1,6 @@
 package com.smd.surmaiya.Fragments
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,16 +9,14 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.smd.surmaiya.HelperClasses.CustomToastMaker
+import com.smd.surmaiya.HelperClasses.FragmentHelper
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
+import com.smd.surmaiya.ManagerClasses.PlaylistManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.AddToPlaylistAdapter
-import com.smd.surmaiya.adapters.AlbumAddSongAdapter
-import com.smd.surmaiya.adapters.AlbumSongAdapter
-import com.smd.surmaiya.adapters.PlaylistSearchItemAdapter
-import com.smd.surmaiya.itemClasses.PlaylistSearchItem
 import com.smd.surmaiya.itemClasses.Song
 import com.smd.surmaiya.itemClasses.SongNew
-import kotlinx.coroutines.selects.select
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -42,11 +38,12 @@ class AddToPlaylistFragment : Fragment() {
     private lateinit var playlistSearchRecyclerView: RecyclerView
     private var songsList = mutableListOf<Song>()
     private var newSongsList = mutableListOf<SongNew>()
+    private var selectedPlaylistId: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            selectedPlaylistId = it.getString("selectedPlaylistId")
         }
     }
 
@@ -87,8 +84,8 @@ class AddToPlaylistFragment : Fragment() {
         }
     }
     private fun createNewSongsList(songsList: MutableList<Song>): MutableList<SongNew> {
-        for (songs in songsList) {
-            newSongsList.add(SongNew(songs.coverArtUrl,songs.songName,songs.artist))
+        for (song in songsList) {
+            newSongsList.add(SongNew(song.coverArtUrl, song.songName, song.artist, song.id))
         }
         return newSongsList
     }
@@ -105,8 +102,25 @@ class AddToPlaylistFragment : Fragment() {
 
             getSelectedSongIds(selectedNewSongs, selectedSongIds)
 
-            openCreateNewPlaylistFragment(selectedSongIds)
+            val selectedPlaylist = PlaylistManager.getPlaylists()
 
+            // Add the selected songs to the playlist
+            if (selectedPlaylist != null) {
+                val updatedSongsList = selectedPlaylist.songIds + selectedSongIds
+                selectedPlaylist.songIds = updatedSongsList
+                // Update the playlist in Firebase
+                FirebaseDatabaseManager.updatePlaylistInFirebase(selectedPlaylist) { success ->
+                    if (success) {
+                        CustomToastMaker().showToast(requireContext(), "Songs Added Successfully")
+                        FragmentHelper(requireActivity().supportFragmentManager, requireContext()).loadFragment(PlaylistSearchFragment())
+                    } else {
+                        CustomToastMaker().showToast(requireContext(), "Error adding songs to playlist")
+                    }
+                }
+            }
+            else {
+                openCreateNewPlaylistFragment(selectedSongIds)
+            }
 
         }
         searchPlaylist.setOnClickListener {

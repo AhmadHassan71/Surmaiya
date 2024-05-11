@@ -113,7 +113,9 @@ object FirebaseDatabaseManager {
                     playlistMap["userIds"] as List<String>,
                     playlistMap["dateAdded"] as List<String>,
                     playlistMap["followers"] as Long,
-                    playlistMap["visibility"] as String
+                    playlistMap["followerIds"] as List<String>,
+                    playlistMap["visibility"] as String,
+                    playlistMap["playlistDescription"]as String,
                 )
                 playlists.add(playlist)
                 Log.d("FirebasePlaylist", "Fetched playlist with ID: ${playlist.playlsitId}")
@@ -133,6 +135,19 @@ object FirebaseDatabaseManager {
             }
             .addOnFailureListener { e ->
                 Log.e(ContentValues.TAG, "Error uploading playlist: ${e.message}")
+            }
+    }
+
+    fun updatePlaylistInFirebase(playlist: Playlist, callback: (Boolean) -> Unit) {
+        val playlistRef = database.getReference("Playlist").child(playlist.playlsitId)
+        playlistRef.setValue(playlist)
+            .addOnSuccessListener {
+                Log.d("FirebasePlaylist", "Playlist updated successfully with ID: ${playlist.playlsitId}")
+                callback(true)
+            }
+            .addOnFailureListener { e ->
+                Log.e(ContentValues.TAG, "Error updating playlist: ${e.message}")
+                callback(false)
             }
     }
 

@@ -18,7 +18,6 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.tasks.Tasks
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.FirebaseStorageManager
 import com.smd.surmaiya.ManagerClasses.UserManager
@@ -34,7 +33,6 @@ import com.smd.surmaiya.itemClasses.Album
 import com.smd.surmaiya.itemClasses.Song
 import com.smd.surmaiya.itemClasses.SongNew
 import java.time.LocalDate
-import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.UUID
 
@@ -149,7 +147,8 @@ class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
         val songNew = SongNew(
             songName = song.songName,
             artistName = song.artist,
-            songCoverImageResource = song.coverArtUrl
+            songCoverImageResource = song.coverArtUrl,
+            songId = song.id
         )
 
         songsToSendFirebase.add(song)
@@ -213,7 +212,8 @@ class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
                     val songNew = SongNew(
                         songName = song.songName,
                         artistName = song.artist,
-                        songCoverImageResource = song.coverArtUrl
+                        songCoverImageResource = song.coverArtUrl,
+                        songId = song.id
                     )
 
                     songsToSendFirebase.add(song)

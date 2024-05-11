@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.EditPlaylistFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/yellow_gradient_background"
@@ -15,148 +14,114 @@
 
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/r5e31ubxxy7v"
+            android:id="@+id/playlistCoverArt"
             android:layout_width="234dp"
             android:layout_height="238dp"
-            android:layout_marginStart="68dp"
-            android:layout_marginTop="120dp"
-            android:scaleType="fitXY"
+            android:layout_marginTop="40dp"
+            android:scaleType="centerCrop"
             android:src="@mipmap/current_favourites"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/cr5" />
 
         <TextView
+            android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="104dp"
-            android:layout_marginTop="416dp"
-            android:text="Edit Playlist"
+            android:layout_marginTop="50dp"
+            android:text="Edit Information"
             android:textColor="#FFFFFF"
-            android:textSize="24sp"
+            android:textSize="32sp"
+            android:fontFamily="@font/satoshi_bold"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/playlistCoverArt" />
 
         <TextView
+            android:id="@+id/textView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="52dp"
-            android:layout_marginTop="592dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="30dp"
             android:text="Privacy"
             android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/playlistDescription" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="53dp"
-            android:layout_marginTop="489dp"
-            android:text="Give your playlist a title "
-            android:textColor="#8A9A9D"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="53dp"
-            android:layout_marginTop="540dp"
-            android:text="Give your playlist a title "
-            android:textColor="#8A9A9D"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-
+        <EditText
+            android:id="@+id/playlistName"
             android:layout_width="200dp"
-            android:layout_height="1dp"
-            android:layout_marginStart="52dp"
-            android:layout_marginTop="512dp"
-            android:background="#8A9A9D"
-            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/satoshi_regular"
+            android:hint="Give your playlist a title "
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#C3C2C2"
+            android:textFontWeight="600"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
-        <View
+        <EditText
 
+            android:id="@+id/playlistDescription"
             android:layout_width="200dp"
-            android:layout_height="1dp"
-            android:layout_marginStart="52dp"
-            android:layout_marginTop="568dp"
-            android:background="#8A9A9D"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <LinearLayout
-            android:layout_width="84dp"
-            android:layout_height="24dp"
-
-            android:layout_marginStart="52dp"
-            android:layout_marginTop="635dp"
-            android:background="@drawable/dropdown_back"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-
-                app:srcCompat="@drawable/globe" />
-
-            <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:text="Public"
-                android:textColor="#39C0D4"
-                android:textSize="10sp" />
-
-            <ImageView
-
-                android:layout_width="25dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/drop_triangle" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="49dp"
+            android:fontFamily="@font/satoshi_regular"
+            android:hint="Describe your playlist"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#C3C2C2"
+            android:textFontWeight="600"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="@+id/playlistName"
+            app:layout_constraintStart_toStartOf="@+id/playlistName"
+            app:layout_constraintTop_toBottomOf="@+id/playlistName" />
 
         <Button
-
-            android:layout_width="84dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="693dp"
-
-            android:layout_marginEnd="60dp"
+            android:id="@+id/saveButton"
+            android:layout_width="100dp"
+            android:layout_height="42dp"
+            android:layout_marginBottom="40dp"
+            android:layout_marginEnd="50dp"
             android:background="@drawable/green_round"
-            android:text="Create"
+            android:text="Save"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="14dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/playlistDescription"
+            app:layout_constraintTop_toTopOf="@+id/cancelButton" />
 
         <Button
+
             android:id="@+id/cancelButton"
-            android:layout_width="72dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="52dp"
-            android:layout_marginTop="691dp"
+            android:layout_width="100dp"
+            android:layout_height="42dp"
             android:background="@drawable/cancel_background"
             android:text="Cancel"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/privacySpinner"
+            app:layout_constraintTop_toBottomOf="@+id/privacySpinner" />
+
+        <Spinner
+            android:id="@+id/privacySpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/dropdown_back"
+            app:layout_constraintStart_toStartOf="@+id/textView10"
+            app:layout_constraintTop_toBottomOf="@+id/textView10"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

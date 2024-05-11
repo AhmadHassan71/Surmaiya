@@ -136,7 +136,8 @@ class   CreateNewPlaylistFragment : Fragment() {
         dateAdded.add(currentDate)
         val followers = 0L
         val visibility = "public"
-
+        val followerList = mutableListOf<String>()
+        followerList.add("Nobody")
         getCoverArtUrlAfterUpload { coverArtDownload ->
             val playlist = Playlist(
                 playlistId,
@@ -146,7 +147,9 @@ class   CreateNewPlaylistFragment : Fragment() {
                 userIdsList,
                 dateAdded,
                 followers,
-                visibility
+                followerList,
+                visibility,
+                playlistDescription.text.toString()
             )
             FirebaseDatabaseManager.uploadPlaylistToFirebase(playlist)
 

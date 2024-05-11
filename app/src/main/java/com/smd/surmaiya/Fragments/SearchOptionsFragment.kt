@@ -28,7 +28,7 @@ class SearchOptionsFragment : Fragment() {
     private var param2: String? = null
     private lateinit var searchSongRecyclerView: RecyclerView
     private lateinit var searchSongAdapter: SearchItemAdapter
-    private var songList: MutableList<Song> = mutableListOf()
+    private var songList: MutableList<SongNew> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -44,6 +44,7 @@ class SearchOptionsFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_search_options, container, false)
     }
+
     fun initializeViews() {
         searchSongRecyclerView = view?.findViewById(R.id.SearchItemRecyclerView)!!
         songList = mutableListOf()
