@@ -14,8 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.smd.surmaiya.HelperClasses.FragmentHelper
+import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager.fetchSongFromFirebase
 import com.smd.surmaiya.ManagerClasses.PlaylistManager
+import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.AlbumAddSongAdapter
 import com.smd.surmaiya.itemClasses.Playlist
@@ -165,6 +167,8 @@ class PlaylistSearchFragment : Fragment() {
         addSong = view?.findViewById(R.id.addToPlaylist)!!
         addUserToPlaylist = view?.findViewById(R.id.addUserToPlaylist)!!
         downloadPlaylist = view?.findViewById(R.id.downloadPlaylist)!!
+
+
     }
 
     fun setUpOnClickListeners() {
@@ -175,17 +179,10 @@ class PlaylistSearchFragment : Fragment() {
         editPlaylist.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction().replace(R.id.fragment_container, EditPlaylistFragment()).addToBackStack(null).commit()
         }
-        followImage.setOnClickListener {
-//            followImage.setImageResource(R.drawable.ic_baseline_favorite_24)
-            if(isLiked) {
-                followImage.setImageResource(R.drawable.heart)
-                isLiked = false
-            }
-            else {
-                followImage.setImageResource(R.drawable.heart_filled)
-                isLiked = true
-            }
 
+        followImage.setOnClickListener {
+
+            updatePlaylistFollower()
         }
         addSong.setOnClickListener {
 
@@ -211,6 +208,41 @@ class PlaylistSearchFragment : Fragment() {
 
         }
 
+    }
+
+    private fun updatePlaylistFollower() {
+        val playlist = getPlaylist()
+        val userId =
+            UserManager.getCurrentUser()?.id // Replace with the actual ID of the current user
+        val followerIds = playlist?.followerIds?.toMutableList() ?: mutableListOf()
+        val followersCount = playlist?.followers ?: 0
+
+        if (userId in followerIds) {
+            // The user is already a follower, so remove them from the followers list
+            followerIds.remove(userId)
+            playlist?.followers = followersCount - 1
+            followImage.setImageResource(R.drawable.heart_empty)
+        } else {
+            // The user is not a follower, so add them to the followers list
+            if (userId != null) {
+                followerIds.add(userId)
+            }
+            playlist?.followers = followersCount + 1
+            followImage.setImageResource(R.drawable.heart_filled)
+        }
+
+        playlist?.followerIds = followerIds
+
+        // Update the playlist in Firebase
+        FirebaseDatabaseManager.updatePlaylistInFirebase(playlist!!) { success ->
+            if (success) {
+                // Update the followers TextView
+                "${playlist.followers} Followers".also { followers.text = it }
+                isLiked = true
+            } else {
+                // Handle the error
+            }
+        }
     }
 
     private fun showEnterEmailDialog(view : View) {

@@ -7,8 +7,8 @@ data class Playlist(
     var coverArtUrl: String,
     val userIds: List<String>,
     val dateAdded: List<String>,
-    val followers: Long,
-    val followerIds: List<String>,
+    var followers: Long,
+    var followerIds: List<String>,
     var visibility: String,
     var playlistDescription: String
 
