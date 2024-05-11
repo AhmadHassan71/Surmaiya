@@ -4,10 +4,12 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.IBinder
 import android.util.Log
 import com.smd.surmaiya.Services.MusicService
+import com.smd.surmaiya.itemClasses.Song
 
 object MusicServiceManager {
 
@@ -40,6 +42,10 @@ object MusicServiceManager {
             context.unbindService(serviceConnection)
             isBound = false
         }
+    }
+
+    fun showNotification(song: Song, albumArtBitmap: Bitmap) {
+        musicService?.showNotification(song, albumArtBitmap)
     }
 
 

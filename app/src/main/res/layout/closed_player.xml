@@ -102,7 +102,7 @@
                             android:layout_height="28dp"
                             android:layout_marginEnd="2dp"
                             android:scaleType="fitXY"
-                            android:background="@drawable/mobile_alt_1_svgrepo_com" />
+                            android:src="@drawable/mobile_alt_1_svgrepo_com" />
 
                         <TextView
 

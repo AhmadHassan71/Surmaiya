@@ -227,7 +227,7 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     private fun startImageRotation() {
         val animator = ObjectAnimator.ofFloat(circleImageView, View.ROTATION, 0f, 360f)
-        animator.duration = 10000 // Duration in milliseconds, adjust to suit your needs
+        animator.duration = 20000 // Duration in milliseconds, adjust to suit your needs
         animator.repeatCount = ObjectAnimator.INFINITE
         animator.interpolator = LinearInterpolator()
         animator.start()

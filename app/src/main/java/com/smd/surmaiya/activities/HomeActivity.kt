@@ -1,12 +1,16 @@
 package com.smd.surmaiya.activities
 
 import BottomNavigationHelper
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -50,9 +54,25 @@ class HomeActivity : AppCompatActivity() {
         BottomNavigationHelper(this).loadFragment(HomeFragment())
         BottomNavigationHelper(this).setUpBottomNavigation()
 
+        initalizeNotificationsChannel()
         initializeViews()
 
        initializeOnClickListeners()
+    }
+
+    private fun initalizeNotificationsChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelId = getString(R.string.music_channel_id)
+            val name = getString(R.string.music_channel_name)
+            val descriptionText = getString(R.string.music_channel_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(channelId, name, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system
+            val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 
     private fun initializeViews() {
@@ -105,6 +125,8 @@ class HomeActivity : AppCompatActivity() {
             .load(song.coverArtUrl)
             .into(albumImageView)
 
+        var albumArtBitmap: Bitmap? = null
+
         Glide.with(this)
             .asBitmap()
             .load(song.coverArtUrl)
@@ -113,6 +135,13 @@ class HomeActivity : AppCompatActivity() {
                     Palette.from(resource).generate { palette ->
                         // Get the muted color from the palette
                         val mutedColor = palette?.mutedSwatch?.rgb ?: Color.parseColor("#550A1C")
+                        albumArtBitmap = resource
+
+                        Log.d("HomeActivity", "album art bitmap : $albumArtBitmap")
+
+                        albumArtBitmap?.let {
+                            Log.d("HomeActivity", "showPlayerBottomSheetDialog: Album art bitmap is not null")
+                            MusicServiceManager.showNotification(song, it) }
 
                         // Set the background color of the viewBackGround
                         viewBackGround.setBackgroundColor(mutedColor)
@@ -124,7 +153,10 @@ class HomeActivity : AppCompatActivity() {
                 }
             })
 
+
+
         progressBar.post(updateProgressRunnable)
+
 
 
         val playerBottomSheetDialogFragment = PlayerBottomSheetDialogFragment()

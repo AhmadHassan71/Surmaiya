@@ -62,6 +62,7 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     implementation ("com.google.android.exoplayer:exoplayer:2.19.1")
     implementation ("androidx.palette:palette:1.0.0")
+    implementation ("androidx.media:media:1.4.3")
 
 
 
