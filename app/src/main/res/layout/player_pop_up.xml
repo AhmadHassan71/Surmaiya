@@ -13,9 +13,21 @@
         android:layout_height="36dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="28dp"
-        android:background="@drawable/dropdown"
+        android:background="@drawable/circle_background"
+        android:backgroundTint="#EFE198"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/closeButton"
+        android:layout_width="36dp"
+        android:elevation="2dp"
+        android:layout_height="36dp"
+        android:background="@drawable/dropdown"
+        app:layout_constraintBottom_toBottomOf="@id/dropdownButton"
+        app:layout_constraintEnd_toEndOf="@id/dropdownButton"
+        app:layout_constraintStart_toStartOf="@id/dropdownButton"
+        app:layout_constraintTop_toTopOf="@id/dropdownButton" />
 
     <Button
         android:id="@+id/threedots"
@@ -84,6 +96,7 @@
         app:layout_constraintTop_toBottomOf="@+id/playingDeviceTextView">
 
         <LinearLayout
+            android:id="@+id/playerBarLinearLayout"
             android:layout_width="wrap_content"
             android:orientation="vertical"
             android:padding="15dp"

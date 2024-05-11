@@ -1,53 +1,60 @@
 package com.smd.surmaiya.Fragments
 
+import android.animation.ObjectAnimator
 import android.app.Dialog
-import android.net.Uri
+import android.content.res.ColorStateList
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowManager
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.*
+import android.view.animation.LinearInterpolator
+import android.widget.*
+import androidx.annotation.RequiresApi
+import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.smd.surmaiya.HelperClasses.ConnectedAudioDevice
 import com.smd.surmaiya.ManagerClasses.MusicServiceManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.itemClasses.Song
 import de.hdodenhof.circleimageview.CircleImageView
-import android.animation.ObjectAnimator
-import android.os.Build
-import android.view.animation.LinearInterpolator
-import android.widget.ProgressBar
-import androidx.annotation.RequiresApi
-import com.smd.surmaiya.HelperClasses.ConnectedAudioDevice
 
 class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
-    override fun getTheme(): Int = R.style.AppBottomSheetDialogTheme
-    private var progressBar: ProgressBar? = null
+    private lateinit var song: Song
+    private lateinit var progressBar: ProgressBar
+    private lateinit var pauseButton: ImageView
+    private lateinit var playButton: ImageView
+    private lateinit var songNameTextView: TextView
+    private lateinit var artistNameTextView: TextView
+    private lateinit var circleImageView: CircleImageView
+    private var nextButton : ImageView? = null
+    private var previousButton : ImageView? = null
+    private var dropDownButton : Button? = null
+    private var threeDots:Button? = null
+    private var closeArrow:ImageView? = null
+    private var playerBarLinearLayout: LinearLayout? = null
 
-    private var song: Song? = null
-    private var pauseButton: ImageView? = null
-    private var songNameTextView: TextView? = null
-    private var artistNameTextView: TextView? = null
-    private var circleImageView: CircleImageView? = null
+    override fun getTheme(): Int = R.style.AppBottomSheetDialogTheme
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = BottomSheetDialog(requireContext(), theme)
         dialog.setOnShowListener {
-
             val bottomSheetDialog = it as BottomSheetDialog
-            val parentLayout =
-                bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-            parentLayout?.let { it ->
-                val behaviour = BottomSheetBehavior.from(it)
-                setupFullHeight(it)
-                behaviour.state = BottomSheetBehavior.STATE_EXPANDED
+            val parentLayout = bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            parentLayout?.let { bottomSheet ->
+                val behavior = BottomSheetBehavior.from(bottomSheet)
+                setupFullHeight(bottomSheet)
+                behavior.state = BottomSheetBehavior.STATE_EXPANDED
             }
         }
         return dialog
@@ -61,81 +68,126 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        song = arguments?.getParcelable<Song>("song")
+        // Initialize views
+        initializeViews(view)
 
+        // Set up click listeners
+        setUpOnClickListeners()
+
+        // Load song details
+        song = requireArguments().getParcelable("song")!!
+
+        // Set song details
+        songNameTextView.text = song.songName
+        artistNameTextView.text = song.artist
+
+        // Load song cover image and set palette colors
+        loadSongCoverImage(song.coverArtUrl)
+
+        // Start the image rotation animation
+        startImageRotation()
+
+        // Start updating the progress bar
+        progressBar.post(updateProgressRunnable)
+    }
+
+    private fun initializeViews(view: View) {
         songNameTextView = view.findViewById(R.id.songNameTextView)
         artistNameTextView = view.findViewById(R.id.artistNameTextView)
         circleImageView = view.findViewById(R.id.albumCoverView)
-
-        songNameTextView?.text = song?.songName
-        artistNameTextView?.text = song?.artist
         progressBar = view.findViewById(R.id.progressBar)
-
-        setUpOnClickListeners()
-
-        val playingDeviceTextView: TextView = view.findViewById(R.id.playingDeviceTextView)
-        val connectedAudioDevice = ConnectedAudioDevice()
-        playingDeviceTextView.text  = connectedAudioDevice.getConnectedAudioDevice(requireContext()).first
-        // set the device start drawable
-        playingDeviceTextView.setCompoundDrawablesWithIntrinsicBounds(connectedAudioDevice.getConnectedAudioDevice(requireContext()).second, 0, 0, 0)
-
-
-        Glide.with(requireContext())
-            .load(song?.coverArtUrl)
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .into(circleImageView!!)
-
-        val dropdownButton = view.findViewById<Button>(R.id.dropdownButton)
-        dropdownButton.setOnClickListener {
-            dismiss() // This will close the bottom sheet when the dropdown button is clicked
-        }
-
-        var bottomSheetBehavior = BottomSheetBehavior.from(view.parent as View)
-        bottomSheetBehavior.state=BottomSheetBehavior.STATE_EXPANDED
-
-        //set minimimum height to parent height
-        bottomSheetBehavior.peekHeight = resources.displayMetrics.heightPixels
-
-
-
-        startImageRotation() // Start the image rotation
-        progressBar?.post(updateProgressRunnable) // Start updating the progress bar
-
+        playButton = view.findViewById(R.id.playButton)
+        pauseButton = view.findViewById(R.id.pauseButton)
+        nextButton = view.findViewById(R.id.nextButton)
+        previousButton = view.findViewById(R.id.previousButton)
+        dropDownButton = view.findViewById(R.id.dropdownButton)
+        threeDots = view.findViewById(R.id.threedots)
+        closeArrow = view.findViewById(R.id.closeButton)
+        playerBarLinearLayout = view.findViewById(R.id.playerBarLinearLayout)
     }
 
-    fun setUpOnClickListeners() {
-
-        // Implement play, pause, and stop functionality
-        val playButton = requireView().findViewById<ImageView>(R.id.pauseButton)
+    private fun setUpOnClickListeners() {
         playButton.setOnClickListener {
             MusicServiceManager.pauseSong()
             playButton.visibility = View.GONE
-            pauseButton?.visibility = View.VISIBLE
-
+            pauseButton.visibility = View.VISIBLE
         }
 
-        pauseButton = requireView().findViewById<ImageView>(R.id.playButton)
-
-        pauseButton?.setOnClickListener {
+        pauseButton.setOnClickListener {
             MusicServiceManager.resumeSong()
-            pauseButton?.visibility = View.GONE
+            pauseButton.visibility = View.GONE
             playButton.visibility = View.VISIBLE
         }
     }
 
-    private fun setupFullHeight(bottomSheet: View) {
-        val layoutParams = bottomSheet.layoutParams
-        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
-        bottomSheet.layoutParams = layoutParams
+    private fun loadSongCoverImage(coverArtUrl: String?) {
+        Glide.with(requireContext())
+            .asBitmap()
+            .load(coverArtUrl)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .into(object : CustomTarget<Bitmap>() {
+                @RequiresApi(Build.VERSION_CODES.S)
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    circleImageView.setImageBitmap(resource)
+                    // Generate Palette from the Bitmap
+                    Palette.from(resource).generate { palette ->
+                        val dominantColor = palette?.dominantSwatch?.rgb ?: Color.parseColor("#EFE198")
+                        // Set colors based on palette
+                        setPaletteColors(dominantColor, palette)
+                    }
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {
+                    // Handle case where the Bitmap load is cleared
+                }
+            })
     }
 
-    companion object {
-        fun newInstance(song: Song): PlayerBottomSheetDialogFragment {
-            val fragment = PlayerBottomSheetDialogFragment()
-            val args = Bundle()
-            args.putParcelable("song", song)
-            fragment.arguments = args
-            return fragment
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun setPaletteColors(dominantColor: Int, palette: Palette?) {
+
+
+        // Set background colors
+        palette?.let {
+            val lightMutedColor = it.lightMutedSwatch?.rgb ?: Color.parseColor("#EFE198")
+            val darkMutedColor = it.darkMutedSwatch?.rgb ?: Color.parseColor("#EFE198")
+            val darkVibrantColor = it.darkVibrantSwatch?.rgb ?: Color.parseColor("#EFE198")
+            val mutedColor = it.mutedSwatch?.rgb ?: Color.parseColor("#EFE198")
+            val vibrantColor = it.vibrantSwatch?.rgb ?: Color.parseColor("#EFE198")
+            val playingDeviceTextView: TextView = view?.findViewById(R.id.playingDeviceTextView) as TextView
+
+            val colors = intArrayOf(lightMutedColor, vibrantColor, darkMutedColor)
+
+
+            val gradientDrawable = GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                colors
+            )
+
+            view?.let { view ->
+
+                view.background = gradientDrawable
+                playerBarLinearLayout?.setBackgroundColor(lightMutedColor)
+                threeDots?.backgroundTintList = ColorStateList.valueOf(darkMutedColor)
+                dropDownButton?.backgroundTintList = ColorStateList.valueOf(darkMutedColor)
+                closeArrow?.backgroundTintList = ColorStateList.valueOf(lightMutedColor)
+                songNameTextView?.setTextColor(darkVibrantColor)
+                artistNameTextView?.setTextColor(darkVibrantColor)
+                playingDeviceTextView.setTextColor(mutedColor)
+                playerBarLinearLayout?.setBackgroundColor(lightMutedColor)
+                threeDots?.backgroundTintList = ColorStateList.valueOf(darkMutedColor)
+
+                val connectedAudioDevice = ConnectedAudioDevice()
+                playingDeviceTextView.text  = connectedAudioDevice.getConnectedAudioDevice(requireContext()).first
+                // set the device start drawable
+                playingDeviceTextView.setCompoundDrawablesWithIntrinsicBounds(connectedAudioDevice.getConnectedAudioDevice(requireContext()).second, 0, 0, 0)
+
+                //change colour of this drawable
+                playingDeviceTextView.compoundDrawableTintList = ColorStateList.valueOf(darkVibrantColor)
+
+
+
+            }
         }
     }
 
@@ -147,11 +199,28 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
         animator.start()
     }
 
+    private fun setupFullHeight(bottomSheet: View) {
+        val layoutParams = bottomSheet.layoutParams
+        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
+        bottomSheet.layoutParams = layoutParams
+    }
+
+    companion object {
+        fun newInstance(song: Song): PlayerBottomSheetDialogFragment {
+            val fragment = PlayerBottomSheetDialogFragment()
+            val args = Bundle().apply {
+                putParcelable("song", song)
+            }
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
     private val updateProgressRunnable = object : Runnable {
         override fun run() {
             val progress = MusicServiceManager.getService()?.getProgress() ?: 0
-            progressBar?.progress = progress
-            progressBar?.postDelayed(this, 5)
+            progressBar.progress = progress
+            progressBar.postDelayed(this, 5)
         }
     }
 }
