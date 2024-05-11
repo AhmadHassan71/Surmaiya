@@ -98,6 +98,7 @@ object FirebaseDatabaseManager {
     fun getPlaylists(callback: (List<Playlist>) -> Unit) {
         val playlistRef = database.getReference("Playlist")
         playlistRef.get().addOnSuccessListener { snapshot ->
+            Log.d("FirebasePlaylist", "Fetched all playlists ${snapshot.value}")
             val playlists = mutableListOf<Playlist>()
             val objectsMap = snapshot.value as Map<*, *>
             for ((_, value) in objectsMap) {
@@ -105,19 +106,32 @@ object FirebaseDatabaseManager {
                 val playlist = Playlist(
                     playlistMap["playlsitId"] as String,
                     playlistMap["playlistName"] as String,
-                    playlistMap["songids"] as Map<String, Any>,
+                    playlistMap["songIds"] as List<String>,
                     playlistMap["coverArtUrl"] as String,
-                    playlistMap["userIds"] as Map<String, Any>,
-                    (playlistMap["dateAdded"] as Map<String, Any>)["date"] as String,
+                    playlistMap["userIds"] as List<String>,
+                    playlistMap["dateAdded"] as List<String>,
                     playlistMap["followers"] as Long,
                     playlistMap["visibility"] as String
                 )
                 playlists.add(playlist)
                 Log.d("FirebasePlaylist", "Fetched playlist with ID: ${playlist.playlsitId}")
-                Log.d("FirebasePlaylist", "Fetched playlist with name: $playlist")
+                Log.d("FirebasePlaylist", "Fetched playlist with name: ${playlist.playlistName}")
             }
             callback(playlists)
         }
+    }
+
+    fun uploadPlaylistToFirebase(playlist: Playlist) {
+        val playlistId = database.getReference("Playlist").push().key
+        val playlistRef = database.getReference("Playlist").child(playlistId!!)
+        playlist.playlsitId = playlistId
+        playlistRef.setValue(playlist)
+            .addOnSuccessListener {
+                Log.d("FirebasePlaylist", "Playlist uploaded successfully with ID: ${playlist.playlsitId}")
+            }
+            .addOnFailureListener { e ->
+                Log.e(ContentValues.TAG, "Error uploading playlist: ${e.message}")
+            }
     }
 
     fun fetchSongFromFirebase(songId: String, callback: (Song) -> Unit) {

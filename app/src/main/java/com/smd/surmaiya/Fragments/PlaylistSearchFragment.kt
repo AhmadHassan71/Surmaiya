@@ -88,22 +88,40 @@ class PlaylistSearchFragment : Fragment() {
         }
     }
 
+//    private fun setupSongsListForPlaylist(playlist: Playlist?) {
+//        val songsList = mutableListOf<Song>()
+//        val songIds = playlist?.let { extractSongIdsFromPlaylist(it) } ?: listOf()
+//
+//        playlistRecyclerView = view?.findViewById(R.id.playlistRecyclerView)!!
+//        playlistRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+//
+//        fetchAllSongsFromFirebase { allSongs ->
+//            val songsInPlaylist = allSongs.filter { it.id in songIds }
+//            songsList.addAll(songsInPlaylist)
+//            val newSongsList = createNewSongsList(songsList)
+//            setupAdapter(newSongsList)
+//        }
+//    }
+
     private fun setupSongsListForPlaylist(playlist: Playlist?) {
         val songsList = mutableListOf<Song>()
-        val songIds = extractSongIdsFromPlaylist(playlist)
+        val songIds = playlist?.let { extractSongIdsFromPlaylist(it) } ?: listOf()
 
         playlistRecyclerView = view?.findViewById(R.id.playlistRecyclerView)!!
         playlistRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         for (songId in songIds) {
-            fetchSongFromFirebase(songId.toString()) { song ->
-                songsList.add(song)
-                val newSongsList = createNewSongsList(songsList)
-                setupAdapter(newSongsList)
+            if (songId != null) {
+                fetchSongFromFirebase(songId) { song ->
+                    song?.let {
+                        songsList.add(it)
+                        val newSongsList = createNewSongsList(songsList)
+                        setupAdapter(newSongsList)
+                    }
+                }
             }
         }
     }
-
     private fun createNewSongsList(songsList: MutableList<Song>): MutableList<SongNew> {
         val newSongsList = mutableListOf<SongNew>()
         for (songs in songsList) {
@@ -118,10 +136,13 @@ class PlaylistSearchFragment : Fragment() {
         playlistAdapter.notifyDataSetChanged()
     }
 
-    private fun extractSongIdsFromPlaylist(playlist: Playlist?): List<Any> {
-        return playlist?.songids?.values?.toList() ?: listOf()
+    private fun extractSongIdsFromPlaylist(playlist: Playlist?): List<String> {
+        val songIds = mutableListOf<String>()
+        if (playlist != null) {
+            songIds.addAll(playlist.songIds)
+        }
+        return songIds
     }
-
 
     private lateinit var backButton: ImageView
     fun initializeViews() {

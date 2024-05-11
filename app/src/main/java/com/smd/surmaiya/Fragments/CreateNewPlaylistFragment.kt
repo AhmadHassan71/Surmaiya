@@ -12,18 +12,20 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
-import com.google.firebase.storage.FirebaseStorage
 import com.smd.surmaiya.HelperClasses.CustomToastMaker
+import com.smd.surmaiya.HelperClasses.FragmentHelper
+import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.FirebaseStorageManager
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.itemClasses.Playlist
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -42,8 +44,8 @@ class   CreateNewPlaylistFragment : Fragment() {
     private val songIds = mutableListOf<String>()
     private lateinit var createButton: Button
     private lateinit var cancelButton: Button
-    private lateinit var playlistName: TextView
-    private lateinit var playlistDescription: TextView
+    private lateinit var playlistName: EditText
+    private lateinit var playlistDescription: EditText
     private lateinit var privacySpinner: Spinner
     private lateinit var playlistCover: ShapeableImageView
     private var coverArtUrl: Uri? = null
@@ -66,7 +68,7 @@ class   CreateNewPlaylistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initializeViews()
+        initializeViews(view)
         receiveData()
         setUpOnClickListeners()
         setupPrivacySpinner(view)
@@ -106,59 +108,60 @@ class   CreateNewPlaylistFragment : Fragment() {
         privacySpinner.adapter = adapter
     }
 
-    fun initializeViews() {
-        cancelButton = view?.findViewById(R.id.cancelButton)!!
-        playlistCover = view?.findViewById(R.id.playlistCoverArt)!!
-        playlistName = view?.findViewById(R.id.playlistName)!!
-        playlistDescription = view?.findViewById(R.id.playlistDescription)!!
-        privacySpinner = view?.findViewById(R.id.privacySpinner)!!
-        createButton = view?.findViewById(R.id.createButton)!!
+    fun initializeViews(view: View) {
+        cancelButton = view.findViewById(R.id.cancelButton)!!
+        playlistCover = view.findViewById(R.id.playlistCoverArt)!!
+        playlistName = view.findViewById(R.id.playlistName)!!
+        playlistDescription = view.findViewById(R.id.playlistDescription)!!
+        privacySpinner = view.findViewById(R.id.privacySpinner)!!
+        createButton = view.findViewById(R.id.createButton)!!
 
     }
 
-    fun buildPlaylistObject(): Playlist {
-        var coverArtDownload = ""
-
-        coverArtDownload = getCoverArtUrlAfterUpload(coverArtDownload)
-
-        if(playlistName.text.toString().isEmpty()) {
+    private fun buildPlaylistObject() {
+        if (playlistName.text.toString().isEmpty()) {
             CustomToastMaker().showToast(requireContext(), "Please enter a playlist name")
-            return Playlist()
+            return
         }
 
-        // Assuming you have these values available in your fragment
         val playlistId = "id"
-        val playlistName = playlistName.text.toString()
-        val mappedSongIds = mapOf("id" to songIds.joinToString(","))
-
-        val userIds = mapOf("id" to "NxT2KMTSCLHqgBYpBCj")
-        val dateAdded = "12/1/2024"
+        val playlistName = this.playlistName.text.toString()
+        val songIdsList = mutableListOf<String>()
+        songIdsList.addAll(songIds)
+        val userIdsList = mutableListOf<String>()
+        userIdsList.add(UserManager.getCurrentUser()!!.id)
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val currentDate = sdf.format(Date())
+        val dateAdded = mutableListOf<String>()
+        dateAdded.add(currentDate)
         val followers = 0L
         val visibility = "public"
 
-        return Playlist(
-            playlistId,
-            playlistName,
-            mappedSongIds,
-            coverArtDownload,
-            userIds,
-            dateAdded,
-            followers,
-            visibility
-        )
+        getCoverArtUrlAfterUpload { coverArtDownload ->
+            val playlist = Playlist(
+                playlistId,
+                playlistName,
+                songIdsList,
+                coverArtDownload,
+                userIdsList,
+                dateAdded,
+                followers,
+                visibility
+            )
+            FirebaseDatabaseManager.uploadPlaylistToFirebase(playlist)
+
+        }
     }
 
-    private fun getCoverArtUrlAfterUpload(coverArtDownload: String): String {
-        var coverArtDownload1 = coverArtDownload
-        val pathString: String =
-            "Playlist/${UserManager.getCurrentUser()!!.id}/${playlistName}/CoverArt/"
-        FirebaseStorageManager.uploadToFirebaseStorage(
-            coverArtUrl!!,
-            pathString + getFileName(coverArtUrl!!)!!
-        ) {
-            coverArtDownload1 = it
+    private fun getCoverArtUrlAfterUpload(callback: (String) -> Unit) {
+        if (coverArtUrl != null) {
+            val pathString = "Playlist/${UserManager.getCurrentUser()!!.id}/${playlistName.text.toString()}/CoverArt/"
+            FirebaseStorageManager.uploadToFirebaseStorage(coverArtUrl!!, pathString + getFileName(coverArtUrl!!)!!) { downloadUrl ->
+                callback(downloadUrl)
+            }
+        } else {
+             CustomToastMaker().showToast(requireContext(), "Please select a cover art")
         }
-        return coverArtDownload1
     }
 
     fun setUpOnClickListeners() {
@@ -170,6 +173,11 @@ class   CreateNewPlaylistFragment : Fragment() {
         playlistCover.setOnClickListener {
 
             uploadPlaylistCover()
+        }
+
+        createButton.setOnClickListener {
+            buildPlaylistObject()
+            FragmentHelper(requireActivity().supportFragmentManager,requireContext()).loadFragment(HomeFragment())
         }
 
 
