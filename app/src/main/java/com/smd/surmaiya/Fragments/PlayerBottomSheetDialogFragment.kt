@@ -27,6 +27,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.smd.surmaiya.HelperClasses.ConnectedAudioDevice
 import com.smd.surmaiya.ManagerClasses.MusicServiceManager
+import com.smd.surmaiya.ManagerClasses.SongManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.itemClasses.Song
 import de.hdodenhof.circleimageview.CircleImageView
@@ -78,7 +79,7 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
         setUpOnClickListeners()
 
         // Load song details
-        song = requireArguments().getParcelable("song")!!
+        song = SongManager.getInstance().currentSong ?: return
 
         // Set song details
         songNameTextView.text = song.songName
@@ -237,7 +238,15 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
         val layoutParams = bottomSheet.layoutParams
         layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
         bottomSheet.layoutParams = layoutParams
+
+        var bottomSheetBehavior = BottomSheetBehavior.from(view?.parent as View)
+        bottomSheetBehavior.state=BottomSheetBehavior.STATE_EXPANDED
+
+        //set minimimum height to parent height
+        bottomSheetBehavior.peekHeight = resources.displayMetrics.heightPixels
     }
+
+
 
     companion object {
         fun newInstance(song: Song): PlayerBottomSheetDialogFragment {
@@ -252,7 +261,8 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     private val updateProgressRunnable = object : Runnable {
         override fun run() {
-            val progress = MusicServiceManager.getService()?.getProgress() ?: 0
+            var progress = MusicServiceManager.getService()?.getProgress() ?: 0
+            progress/=2
             progressBar.progress = progress
             progressBar.postDelayed(this, 5)
         }

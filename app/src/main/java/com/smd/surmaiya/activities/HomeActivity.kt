@@ -12,6 +12,8 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.TranslateAnimation
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -26,6 +28,7 @@ import com.smd.surmaiya.Fragments.HomeFragment
 import com.smd.surmaiya.Fragments.PlayerBottomSheetDialogFragment
 import com.smd.surmaiya.HelperClasses.ConnectedAudioDevice
 import com.smd.surmaiya.ManagerClasses.MusicServiceManager
+import com.smd.surmaiya.ManagerClasses.SongManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.itemClasses.Song
 
@@ -92,8 +95,8 @@ class HomeActivity : AppCompatActivity() {
     private fun initializeOnClickListeners() {
         musicPlayer = findViewById(R.id.music_player)
         musicPlayer.setOnClickListener {
-            val songUri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/surmaiya.appspot.com/o/Albums%2F-NxT2KMTSCLHqgBYpBCj%2F5a9cc003-ad95-4e95-b157-1cdc94946806%2FSongs%2F06ff2cb6-3f1f-403c-ac03-b0e5cd98bb9d.mp3?alt=media&token=ec0729e0-66a9-4fa9-b0c4-64103ec619fa")
-            MusicServiceManager.playSong(songUri)
+
+            Log.d("HomeActivity", "initializeOnClickListeners: Music player clicked")
             showPlayerBottomSheetDialog()
         }
     }
@@ -113,8 +116,11 @@ class HomeActivity : AppCompatActivity() {
             genres = listOf("genre1", "genre2"),
             albumName = "albumName"
         )
-
+        SongManager.getInstance().currentSong = song
+        SongManager.getInstance().addToQueue(song)
+        MusicServiceManager.playSong(song)
         songNameTextView.text = song.songName
+
 
         val connectedAudioDevice = ConnectedAudioDevice()
         playingDeviceTextView.text = connectedAudioDevice.getConnectedAudioDevice(this).first
@@ -169,7 +175,7 @@ class HomeActivity : AppCompatActivity() {
 
     private val updateProgressRunnable = object : Runnable {
         override fun run() {
-            val progress = MusicServiceManager.getService()?.getProgress() ?: 0
+            var progress = MusicServiceManager.getService()?.getProgress()  ?: 0
             progressBar.progress = progress
             progressBar.postDelayed(this, 2) // Update progress every second
         }

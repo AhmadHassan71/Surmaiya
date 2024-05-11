@@ -6,8 +6,10 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.smd.surmaiya.Services.MusicService
 import com.smd.surmaiya.itemClasses.Song
 
@@ -16,6 +18,7 @@ object MusicServiceManager {
     private var musicService: MusicService? = null
     private var isBound = false
     private lateinit var serviceConnection: ServiceConnection
+    private val songManager = SongManager.getInstance()
 
     fun bindService(context: Context) {
         if (!isBound) {
@@ -44,21 +47,26 @@ object MusicServiceManager {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     fun showNotification(song: Song, albumArtBitmap: Bitmap) {
         musicService?.showNotification(song, albumArtBitmap)
     }
 
 
-    fun playSong(uri: Uri) {
-        Log.d("playSong musicservice manager", "playSong: , ${uri.toString()}")
-        musicService?.playSong(uri)
+    fun playSong(song: Song) {
+        Log.d("playSong musicservice manager", "playSong: , ${song.songUrl.toString()}")
+        musicService?.playSong(song)
+        songManager.currentSong = song
     }
 
     fun pauseSong() {
+        songManager.currentProgress = (musicService?.getProgress() ?: 0).toFloat()
         musicService?.pauseMusic()
     }
 
     fun resumeSong() {
+
+        songManager.currentProgress = (musicService?.getProgress() ?: 0).toFloat()
         musicService?.resumeSong()
     }
 

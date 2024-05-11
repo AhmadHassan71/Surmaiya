@@ -74,7 +74,6 @@
                     android:orientation="vertical">
 
                     <TextView
-
                         android:id="@+id/songNameTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -83,7 +82,13 @@
                         android:fontFamily="@font/avenirnext_bold"
                         android:text="From Me to You"
                         android:textColor="#FFFFFF"
-                        android:textSize="12.5sp" />
+                        android:textSize="12.5sp"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit="marquee_forever"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true" />
 
                     <LinearLayout
 
