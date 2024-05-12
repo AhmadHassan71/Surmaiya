@@ -2,29 +2,24 @@ package com.smd.surmaiya.adapters
 
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.content.Intent
-import android.os.Build
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.smd.surmaiya.Fragments.ArtistPageFragment
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
-import com.smd.surmaiya.ManagerClasses.OtherUserManager
-import com.smd.surmaiya.Fragments.PlayerBottomSheetDialogFragment
 import com.smd.surmaiya.ManagerClasses.MusicServiceManager
-import com.smd.surmaiya.ManagerClasses.SongManager
+import com.smd.surmaiya.ManagerClasses.OtherUserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.interfaces.OnArtistClickListener
 import com.smd.surmaiya.itemClasses.Song
@@ -108,17 +103,14 @@ class SearchItemAdapter(
                     }
                 }
             }
+
+        }
         songImageView.setOnClickListener {
             val song = searchItems[position]
             MusicServiceManager.broadCastSongSelected(song)
 
 
-
         }
-
-
-        }
-
 
 
 
@@ -136,15 +128,25 @@ class SearchItemAdapter(
             song.isLiked = !song.isLiked
 
             // Update the song in your database
-            FirebaseDatabaseManager.updateSongInFirebase(SongNew(song.coverArtUrl,song.songName,song.artist,song.id,song.isLiked)){ success ->
+            FirebaseDatabaseManager.updateSongInFirebase(
+                SongNew(
+                    song.coverArtUrl,
+                    song.songName,
+                    song.artist,
+                    song.id,
+                    song.isLiked
+                )
+            ) { success ->
                 if (success) {
                     // Update the UI only after the song is updated in Firebase
                     likedImageView.setImageDrawable(
                         if (song.isLiked) {
-                            val drawable: Drawable? = likedImageView.context.getDrawable(R.drawable.heart_filled)
+                            val drawable: Drawable? =
+                                likedImageView.context.getDrawable(R.drawable.heart_filled)
                             drawable
                         } else {
-                            val drawable: Drawable? = likedImageView.context.getDrawable(R.drawable.heart_empty)
+                            val drawable: Drawable? =
+                                likedImageView.context.getDrawable(R.drawable.heart_empty)
                             drawable
                         }
                     )
@@ -159,10 +161,12 @@ class SearchItemAdapter(
                     }, 3000)
                 } else {
                     // Handle the error
-                    song.isLiked = !song.isLiked // Revert the like status if the update operation failed
+                    song.isLiked =
+                        !song.isLiked // Revert the like status if the update operation failed
                 }
             }
         }
     }
+
     override fun getItemCount() = searchItems.size
 }

@@ -1,21 +1,19 @@
 package com.smd.surmaiya.Fragments
 
-import android.media.Image
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.smd.surmaiya.HelperClasses.FragmentHelper
 import com.smd.surmaiya.HelperClasses.SideBarNavigationHelper
-import com.smd.surmaiya.ManagerClasses.PlaylistManager
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.OtherUserManager
+import com.smd.surmaiya.ManagerClasses.PlaylistManager
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.PlaylistAdapter
@@ -116,8 +114,8 @@ class LibraryFragment : Fragment() {
                     }
                 }
             }
-        })
-        },requireActivity().supportFragmentManager)
+        }, requireActivity().supportFragmentManager)
+
 
 
         librarySongRecyclerView.adapter = librarySongAdapter
@@ -135,26 +133,33 @@ class LibraryFragment : Fragment() {
     }
 
     private fun prepareYourPlaylists() {
-        playlistRecyclerView.layoutManager = LinearLayoutManager(this.context,
-            LinearLayoutManager.HORIZONTAL,false)
+        playlistRecyclerView.layoutManager = LinearLayoutManager(
+            this.context,
+            LinearLayoutManager.HORIZONTAL, false
+        )
 
         FirebaseDatabaseManager.getPlaylists { playlists ->
 
             val yourPlaylists = playlists.filter { UserManager.getCurrentUser()?.id in it.userIds }
 
 
-            val playlistAdapter = PlaylistAdapter(yourPlaylists, object : PlaylistAdapter.OnItemClickListener {
-                override fun onItemClick(position: Int) {
-                    // Handle item click
-                    // pass the playlist object to the next fragment
-                    val playlist = yourPlaylists[position]
-                    PlaylistManager.addPlaylist(playlist)
-                    FragmentHelper(requireActivity().supportFragmentManager,requireContext()).loadFragment(PlaylistSearchFragment())
-                }
-                override fun onItemChanged(position: Int) {
-                    // Handle item change
-                }
-            })
+            val playlistAdapter =
+                PlaylistAdapter(yourPlaylists, object : PlaylistAdapter.OnItemClickListener {
+                    override fun onItemClick(position: Int) {
+                        // Handle item click
+                        // pass the playlist object to the next fragment
+                        val playlist = yourPlaylists[position]
+                        PlaylistManager.addPlaylist(playlist)
+                        FragmentHelper(
+                            requireActivity().supportFragmentManager,
+                            requireContext()
+                        ).loadFragment(PlaylistSearchFragment())
+                    }
+
+                    override fun onItemChanged(position: Int) {
+                        // Handle item change
+                    }
+                })
             playlistRecyclerView.adapter = playlistAdapter
         }
     }
@@ -172,7 +177,6 @@ class LibraryFragment : Fragment() {
 
         }
     }
-
 
 
     companion object {
