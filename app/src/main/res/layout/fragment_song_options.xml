@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.AlbumScreenFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/album_gradient">
+
+        <ImageView
+            android:id="@+id/coverArt"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/song_image"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/songNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/avenirnext_bold"
+            android:text="Song Name"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="@+id/coverArt"
+            app:layout_constraintStart_toStartOf="@+id/coverArt"
+            app:layout_constraintTop_toBottomOf="@+id/coverArt" />
+
+        <TextView
+            android:id="@+id/artistNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/avenirnext_regular"
+            android:text="Artist Name"
+            android:textColor="#DFDFDF"
+            android:textFontWeight="800"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/songNameTextView"
+            app:layout_constraintStart_toStartOf="@+id/songNameTextView"
+            app:layout_constraintTop_toBottomOf="@+id/songNameTextView" />
+
+
+        <GridLayout
+            android:id="@+id/gridLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:columnCount="1"
+            android:rowCount="6"
+
+            app:layout_constraintEnd_toEndOf="@+id/coverArt"
+            app:layout_constraintHeight_percent="0.4"
+            app:layout_constraintStart_toStartOf="@+id/coverArt"
+            app:layout_constraintTop_toBottomOf="@+id/artistNameTextView"
+            app:layout_constraintWidth_percent="0.6">
+
+            <TextView
+                android:id="@+id/likeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/heart"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/white"
+                android:fontFamily="@font/avenirnext_regular"
+                android:padding="10dp"
+                android:text="Like"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/white"
+                android:textFontWeight="600"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/viewArtistTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+
+                android:drawableStart="@drawable/view_artist"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/white"
+                android:fontFamily="@font/avenirnext_regular"
+                android:padding="10dp"
+                android:text="View Artist"
+                android:textColor="@color/white"
+                android:textFontWeight="600"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/addToPlaylistTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/add_to_playlist"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/avenirnext_regular"
+                android:padding="10dp"
+                android:layout_marginBottom="10dp"
+
+                android:text="Add to a Playlist"
+                android:textColor="@color/white"
+                android:textFontWeight="600"
+                android:textSize="18sp" />
+
+
+            <TextView
+                android:id="@+id/addToQueueTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/add_to_queue"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/avenirnext_regular"
+                android:padding="10dp"
+
+                android:text="Add to Queue"
+                android:textColor="@color/white"
+                android:textFontWeight="600"
+                android:textSize="18sp" />
+
+
+        </GridLayout>
+
+        <TextView
+            android:id="@+id/closeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="@font/avenirnext_regular"
+            android:text="Close"
+            android:textColor="@color/white"
+            android:textFontWeight="600"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gridLayout" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

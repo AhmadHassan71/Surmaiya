@@ -104,21 +104,26 @@ object MusicServiceManager {
 
         val intent = Intent("com.smd.surmaiya.ACTION_PLAY")
         musicService?.sendBroadcast(intent)
+
+        FirebaseDatabaseManager.addSongToRecentlyPlayed(song)
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
     fun playNextSong() {
         val nextSong = SongManager.getInstance().nextSong()
         if (nextSong != null) {
-            playSong(nextSong)
+            playThisSongInstantly(nextSong)
+            broadCastSongSelected(nextSong)
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
     fun playPreviousSong() {
+        Log.d("playPreviousSong", "playPreviousSong: ")
         val previousSong = SongManager.getInstance().previousSong()
         if (previousSong != null) {
-            playSong(previousSong)
+            playThisSongInstantly(previousSong)
+            broadCastSongSelected(previousSong)
         }
     }
 

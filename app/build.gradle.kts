@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.firebase.storage)
     implementation(libs.androidx.palette.ktx)
+    implementation(libs.androidx.animation.graphics.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -63,6 +64,7 @@ dependencies {
     implementation ("androidx.palette:palette:1.0.0")
     implementation ("androidx.media:media:1.4.3")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation ("jp.wasabeef:glide-transformations:4.3.0")
 
 
 }

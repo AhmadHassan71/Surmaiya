@@ -35,6 +35,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.smd.surmaiya.HelperClasses.ConnectedAudioDevice
+import com.smd.surmaiya.HelperClasses.FragmentHelper
 import com.smd.surmaiya.ManagerClasses.MusicServiceManager
 import com.smd.surmaiya.ManagerClasses.SongManager
 import com.smd.surmaiya.R
@@ -154,10 +155,13 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
         // In PlayerBottomSheetDialogFragment.kt
         nextButton?.setOnClickListener {
             MusicServiceManager.playNextSong()
+            refreshPage()
         }
 
         previousButton?.setOnClickListener {
+            Log.d("Previous Button", "Previous Button Clicked")
             MusicServiceManager.playPreviousSong()
+            refreshPage()
         }
 
 
@@ -184,6 +188,30 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
                 progressBar.post(updateProgressRunnable)
             }
         })
+
+        threeDots?.setOnClickListener {
+
+            Log.d("Three Dots", "Three Dots Clicked")
+
+            val optionsFragment = SongOptionsFragment().apply {
+                // pass song as parcelable to the fragment
+                arguments = Bundle().apply {
+                    putParcelable("song", song)
+                }
+            }
+
+            FragmentHelper(requireActivity().supportFragmentManager, requireContext()).loadFragment(SongOptionsFragment())
+        }
+    }
+
+
+    fun refreshPage()
+    {
+        song = SongManager.getInstance().currentSong ?: return
+        songNameTextView.text = song.songName
+        artistNameTextView.text = song.artist
+        loadSongCoverImage(song.coverArtUrl)
+
     }
 
     private fun loadSongCoverImage(coverArtUrl: String?) {
@@ -201,6 +229,8 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
                         // Set colors based on palette
                         setPaletteColors(dominantColor, palette)
                     }
+
+                    MusicServiceManager.showNotification(song,resource)
                 }
 
                 override fun onLoadCleared(placeholder: Drawable?) {

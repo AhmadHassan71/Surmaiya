@@ -3,6 +3,7 @@ package com.smd.surmaiya.adapters
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -17,6 +18,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.smd.surmaiya.Fragments.ArtistPageFragment
+import com.smd.surmaiya.Fragments.SongOptionsFragment
+import com.smd.surmaiya.HelperClasses.FragmentHelper
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.MusicServiceManager
 import com.smd.surmaiya.ManagerClasses.OtherUserManager
@@ -117,8 +120,21 @@ class SearchItemAdapter(
     }
 
     private fun showOptions(optionsImageView: ImageView?, holder: SearchItemAdapter.MyViewHolder) {
-        Log.d("Options", "Options Clicked")
+        val position = holder.adapterPosition
+        val song = searchItems[position]
 
+        val optionsFragment = SongOptionsFragment().apply {
+            // pass song as parcelable to the fragment
+            arguments = Bundle().apply {
+                putParcelable("song", song)
+            }
+        }
+
+        // Replace 'fragment_container' with the id of your Fragment container
+        fragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, optionsFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun likeOption(likedImageView: ImageView?, holder: SearchItemAdapter.MyViewHolder) {

@@ -1,11 +1,15 @@
 package com.smd.surmaiya.Fragments
 
+import BottomNavigationHelper
 import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -206,8 +210,7 @@ class HomeFragment : Fragment() {
 
         FirebaseDatabaseManager.getPlaylists { playlists ->
 
-            val yourPlaylists =
-                playlists.filter { "public" in it.visibility && UserManager.getCurrentUser()?.id !in it.userIds }
+            val yourPlaylists = playlists.filter { "public" in it.visibility ||"Public" in it.visibility && UserManager.getCurrentUser()?.id !in it.userIds}
 
 
             val playlistAdapter =
@@ -269,8 +272,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun prepareRecentlyPlayed() {
-        recentlyPlayedRecyclerView.layoutManager =
-            LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+        recentlyPlayedRecyclerView.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
 
         val songList = prepareSongData()  // Replace with your data loading logic
         val songAdapter = RecentlyPlayedAdapter(songList)
@@ -279,66 +281,27 @@ class HomeFragment : Fragment() {
 
     private fun prepareSongData(): List<Song> {
         val songs = mutableListOf<Song>()
-        songs.add(
-            Song(
-                "id",
-                "Song Name",
-                "Artist",
-                "Album",
-                "Duration",
-                "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg",
-                "songUrl",
-                "releaseDate",
-                0,
-                listOf("genre"),
-                "Album Name"
-            )
-        )
-        songs.add(
-            Song(
-                "id",
-                "Song Name",
-                "Artist",
-                "Album",
-                "Duration",
-                "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg",
-                "songUrl",
-                "releaseDate",
-                0,
-                listOf("genre"),
-                "Album Name"
-            )
-        )
-        songs.add(
-            Song(
-                "id",
-                "Song Name",
-                "Artist",
-                "Album",
-                "Duration",
-                "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg",
-                "songUrl",
-                "releaseDate",
-                0,
-                listOf("genre"),
-                "Album Name"
-            )
-        )
-        songs.add(
-            Song(
-                "id",
-                "Song Name",
-                "Artist",
-                "Album",
-                "Duration",
-                "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg",
-                "songUrl",
-                "releaseDate",
-                0,
-                listOf("genre"),
-                "Album Name"
-            )
-        )
+
+        FirebaseDatabaseManager.getRecentlyPlayedSongs {
+
+            //if a song is repeated exclude it
+            Log.d("Recently Played", "prepareSongData: $it")
+            val uniqueSongs = it.distinctBy { it.id }
+
+            songs.addAll(uniqueSongs)
+
+            //reverse order and only show top 5 if there are 5 otherwise till size
+
+            songs.reverse()
+
+            if(songs.size > 5){
+                songs.subList(0,5)
+            }
+
+
+            recentlyPlayedRecyclerView.adapter?.notifyDataSetChanged()
+
+        }
 
         return songs
     }
