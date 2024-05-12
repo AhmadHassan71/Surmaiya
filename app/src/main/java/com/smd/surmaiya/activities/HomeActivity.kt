@@ -108,40 +108,13 @@ class HomeActivity : AppCompatActivity() {
         playButton.setOnClickListener {
             playButton.visibility = View.GONE
             pauseButton.visibility = View.VISIBLE
-            val progress= MusicServiceManager.musicService?.getProgress()?.toFloat() ?: 0f
-            SongManager.getInstance().currentSong?.let { it1 ->
-                MusicServiceManager.getService()
-                    ?.playSong(it1, progress)
-            }
-
-            //put a wait on this using delay
-
-
-            Handler(Looper.getMainLooper()).postDelayed({
-                val duration = MusicServiceManager.getService()?.exoPlayer?.duration ?: 0
-                Log.d("Progress percentage= ", "Progress percentage = " + progress/100)
-                Log.d("DUration = ", "DUration = " + duration)
-                Log.d("Progress = ", "Progress = " + progress)
-                val newProgress = (progress/ 100.0) * duration
-                MusicServiceManager.getService()?.exoPlayer?.seekTo(newProgress.toLong())
-            }, 1000) // Delay of 1 second
-
-            val intent = Intent("com.smd.surmaiya.ACTION_PLAY")
-            MusicServiceManager.musicService?.sendBroadcast(intent)
-
-            //broadcast play action to the service
+            MusicServiceManager.playCurrentSongWithDelay(1000)
         }
 
         pauseButton.setOnClickListener {
             pauseButton.visibility = View.GONE
             playButton.visibility = View.VISIBLE
-            MusicServiceManager.musicService?.progress= MusicServiceManager.musicService?.getProgress()
-                ?.toFloat()
-                ?: 0f
-            MusicServiceManager.musicService?.exoPlayer?.stop()
-
-            val intent = Intent("com.smd.surmaiya.ACTION_PAUSE")
-            MusicServiceManager.musicService?.sendBroadcast(intent)
+            MusicServiceManager.pauseMusicAndBroadcast()
         }
 
     }

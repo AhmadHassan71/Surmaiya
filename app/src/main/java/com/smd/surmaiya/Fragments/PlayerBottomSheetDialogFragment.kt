@@ -122,49 +122,19 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     @RequiresApi(Build.VERSION_CODES.P)
     private fun setUpOnClickListeners() {
+
         playButton.setOnClickListener {
-            val currentTime = System.currentTimeMillis()
-            if (currentTime - lastClickTime > 1000) {
-                Log.d("PlayerBottomSheetDialogFragment", "Play button clicked")
-                playButton.visibility = View.GONE
-                pauseButton.visibility = View.VISIBLE
-                val progress= MusicServiceManager.musicService?.getProgress()?.toFloat() ?: 0f
-                MusicServiceManager.getService()
-                    ?.playSong(song, progress)
-
-                //put a wait on this using delay
-
-
-                Handler(Looper.getMainLooper()).postDelayed({
-                    val duration = MusicServiceManager.getService()?.exoPlayer?.duration ?: 0
-                    Log.d("Progress percentage= ", "Progress percentage = " + progress/100)
-                    Log.d("DUration = ", "DUration = " + duration)
-                    Log.d("Progress = ", "Progress = " + progress)
-                    val newProgress = (progress/ 100.0) * duration
-                    MusicServiceManager.getService()?.exoPlayer?.seekTo(newProgress.toLong())
-                }, 1000) // Delay of 1 second
-
-                val intent = Intent("com.smd.surmaiya.ACTION_PLAY")
-                MusicServiceManager.musicService?.sendBroadcast(intent)
-            }
+            playButton.visibility = View.GONE
+            pauseButton.visibility = View.VISIBLE
+            MusicServiceManager.playCurrentSongWithDelay(1000)
         }
 
         pauseButton.setOnClickListener {
-            val currentTime = System.currentTimeMillis()
-            if (currentTime - lastClickTime > 1000) {
-                Log.d("PlayerBottomSheetDialogFragment", "Pause button clicked")
-                MusicServiceManager.musicService?.progress =
-                    MusicServiceManager.getService()?.getProgress()?.toFloat()!!
-
-                Log.d("PlayerBottomSheetDialogFragment", "Progress is ${MusicServiceManager.musicService?.progress}")
-                pauseButton.visibility = View.GONE
-                playButton.visibility = View.VISIBLE
-                MusicServiceManager.musicService?.exoPlayer?.stop()
-
-                val intent = Intent("com.smd.surmaiya.ACTION_PAUSE")
-                MusicServiceManager.musicService?.sendBroadcast(intent)
-            }
+            pauseButton.visibility = View.GONE
+            playButton.visibility = View.VISIBLE
+            MusicServiceManager.pauseMusicAndBroadcast()
         }
+
 
         dropDownButton?.setOnClickListener {
             dismiss() // This will close the bottom sheet when the dropdown button is clicked

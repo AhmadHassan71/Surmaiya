@@ -54,12 +54,6 @@ class MusicService : Service() {
     }
 
     private val handler = Handler(Looper.getMainLooper())
-//    private val updateProgressRunnable = object : Runnable {
-//        override fun run() {
-//            updateNotificationProgress()
-//            handler.postDelayed(this, 1000) // Update progress every second
-//        }
-//    }
 
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -207,6 +201,8 @@ class MusicService : Service() {
             }
             notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
     }
+
+
 
 
 
