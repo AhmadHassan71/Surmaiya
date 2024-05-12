@@ -159,6 +159,7 @@ object FirebaseDatabaseManager {
             }
     }
 
+
     fun fetchSongFromFirebase(songId: String, callback: (Song) -> Unit) {
         val songRef = FirebaseDatabase.getInstance().getReference("Songs").child(songId)
         songRef.get().addOnSuccessListener { snapshot ->
@@ -430,6 +431,43 @@ object FirebaseDatabaseManager {
                 Log.e(ContentValues.TAG, "Error fetching users: ${databaseError.message}")
             }
         })
+    }
+
+
+
+    fun addNotificationToUser(
+        userId: String,
+        notification: String,
+        notificationType: String,
+    ) {
+        val database = FirebaseDatabase.getInstance()
+        val notificationRef =
+            database.getReference("users").child(userId).child("notifications").push()
+
+        notificationRef.setValue(
+            mapOf(
+                "notification" to notification,
+                "notificationType" to notificationType,
+            )
+        )
+            .addOnSuccessListener {
+                Log.d(ContentValues.TAG, "Notification added successfully")
+            }
+            .addOnFailureListener { e ->
+                Log.e(ContentValues.TAG, "Failed to add notification: ${e.message}")
+            }
+
+
+    }
+
+    fun sendNotificationsToListOfUsers(
+        userIds: List<String>,
+        notification: String,
+        notificationType: String,
+    ) {
+        userIds.forEach { userId ->
+            addNotificationToUser(userId, notification, notificationType)
+        }
     }
 }
 

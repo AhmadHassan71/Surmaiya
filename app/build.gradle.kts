@@ -63,7 +63,6 @@ dependencies {
     implementation ("com.google.android.exoplayer:exoplayer:2.19.1")
     implementation ("androidx.palette:palette:1.0.0")
     implementation ("androidx.media:media:1.4.3")
-
-
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
 }
