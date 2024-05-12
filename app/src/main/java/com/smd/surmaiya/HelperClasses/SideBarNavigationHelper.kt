@@ -18,13 +18,16 @@ import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
+import com.smd.surmaiya.Fragments.ArtistStatsFragment
 import com.smd.surmaiya.Fragments.SettingsFragment
 import com.smd.surmaiya.Fragments.YourUserFragment
+import com.smd.surmaiya.ManagerClasses.OtherUserManager
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.ManagerClasses.UserManager.showGuestDialog
 import com.smd.surmaiya.R
 import com.smd.surmaiya.activities.LoginActivity
 import com.smd.surmaiya.activities.LoginOrSignupActivity
+import com.smd.surmaiya.activities.NotificationsActivity
 import com.smd.surmaiya.itemClasses.User
 import com.smd.surmaiya.itemClasses.UserType
 
@@ -71,9 +74,25 @@ class SideBarNavigationHelper(private val activity: Activity) {
                         showGuestDialog(activity)
                         return@setNavigationItemSelectedListener false
                     }
+                    Navigator.navigateToActivity(activity, NotificationsActivity::class.java)
 
                     true
                 }
+                R.id.viewArtistStats->{
+                    if(UserManager.getCurrentUser()?.userType==UserType.ARTIST){
+                        fragmentHelper.closeDrawerWithDelay(drawerLayout, 300)
+                        OtherUserManager.addUser(UserManager.getCurrentUser() as User)
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            fragmentHelper.loadFragment(ArtistStatsFragment())
+                        }, 300)
+
+                    }
+                    else{
+                        CustomToastMaker().showToast(activity, "Only artists can view their stats")
+                    }
+                    true
+                }
+
 
                 else -> false
             }

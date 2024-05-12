@@ -8,12 +8,15 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.smd.surmaiya.HelperClasses.FragmentHelper
 import com.smd.surmaiya.HelperClasses.SideBarNavigationHelper
-import com.smd.surmaiya.ManagerClasses.PlaylistManager
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.OtherUserManager
+import com.smd.surmaiya.ManagerClasses.PlaylistManager
+import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
-import com.smd.surmaiya.adapters.LibraryFilterAdapter
+import com.smd.surmaiya.adapters.PlaylistAdapter
 import com.smd.surmaiya.adapters.SearchItemAdapter
 import com.smd.surmaiya.interfaces.OnArtistClickListener
 import com.smd.surmaiya.itemClasses.Song
@@ -32,7 +35,7 @@ class LibraryFragment : Fragment() {
     // TODO: Rename and change types of parameters
 //    private lateinit var backButton: ImageView
     private lateinit var addToPlaylist: ImageView
-    private lateinit var filterRecyclerView: RecyclerView
+    private lateinit var playlistRecyclerView: RecyclerView
     private lateinit var librarySongRecyclerView: RecyclerView
     private lateinit var librarySongAdapter: SearchItemAdapter
     private var songList: MutableList<Song> = mutableListOf()
@@ -48,16 +51,23 @@ class LibraryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initializeViews()
         setOnClickListeners()
-        setUpRecyclerView()
-
+        setUpLikedSongsRecyclerView()
+        prepareYourPlaylists()
         SideBarNavigationHelper(requireActivity()).openDrawerOnMenuClick(view, requireActivity())
         SideBarNavigationHelper(requireActivity()).setupNavigationView(
             requireActivity().findViewById(
                 R.id.drawer_layout
             )
         )
+        getProfilePicture(view)
+
         SideBarNavigationHelper(requireActivity()).openDrawerOnMenuClick(view, requireActivity())
 
+    }
+
+    private fun getProfilePicture(view: View) {
+        val pfp = view.findViewById<ImageView>(R.id.userProfilePicture1)
+        Glide.with(this).load(UserManager.getCurrentUser()?.profilePictureUrl).into(pfp)
     }
 
     fun initializeViews() {
@@ -65,23 +75,30 @@ class LibraryFragment : Fragment() {
 
         PlaylistManager.removePlaylist()
         addToPlaylist = view?.findViewById(R.id.addToPlaylist)!!
-        filterRecyclerView = view?.findViewById(R.id.searchFilterRecyclerView)!!
+        playlistRecyclerView = view?.findViewById(R.id.libraryPlaylistsRecyclerView)!!
 
     }
 
-    fun setUpRecyclerView() {
-        // Create dummy data for testing
-        val filterItems = mutableListOf(
-            "Item 1",
-            "Item 2",
-            "Item 3"
-        )
-        filterRecyclerView.adapter = LibraryFilterAdapter(filterItems)
-        filterRecyclerView.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-
-        librarySongRecyclerView = view?.findViewById(R.id.librarySongRecyclerView)!!
+    private fun setUpLikedSongsRecyclerView() {
+        // Initialize songList and RecyclerView for liked songs
         songList = mutableListOf<Song>()
+        librarySongRecyclerView = view?.findViewById(R.id.librarySongRecyclerView)!!
+
+        // Fetch liked songs from Firebase and update songList
+        FirebaseDatabaseManager.getLikedSongsFromFirebase() { songs ->
+            FirebaseDatabaseManager.getAllSongs {
+                for (song in songs) {
+                    for (s in it) {
+                        if (song == s.id) {
+                            songList.add(s)
+                        }
+                    }
+                }
+                librarySongAdapter.notifyDataSetChanged()
+            }
+        }
+
+        // Set up RecyclerView adapter and layout manager
         librarySongAdapter = SearchItemAdapter(songList, object : OnArtistClickListener {
             override fun onArtistClick(artistName: String) {
                 FirebaseDatabaseManager.getAllUsers { users ->
@@ -97,14 +114,57 @@ class LibraryFragment : Fragment() {
                     }
                 }
             }
-        },requireActivity().supportFragmentManager)
+        }, requireActivity().supportFragmentManager)
+
 
 
         librarySongRecyclerView.adapter = librarySongAdapter
         librarySongRecyclerView.layoutManager = LinearLayoutManager(context)
+
+//        // Set up RecyclerView for filter items
+//        val filterItems = mutableListOf(
+//            "Item 1",
+//            "Item 2",
+//            "Item 3"
+//        )
+//        filterRecyclerView.adapter = LibraryFilterAdapter(filterItems)
+//        filterRecyclerView.layoutManager =
+//            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
     }
 
-    fun setOnClickListeners() {
+    private fun prepareYourPlaylists() {
+        playlistRecyclerView.layoutManager = LinearLayoutManager(
+            this.context,
+            LinearLayoutManager.HORIZONTAL, false
+        )
+
+        FirebaseDatabaseManager.getPlaylists { playlists ->
+
+            val yourPlaylists = playlists.filter { UserManager.getCurrentUser()?.id in it.userIds }
+
+
+            val playlistAdapter =
+                PlaylistAdapter(yourPlaylists, object : PlaylistAdapter.OnItemClickListener {
+                    override fun onItemClick(position: Int) {
+                        // Handle item click
+                        // pass the playlist object to the next fragment
+                        val playlist = yourPlaylists[position]
+                        PlaylistManager.addPlaylist(playlist)
+                        FragmentHelper(
+                            requireActivity().supportFragmentManager,
+                            requireContext()
+                        ).loadFragment(PlaylistSearchFragment())
+                    }
+
+                    override fun onItemChanged(position: Int) {
+                        // Handle item change
+                    }
+                })
+            playlistRecyclerView.adapter = playlistAdapter
+        }
+    }
+
+    private fun setOnClickListeners() {
 //        backButton.setOnClickListener {
 //            requireActivity().supportFragmentManager.popBackStack()
 //        }
@@ -117,6 +177,7 @@ class LibraryFragment : Fragment() {
 
         }
     }
+
 
     companion object {
         /**

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -15,6 +16,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
+import com.smd.surmaiya.ManagerClasses.GenreManager
 import com.smd.surmaiya.ManagerClasses.OtherUserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.SearchFilterAdapter
@@ -43,6 +45,7 @@ class SearchResultsFragment : Fragment() {
     private lateinit var searchSongAdapter: SearchItemAdapter
     private var selectedGenres = mutableListOf<String>()
     private var songList: MutableList<Song> = mutableListOf()
+    private lateinit var searchResultsTitle: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +58,7 @@ class SearchResultsFragment : Fragment() {
             }
         })
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -68,14 +72,19 @@ class SearchResultsFragment : Fragment() {
         initializeViews()
         setOnClickListeners()
         setUpRecyclerView()
-        searchView.postDelayed(Runnable { show_keyboard(requireActivity(),searchView )} , 50)
+        searchView.postDelayed(Runnable { show_keyboard(requireActivity(), searchView) }, 50)
         val query = arguments?.getString("search_query")
+        if (GenreManager.getGenre() != null) {
+            selectedGenres.add(GenreManager.getGenre()!!.name)
+            searchResultsTitle.text = "Search Results for ${GenreManager.getGenre()!!.name}"
+            searchSongs("", selectedGenres)
+            GenreManager.removeGenre()
+        }
         if (query != null) {
+            searchResultsTitle.text = "Search Results"
             searchSongs(query, selectedGenres)
         }
     }
-
-
 
     fun setUpRecyclerView() {
         // Create dummy data for testing
@@ -124,6 +133,7 @@ class SearchResultsFragment : Fragment() {
         genreFilterRecyclerView = view?.findViewById(R.id.genreFilterRecyclerView)!!
         searchView = view?.findViewById(R.id.searchView)!!
         searchView.setQuery(arguments?.getString("search_query"), false)
+        searchResultsTitle = view?.findViewById(R.id.searchResultsTitle)!!
     }
 
     fun setOnClickListeners() {
@@ -140,6 +150,7 @@ class SearchResultsFragment : Fragment() {
                 }
                 return false
             }
+
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText != null) {
                     val selectedGenres =
@@ -151,8 +162,10 @@ class SearchResultsFragment : Fragment() {
             }
         })
     }
-    private  fun show_keyboard(activity: FragmentActivity, searchView: SearchView) {
-        val inputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+
+    private fun show_keyboard(activity: FragmentActivity, searchView: SearchView) {
+        val inputMethodManager =
+            activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         searchView.requestFocus()
         inputMethodManager.showSoftInput(searchView, 0)
     }
@@ -192,6 +205,7 @@ class SearchResultsFragment : Fragment() {
 
 
     }
+
     companion object {
         /**
          * Use this factory method to create a new instance of

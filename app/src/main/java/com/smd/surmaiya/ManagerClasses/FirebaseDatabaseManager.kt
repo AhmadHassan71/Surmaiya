@@ -3,6 +3,7 @@ package com.smd.surmaiya.ManagerClasses
 import android.content.ContentValues
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -160,6 +161,7 @@ object FirebaseDatabaseManager {
             }
     }
 
+
     fun fetchSongFromFirebase(songId: String, callback: (Song) -> Unit) {
         val songRef = FirebaseDatabase.getInstance().getReference("Songs").child(songId)
         songRef.get().addOnSuccessListener { snapshot ->
@@ -297,6 +299,7 @@ object FirebaseDatabaseManager {
             }.addOnFailureListener { exception ->
                 Log.d("FirebaseUser", "Failed to fetch user with ID: $userId", exception)
             }
+
         }
     }
 
@@ -432,5 +435,47 @@ object FirebaseDatabaseManager {
             }
         })
     }
+
+
+
+    fun addNotificationToUser(
+        userId: String,
+        notification: String,
+        notificationType: String,
+    ) {
+        val database = FirebaseDatabase.getInstance()
+        val notificationRef =
+            database.getReference("users").child(userId).child("notifications").push()
+
+        notificationRef.setValue(
+            mapOf(
+                "notification" to notification,
+                "notificationType" to notificationType,
+            )
+        )
+            .addOnSuccessListener {
+                Log.d(ContentValues.TAG, "Notification added successfully")
+
+            }
+            .addOnFailureListener { e ->
+                Log.e(ContentValues.TAG, "Failed to add notification: ${e.message}")
+            }
+
+
+    }
+
+
+
+    fun sendNotificationsToListOfUsers(
+        userIds: List<String>,
+        notification: String,
+        notificationType: String,
+    ) {
+        userIds.forEach { userId ->
+            addNotificationToUser(userId, notification, notificationType)
+        }
+    }
+
+
 }
 

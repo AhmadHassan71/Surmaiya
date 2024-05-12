@@ -24,6 +24,12 @@
         android:iconTint="@color/black"
 
         />
+    <item android:id="@+id/viewArtistStats"
+        android:title="Artist Stats"
+        android:icon="@drawable/edit_profile"
+        android:iconTint="@color/black"
+
+        />
 
 
 

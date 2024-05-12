@@ -44,7 +44,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation ("com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:1.0.0")
-
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
@@ -52,19 +51,18 @@ dependencies {
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.database)
     implementation(libs.firebase.storage)
+    implementation(libs.androidx.palette.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(kotlin("script-runtime"))
-
     implementation ("com.google.android.material:material:1.4.0")
     implementation ("de.hdodenhof:circleimageview:3.1.0")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     implementation ("com.google.android.exoplayer:exoplayer:2.19.1")
     implementation ("androidx.palette:palette:1.0.0")
     implementation ("androidx.media:media:1.4.3")
-
-
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
 
 }

@@ -14,3 +14,7 @@
 .cxx
 local.properties
 app/google-services.json
+gradle.properties
+gradle.properties
+*.properties
+gradle.properties

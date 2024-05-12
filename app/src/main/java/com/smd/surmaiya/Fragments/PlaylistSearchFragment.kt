@@ -1,7 +1,9 @@
 package com.smd.surmaiya.Fragments
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,9 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
+import com.smd.surmaiya.HelperClasses.CustomToastMaker
 import com.smd.surmaiya.HelperClasses.FragmentHelper
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager.fetchSongFromFirebase
+import com.smd.surmaiya.ManagerClasses.NotificationsManager
 import com.smd.surmaiya.ManagerClasses.MusicServiceManager
 import com.smd.surmaiya.ManagerClasses.PlaylistManager
 import com.smd.surmaiya.ManagerClasses.SongManager
@@ -27,6 +31,7 @@ import com.smd.surmaiya.adapters.PlaylistAuthorAdapter
 import com.smd.surmaiya.itemClasses.Playlist
 import com.smd.surmaiya.itemClasses.Song
 import com.smd.surmaiya.itemClasses.SongNew
+import com.smd.surmaiya.itemClasses.User
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -77,10 +82,81 @@ class PlaylistSearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        handleCollaborationInvite()
         initializeViews()
         setUpOnClickListeners()
         setupRecyclerView()
     }
+
+    private fun handleCollaborationInvite() {
+        if(requireActivity().intent.extras != null) {
+            val playlistId = requireActivity().intent.extras?.getString("playlistId")
+            val chatType = requireActivity().intent.extras?.getString("chat_type")
+            val playlist = requireActivity().intent.getParcelableExtra<Playlist>("playlist")
+            PlaylistManager.addPlaylist(playlist!!)
+            showCollaborationDialogBox()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        requireActivity().intent.removeExtra("playlistId")
+        requireActivity().intent.removeExtra("chat_type")
+        requireActivity().intent.removeExtra("playlist")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        requireActivity().intent.removeExtra("playlistId")
+        requireActivity().intent.removeExtra("chat_type")
+        requireActivity().intent.removeExtra("playlist")
+    }
+
+    private fun showCollaborationDialogBox() {
+        // show dialog to accept or reject the invitation
+        val builder = AlertDialog.Builder(requireContext())
+        val inflater = requireActivity().layoutInflater
+        val dialogView = inflater.inflate(R.layout.dialog_invitation, null)
+        builder.setView(dialogView)
+        val dialog = builder.create()
+        dialog.window?.setBackgroundDrawableResource(R.drawable.dialog_round_corners)
+        val acceptButton = dialogView.findViewById<Button>(R.id.acceptButton)
+        val rejectButton = dialogView.findViewById<Button>(R.id.rejectButton)
+        val invitationText = dialogView.findViewById<TextView>(R.id.invitationText)
+        invitationText.text = "You have been invited to collaborate on this Playlist"
+
+        acceptButton.setOnClickListener {
+            val userId = UserManager.getCurrentUser()?.id
+            val userIds = PlaylistManager.getPlaylists()!!.userIds.toMutableList()
+            if (userId != null) {
+                userIds.add(userId)
+            }
+            PlaylistManager.getPlaylists()!!.userIds = userIds
+
+            FirebaseDatabaseManager.updatePlaylistInFirebase(PlaylistManager.getPlaylists()!!) { success ->
+                if (success) {
+                    CustomToastMaker().showToast(
+                        requireContext(),
+                        "You have accepted the invitation"
+                    )
+                    dialog.dismiss()
+                }
+                // remove things from intent
+                requireActivity().intent.removeExtra("playlistId")
+                requireActivity().intent.removeExtra("chat_type")
+                requireActivity().intent.removeExtra("playlist")
+            }
+        }
+        rejectButton.setOnClickListener {
+            dialog.dismiss()
+            requireActivity().intent.removeExtra("playlistId")
+            requireActivity().intent.removeExtra("chat_type")
+            requireActivity().intent.removeExtra("playlist")
+        }
+        dialog.show()
+    }
+
     private fun setupRecyclerView() {
         val playlist = getPlaylist()
         setupPlaylistDetails(playlist)
@@ -200,6 +276,13 @@ class PlaylistSearchFragment : Fragment() {
             followImage.setImageResource(R.drawable.heart_filled)
         }
 
+        if(UserManager.getCurrentUser()?.id !in PlaylistManager.getPlaylists()!!.userIds){
+            editPlaylist.visibility = View.GONE
+            addUserToPlaylist.visibility = View.GONE
+            addSong.visibility = View.GONE
+        }
+
+
     }
 
     fun setUpOnClickListeners() {
@@ -299,9 +382,63 @@ class PlaylistSearchFragment : Fragment() {
         dialog.window?.setBackgroundDrawableResource(R.drawable.dialog_round_corners)
         val inviteButton = dialogView.findViewById<Button>(R.id.sendInviteButton)
         inviteButton.setOnClickListener {
-
+            val collaboratorEmail = dialogView.findViewById<TextView>(R.id.emailEditText).text.toString()
+            if(collaboratorEmail.isNotEmpty()){
+                sendInvitationNotification(collaboratorEmail)
+            }
+            else{
+                CustomToastMaker().showToast(requireContext(), "Please enter an email address")
+            }
+            dialog.dismiss()
         }
         dialog.show()
+    }
+
+    private fun sendInvitationNotification(collaboratorEmail: String){
+
+        val title = "Invitation to Collaborate"
+        val message = "${UserManager.getCurrentUser()!!.name} has invited you to collaborate on ${getPlaylist()!!.playlistName}"
+        var colaborID : String? = null
+        findCollaborator(collaboratorEmail) { collaborator ->
+
+            colaborID = collaborator.id
+            if (collaborator.fcmToken.isNotEmpty()) {
+
+                NotificationsManager.sendCollaborationNotification(
+                    title,
+                    message,
+                    collaborator.fcmToken,
+                    PlaylistManager.getPlaylists()!!.playlsitId
+                )
+
+            } else {
+                CustomToastMaker().showToast(requireContext(), "User not found")
+            }
+        }
+
+        Handler().postDelayed({
+            FirebaseDatabaseManager.addNotificationToUser(
+                colaborID!!,
+                title,
+                message
+            )
+        }, 8000)
+
+
+    }
+
+    private fun findCollaborator(collaboratorEmail: String, callback: (User) -> Unit) {
+        var collaborator: User
+
+        FirebaseDatabaseManager.getAllUsers { users ->
+            for (user in users) {
+                Log.d("PlaylistSearchFragment", "User: $user")
+                if (user.email == collaboratorEmail) {
+                    collaborator = user
+                    callback(collaborator)
+                }
+            }
+        }
     }
 
     companion object {

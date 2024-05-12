@@ -18,43 +18,49 @@
             android:layout_height="30dp"
             android:layout_marginVertical="15dp"
             android:src="@drawable/menu"
-            app:layout_constraintStart_toStartOf="@+id/imageView4"
+            app:layout_constraintStart_toStartOf="@+id/userProfilePicture"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/r4awqdxw2d7x2"
-            android:layout_width="132dp"
-            android:layout_height="22dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="192dp"
-            android:text="Recently Played"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Liked Songs"
+            android:fontFamily="@font/satoshi_bold"
             android:textColor="#00A136"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="@+id/librarySongRecyclerView"
+            app:layout_constraintTop_toBottomOf="@+id/r4awqdxw2d7x" />
 
         <TextView
             android:id="@+id/r4awqdxw2d7x"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="52dp"
-            android:layout_marginTop="72dp"
-            android:textStyle="bold"
+            android:fontFamily="@font/satoshi_bold"
             android:text="Your Library"
+            android:layout_marginTop="30dp"
             android:textColor="#00A136"
-            android:textSize="24sp"
+            android:textSize="32sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/menu_opener" />
 
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="43dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="72dp"
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="20dp"
+            android:id="@+id/userProfilePicture"
+            app:layout_constraintBottom_toBottomOf="@+id/r4awqdxw2d7x"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/r4awqdxw2d7x"
+            >
+        <ImageView
+            android:id="@+id/userProfilePicture1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+           android:scaleType="centerCrop"
             app:srcCompat="@mipmap/your_library" />
+        </androidx.cardview.widget.CardView>
 
         <ImageView
             android:id="@+id/addToPlaylist"
@@ -65,44 +71,39 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/plus" />
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/searchFilterRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="128dp"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="200dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/window" />
-
-        <ImageView
-            android:id="@+id/imageView8"
-            android:layout_width="25dp"
-            android:layout_height="24dp"
-            android:layout_marginTop="193dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/updown" />
-
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/librarySongRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="254dp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.35"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/r4awqdxw2d7x2" />
+
+
+        <TextView
+            android:id="@+id/album"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Playlists"
+            android:textColor="#00A136"
+            android:layout_marginTop="5dp"
+            android:textSize="24sp"
+            android:fontFamily="@font/satoshi_bold"
+            app:layout_constraintStart_toStartOf="@+id/librarySongRecyclerView"
+            app:layout_constraintTop_toBottomOf="@+id/librarySongRecyclerView" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/libraryPlaylistsRecyclerView"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.35"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/album" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
