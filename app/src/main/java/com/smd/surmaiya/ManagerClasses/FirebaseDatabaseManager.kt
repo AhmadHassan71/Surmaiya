@@ -488,7 +488,7 @@ object FirebaseDatabaseManager {
         val recentlyPlayedRef = database.getReference("users").child(userId).child("recentlyPlayed")
         recentlyPlayedRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                Log.d("FirebaseDatabaseManager", "Fetched recently played songs")
+                Log.d("FirebaseDatabaseManager", "Fetched recently played songsn")
                 Log.d("FirebaseDatabaseManager", "DataSnapshot: $dataSnapshot")
                 val recentlyPlayedSongs = dataSnapshot.children.mapNotNull { it.getValue(Song::class.java) }
                 callback(recentlyPlayedSongs)

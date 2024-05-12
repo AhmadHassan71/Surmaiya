@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.smd.surmaiya.R
 import com.smd.surmaiya.itemClasses.Song
 
-class TopSongsAdapter(private val songs: List<Song>) : RecyclerView.Adapter<TopSongsAdapter.SongViewHolder>() {
+class TopSongsAdapter(private val songs: List<Song>, private val isMonthlyRanking: Boolean, private val playlistIds: List<String>?) : RecyclerView.Adapter<TopSongsAdapter.SongViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongViewHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -20,12 +20,26 @@ class TopSongsAdapter(private val songs: List<Song>) : RecyclerView.Adapter<TopS
 
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
         val currentSong = songs[position]
-//        holder.songImageView.setImageResource(currentSong.songCoverImageResource)
-        Glide.with(holder.itemView.context)
-            .load(currentSong.coverArtUrl)
-            .into(holder.songImageView)
-        holder.songNameTextView.text = currentSong.songName
-        holder.artistNameTextView.text = currentSong.artist
+
+        if (isMonthlyRanking) {
+            // Load the song image and set the song and artist names for monthly ranking
+            Glide.with(holder.itemView.context)
+                .load(currentSong.coverArtUrl)
+                .into(holder.songImageView)
+            holder.songNameTextView.text = currentSong.songName
+            holder.artistNameTextView.text = currentSong.artist
+        } else {
+            // Load the playlist image and set the playlist name and description for popular playlists
+            Glide.with(holder.itemView.context)
+                .load(currentSong.coverArtUrl)
+                .into(holder.songImageView)
+            holder.songNameTextView.text = currentSong.songName
+            holder.artistNameTextView.text = currentSong.artist
+
+            // Set the playlist ID for each item
+            val playlistId = playlistIds?.get(position)
+            // Use the playlistId as needed
+        }
     }
 
     override fun getItemCount() = songs.size

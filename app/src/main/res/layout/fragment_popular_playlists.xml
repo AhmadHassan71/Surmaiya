@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/avenirnext_regular"
-        android:text="Monthly Ranking"
+        android:text="Popular Playlists"
         android:textColor="@color/text_primary"
         android:textFontWeight="800"
         android:textSize="22sp"
