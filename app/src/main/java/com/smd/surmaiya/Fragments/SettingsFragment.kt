@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.smd.surmaiya.HelperClasses.FragmentHelper
 import com.smd.surmaiya.HelperClasses.FragmentNavigationHelper
 import com.smd.surmaiya.HelperClasses.Navigator
 import com.smd.surmaiya.HelperClasses.SideBarNavigationHelper
@@ -69,10 +70,13 @@ class SettingsFragment : Fragment() {
             Navigator.navigateToActivity(activity, ResetPasswordActivity::class.java)
         }
         view?.findViewById<View>(R.id.notificationsTextView)?.setOnClickListener {
-            Navigator.navigateToActivity(activity, NotificationsActivity::class.java)
+            FragmentHelper(activity.supportFragmentManager, activity).loadFragment(DataPreferencesFragment())
         }
         view?.findViewById<View>(R.id.equalizerTextView)?.setOnClickListener {
             FragmentNavigationHelper(activity).loadFragment(EqualizerFragment())
+        }
+        view?.findViewById<View>(R.id.privacyPolicyTextView)?.setOnClickListener {
+            FragmentNavigationHelper(activity).loadFragment(PrivacyPolicyFragment())
         }
 //        backButton.setOnClickListener {
 //            requireActivity().supportFragmentManager.popBackStack()

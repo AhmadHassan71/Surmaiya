@@ -75,7 +75,7 @@
                 <LinearLayout
 
                     android:layout_width="354dp"
-                    android:layout_height="176dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginHorizontal="30dp"
                     android:layout_marginBottom="30dp"
                     android:background="@drawable/cr6b0d24265f"
@@ -93,8 +93,8 @@
 
                         <ImageView
 
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
                             android:layout_marginEnd="47dp"
                             android:scaleType="fitXY"
                             android:src="@drawable/edit_profile" />
@@ -119,7 +119,7 @@
 
                         <ImageView
 
-                            android:layout_width="20dp"
+                            android:layout_width="24dp"
                             android:layout_height="25dp"
                             android:layout_marginEnd="46dp"
                             android:scaleType="fitXY"
@@ -145,20 +145,47 @@
 
                         <ImageView
 
-                            android:layout_width="20dp"
+                            android:layout_width="24dp"
                             android:layout_height="25dp"
                             android:layout_marginEnd="46dp"
                             android:scaleType="fitXY"
-                            android:src="@drawable/notifications" />
+                            android:src="@drawable/privacy" />
 
                         <TextView
                             android:id="@+id/notificationsTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Notifications"
+                            android:text="Data Preferences"
                             android:textColor="#00A136"
                             android:textSize="16sp" />
+
+                    </LinearLayout>
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="14dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+
+                            android:layout_width="24dp"
+                            android:layout_height="25dp"
+                            android:layout_marginEnd="46dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/privacy" />
+
+                        <TextView
+                            android:id="@+id/privacyPolicyTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Privacy Policy"
+                            android:textColor="#00A136"
+                            android:textSize="16sp" />
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -170,8 +197,8 @@
 
                         <ImageView
 
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
                             android:layout_marginEnd="46dp"
                             android:scaleType="fitXY"
                             android:src="@drawable/lock"

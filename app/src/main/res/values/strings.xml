@@ -6,5 +6,8 @@
     <string name="music_channel_id">com.smd.surmaiya.music_channel</string>
     <string name="music_channel_name">Music Player</string>
     <string name="music_channel_description">Notifications related to music playback</string>
+    <string name="intro">This Privacy Policy describes how your personal information is collected, used, and shared when you visit Surmaiya.</string>
+    <string name="security_standards">Surmaiya takes data protection and user privacy seriously, implementing a robust framework to ensure the security of sensitive information.</string>
+    <string name="protection_tech">Surmaiya employs a robust data protection policy centered around SHA 256 encryption, TLS protocols, and Firebase servers.</string>
 
 </resources>
