@@ -126,7 +126,8 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
         playButton.setOnClickListener {
             playButton.visibility = View.GONE
             pauseButton.visibility = View.VISIBLE
-            MusicServiceManager.playCurrentSongWithDelay(1000)
+            MusicServiceManager.playOrRestartSong()
+
         }
 
         pauseButton.setOnClickListener {
@@ -284,7 +285,9 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
        val intentFilter = IntentFilter().apply {
             addAction("com.smd.surmaiya.ACTION_PLAY")
             addAction("com.smd.surmaiya.ACTION_PAUSE")
-        }
+           addAction("com.smd.surmaiya.ACTION_SONG_ENDED") // Add this line
+
+       }
         requireContext().registerReceiver(playPauseReceiver, intentFilter)
 
         progressBar.post(updateProgressRunnable)
@@ -313,7 +316,11 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
                 pauseButton.visibility = View.GONE
                 playButton.visibility = View.VISIBLE
 
+            }
 
+            "com.smd.surmaiya.ACTION_SONG_ENDED" -> { // Add this case
+                pauseButton.visibility = View.GONE
+                playButton.visibility = View.VISIBLE
             }
         }
     }

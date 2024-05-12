@@ -101,6 +101,7 @@ class MusicService : Service() {
             sendBroadcast(intent)
             showNotification(song, albumArtBitmap ?: return)
 
+
         } catch (e: Exception) {
             Log.e("playSong musicservice", "Error playing song: ${e.message}")
         }

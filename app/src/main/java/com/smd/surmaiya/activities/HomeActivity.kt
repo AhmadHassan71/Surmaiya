@@ -108,7 +108,7 @@ class HomeActivity : AppCompatActivity() {
         playButton.setOnClickListener {
             playButton.visibility = View.GONE
             pauseButton.visibility = View.VISIBLE
-            MusicServiceManager.playCurrentSongWithDelay(1000)
+            MusicServiceManager.playOrRestartSong()
         }
 
         pauseButton.setOnClickListener {
@@ -196,6 +196,8 @@ class HomeActivity : AppCompatActivity() {
             val intentFilter = IntentFilter().apply {
                 addAction("com.smd.surmaiya.ACTION_PLAY")
                 addAction("com.smd.surmaiya.ACTION_PAUSE")
+                addAction("com.smd.surmaiya.ACTION_SONG_ENDED") // Add this line
+
             }
             registerReceiver(playPauseReceiver, intentFilter)
         }
@@ -218,6 +220,11 @@ class HomeActivity : AppCompatActivity() {
                     pauseButton.visibility = View.GONE
                     playButton.visibility = View.VISIBLE
                 }
+                "com.smd.surmaiya.ACTION_SONG_ENDED" -> { // Add this case
+                    pauseButton.visibility = View.GONE
+                    playButton.visibility = View.VISIBLE
+                }
+
             }
         }
     }

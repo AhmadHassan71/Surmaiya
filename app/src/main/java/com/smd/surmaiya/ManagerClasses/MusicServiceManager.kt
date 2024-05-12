@@ -12,6 +12,7 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.google.android.exoplayer2.Player
 import com.smd.surmaiya.Services.MusicService
 import com.smd.surmaiya.itemClasses.Song
 
@@ -54,6 +55,16 @@ object MusicServiceManager {
         musicService?.showNotification(song, albumArtBitmap)
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
+    fun playOrRestartSong() {
+        if (musicService?.exoPlayer?.playbackState == Player.STATE_ENDED) {
+            // If the song has ended, restart it
+            playSong(songManager.currentSong ?: return)
+        } else {
+            playCurrentSongWithDelay(1000)
+        }
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.P)
     fun playSong(song: Song) {
@@ -66,6 +77,17 @@ object MusicServiceManager {
         Log.d("playSong musicservice manager", "playSong: , ${song.songUrl.toString()}")
         musicService?.playSong(song)
         songManager.currentSong = song
+
+        // Add a listener to the ExoPlayer
+        musicService?.exoPlayer?.addListener(object : Player.Listener {
+            override fun onPlaybackStateChanged(state: Int) {
+                if (state == Player.STATE_ENDED) {
+                    // When the song ends, send a broadcast
+                    val intent = Intent("com.smd.surmaiya.ACTION_SONG_ENDED")
+                    musicService?.sendBroadcast(intent)
+                }
+            }
+        })
 
         val intent = Intent("com.smd.surmaiya.ACTION_PLAY")
         musicService?.sendBroadcast(intent)
