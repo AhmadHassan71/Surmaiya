@@ -28,6 +28,7 @@ import com.smd.surmaiya.R
 import com.smd.surmaiya.activities.LoginActivity
 import com.smd.surmaiya.activities.LoginOrSignupActivity
 import com.smd.surmaiya.activities.NotificationsActivity
+import com.smd.surmaiya.activities.PopularPlaylistsActivity
 import com.smd.surmaiya.itemClasses.User
 import com.smd.surmaiya.itemClasses.UserType
 
@@ -64,9 +65,18 @@ class SideBarNavigationHelper(private val activity: Activity) {
 
                     true
                 }
-                R.id.monthlyRankingsButton -> true
+                R.id.monthlyRankingsButton -> {
+                    fragmentHelper.closeDrawerWithDelay(drawerLayout, 300) // delay in milliseconds
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        fragmentHelper.loadFragment(MonthlyRankingsFragment())
+                    }, 300)
+                    true
+                }
                 R.id.popularPLaylistsButton -> {
-
+                    fragmentHelper.closeDrawerWithDelay(drawerLayout, 300) // delay in milliseconds
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        fragmentHelper.loadFragment(PopularPlaylistsFragment())
+                    }, 300)
                     true
                 }
                 R.id.notificataionsButton -> {
