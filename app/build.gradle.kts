@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.googleGmsGoogleServices)
+    id("kotlin-parcelize")
+
 }
 
 android {
@@ -58,6 +60,9 @@ dependencies {
     implementation ("com.google.android.material:material:1.4.0")
     implementation ("de.hdodenhof:circleimageview:3.1.0")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
+    implementation ("com.google.android.exoplayer:exoplayer:2.19.1")
+    implementation ("androidx.palette:palette:1.0.0")
+    implementation ("androidx.media:media:1.4.3")
 
 
 

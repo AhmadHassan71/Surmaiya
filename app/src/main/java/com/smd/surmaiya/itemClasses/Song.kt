@@ -1,6 +1,9 @@
 package com.smd.surmaiya.itemClasses
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Song(
     val id: String,
     val songName: String,
@@ -17,3 +20,4 @@ data class Song(
     constructor() : this("", "", "", "", "", "", "", "", 0, listOf(), "")
 
 }
+) : Parcelable

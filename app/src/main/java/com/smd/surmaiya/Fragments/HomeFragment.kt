@@ -60,6 +60,7 @@ class HomeFragment : Fragment() {
         initalizeViews()
 
 
+
         prepareTopGenres()
 
         if(UserManager.getCurrentUser() !=null){

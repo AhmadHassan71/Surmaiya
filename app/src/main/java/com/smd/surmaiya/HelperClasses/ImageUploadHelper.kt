@@ -62,7 +62,7 @@ object ImageUploadUtils {
                     // Compress the image
                     val bitmap = MediaStore.Images.Media.getBitmap(fragment.requireContext().contentResolver, contentURI)
                     val outputStream = ByteArrayOutputStream()
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream)
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)
                     val byteArray = outputStream.toByteArray()
                     contentURI = Uri.parse(MediaStore.Images.Media.insertImage(fragment.requireContext().contentResolver, Bitmap.createScaledBitmap(bitmap, bitmap.width/2, bitmap.height/2, false), "Title", null))
 

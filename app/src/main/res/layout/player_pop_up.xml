@@ -13,9 +13,21 @@
         android:layout_height="36dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="28dp"
-        android:background="@drawable/dropdown"
+        android:background="@drawable/circle_background"
+        android:backgroundTint="#EFE198"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/closeButton"
+        android:layout_width="36dp"
+        android:elevation="2dp"
+        android:layout_height="36dp"
+        android:background="@drawable/dropdown"
+        app:layout_constraintBottom_toBottomOf="@id/dropdownButton"
+        app:layout_constraintEnd_toEndOf="@id/dropdownButton"
+        app:layout_constraintStart_toStartOf="@id/dropdownButton"
+        app:layout_constraintTop_toTopOf="@id/dropdownButton" />
 
     <Button
         android:id="@+id/threedots"
@@ -53,6 +65,10 @@
         app:layout_constraintTop_toBottomOf="@+id/dropdownButton" />
 
     <TextView
+        android:gravity="center_vertical"
+        android:drawableTint="#99EE3900"
+        android:drawableStart="@drawable/mobile_alt_1_svgrepo_com"
+        android:drawablePadding="5dp"
         android:id="@+id/playingDeviceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -64,82 +80,97 @@
         app:layout_constraintStart_toStartOf="@+id/artistNameTextView"
         app:layout_constraintTop_toBottomOf="@+id/artistNameTextView" />
 
-    <LinearLayout
-        android:elevation="15dp"
-        android:translationZ="15dp"
-        android:outlineSpotShadowColor="@color/bottom_nav_primary"
+
+    <androidx.cardview.widget.CardView
+        android:elevation="25dp"
+        android:translationZ="25dp"
         android:id="@+id/playerBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:background="@drawable/rounded_border"
         android:backgroundTint="#F88703"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="15dp"
-        android:paddingVertical="50dp"
+        app:cardCornerRadius="50dp"
         app:layout_constraintEnd_toEndOf="@+id/playingDeviceTextView"
         app:layout_constraintHorizontal_bias="0.469"
         app:layout_constraintStart_toStartOf="@+id/playingDeviceTextView"
         app:layout_constraintTop_toBottomOf="@+id/playingDeviceTextView">
 
-
-        <ImageView
-            android:id="@+id/repeatButton"
+        <LinearLayout
+            android:id="@+id/playerBarLinearLayout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:translationZ="45dp"
-            android:elevation="45dp"
-            android:layout_marginBottom="30dp"
-            android:background="@drawable/repeat"
-            android:backgroundTint="@color/white" />
+            android:orientation="vertical"
+            android:padding="15dp"
+            android:paddingVertical="50dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/repeatButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:translationZ="45dp"
+                android:elevation="55dp"
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/repeat"
+                android:backgroundTint="@color/white" />
 
-        <ImageView
-            android:id="@+id/nextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:translationZ="45dp"
-            android:elevation="45dp"
-            android:background="@drawable/next"
-            android:backgroundTint="@color/white"
-            app:tint="@color/black" />
+            <ImageView
+                android:id="@+id/nextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:translationZ="45dp"
+                android:elevation="45dp"
+                android:background="@drawable/next"
+                android:backgroundTint="@color/white"
+                app:tint="@color/black" />
 
-        <ImageView
-            android:id="@+id/pauseButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/pausealt"
-            android:backgroundTint="@color/white"
-            android:layout_marginBottom="30dp"
-            android:translationZ="45dp"
-            android:elevation="45dp"
-            app:tint="@color/black" />
+            <ImageView
+                android:id="@+id/pauseButton"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/pausealt"
+                android:backgroundTint="@color/white"
+                android:layout_marginBottom="30dp"
+                android:translationZ="45dp"
+                android:elevation="45dp"
+                app:tint="@color/black" />
 
-        <ImageView
-            android:id="@+id/previousButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:background="@drawable/previous"
-            android:backgroundTint="@color/white"
-            android:elevation="45dp"
-            android:translationZ="45dp"
-            app:tint="@color/white" />
+            <ImageView
+                android:id="@+id/playButton"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/player_play"
+                android:backgroundTint="@color/white"
+                android:visibility="gone"
+                android:layout_marginBottom="30dp"
+                android:translationZ="45dp"
+                android:elevation="45dp"
+                app:tint="@color/black" />
 
-        <ImageView
-            android:id="@+id/likeButton"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:translationZ="55dp"
-            android:elevation="55dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/heart_empty"
-            android:backgroundTint="@color/white"
-            app:tint="@color/black" />
+            <ImageView
+                android:id="@+id/previousButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/previous"
+                android:backgroundTint="@color/white"
+                android:elevation="45dp"
+                android:translationZ="45dp"
+                app:tint="@color/white" />
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/likeButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:translationZ="55dp"
+                android:elevation="55dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/heart_empty"
+                android:backgroundTint="@color/white"
+                app:tint="@color/black" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 
     <FrameLayout
@@ -152,13 +183,6 @@
         app:layout_constraintTop_toTopOf="@+id/playerBar"
         >
 
-        <View
-            android:id="@+id/circleBackground"
-            android:layout_width="370dp"
-            android:layout_height="370dp"
-            android:layout_gravity="center"
-            android:background="@drawable/circle_background"
-            android:elevation="4dp" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -166,13 +190,13 @@
             android:layout_gravity="center"
             android:elevation="10dp">
 
-            <ProgressBar
+            <SeekBar
                 android:id="@+id/progressBar"
                 style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_width="450dp"
                 android:layout_height="450dp"
                 android:layout_centerInParent="true"
-                android:progress="40"
+                android:progress="50"
                 android:progressDrawable="@drawable/progress_bar_circle"
                 android:rotation="90" />
 
