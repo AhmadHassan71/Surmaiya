@@ -16,42 +16,17 @@
         app:layout_constraintStart_toEndOf="@+id/backButton"
         app:layout_constraintTop_toBottomOf="@+id/backButton" />
 
-    <View
-        android:id="@+id/view4"
-        android:layout_width="300dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/rounded_border"
-        android:backgroundTint="@color/icon_secondary"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/notificationsRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent=".85"
+        app:layout_constraintWidth_percent=".8"
+        android:layout_marginRight="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/notificationImageView"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:src="@drawable/genre_image"
-        app:civ_border_color="@color/white"
-        app:civ_border_width="1dp"
-        app:layout_constraintStart_toStartOf="@id/view4"
-        app:layout_constraintTop_toTopOf="@id/view4" />
-
-    <TextView
-        android:id="@+id/notificationTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:fontFamily="@font/avenirnext_regular"
-        android:text="Notification"
-        android:textFontWeight="600"
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/notificationImageView"
-        app:layout_constraintStart_toEndOf="@+id/notificationImageView"
-        app:layout_constraintTop_toTopOf="@+id/notificationImageView"
-        />
     <ImageView
         android:id="@+id/backButton"
         android:layout_width="40dp"

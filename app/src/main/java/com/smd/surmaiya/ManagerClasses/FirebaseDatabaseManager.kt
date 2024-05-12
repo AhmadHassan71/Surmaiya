@@ -3,6 +3,7 @@ package com.smd.surmaiya.ManagerClasses
 import android.content.ContentValues
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -297,6 +298,7 @@ object FirebaseDatabaseManager {
             }.addOnFailureListener { exception ->
                 Log.d("FirebaseUser", "Failed to fetch user with ID: $userId", exception)
             }
+
         }
     }
 
@@ -452,6 +454,7 @@ object FirebaseDatabaseManager {
         )
             .addOnSuccessListener {
                 Log.d(ContentValues.TAG, "Notification added successfully")
+
             }
             .addOnFailureListener { e ->
                 Log.e(ContentValues.TAG, "Failed to add notification: ${e.message}")
@@ -459,6 +462,8 @@ object FirebaseDatabaseManager {
 
 
     }
+
+
 
     fun sendNotificationsToListOfUsers(
         userIds: List<String>,

@@ -25,6 +25,7 @@ import com.smd.surmaiya.ManagerClasses.UserManager.showGuestDialog
 import com.smd.surmaiya.R
 import com.smd.surmaiya.activities.LoginActivity
 import com.smd.surmaiya.activities.LoginOrSignupActivity
+import com.smd.surmaiya.activities.NotificationsActivity
 import com.smd.surmaiya.itemClasses.User
 import com.smd.surmaiya.itemClasses.UserType
 
@@ -71,6 +72,7 @@ class SideBarNavigationHelper(private val activity: Activity) {
                         showGuestDialog(activity)
                         return@setNavigationItemSelectedListener false
                     }
+                    Navigator.navigateToActivity(activity, NotificationsActivity::class.java)
 
                     true
                 }

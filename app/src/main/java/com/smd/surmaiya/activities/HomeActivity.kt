@@ -31,8 +31,12 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.smd.surmaiya.Fragments.HomeFragment
 import com.smd.surmaiya.Fragments.PlayerBottomSheetDialogFragment
+import com.smd.surmaiya.Fragments.PlaylistSearchFragment
 import com.smd.surmaiya.HelperClasses.ConnectedAudioDevice
+import com.smd.surmaiya.HelperClasses.FragmentNavigationHelper
+import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.MusicServiceManager
+import com.smd.surmaiya.ManagerClasses.PlaylistManager
 import com.smd.surmaiya.ManagerClasses.SongManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.itemClasses.Song
@@ -57,16 +61,48 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        MusicServiceManager.bindService(this)
 
+        val playlistId = intent.getStringExtra("playlistId")
+        val chatType = intent.getStringExtra("chat_type")
+
+        if (chatType == "collaboration") {
+            val fragment = PlaylistSearchFragment()
+            val bundle = Bundle()
+            bundle.putString("playlistId", playlistId)
+            fragment.arguments = bundle
+            BottomNavigationHelper(this).loadFragment(fragment)
+        }
+
+
+        MusicServiceManager.bindService(this)
         BottomNavigationHelper(this).loadFragment(HomeFragment())
         BottomNavigationHelper(this).setUpBottomNavigation()
 
-        initalizeNotificationsChannel()
+        handleNotificationIntent(intent)
+
+
         initializeViews()
 
        initializeOnClickListeners()
+
+//        Handler(Looper.getMainLooper()).postDelayed({
+//            initalizeNotificationsChannel()
+//        }, 2000)
+
     }
+
+    private fun handleNotificationIntent(intent: Intent?) {
+        if(intent?.extras!=null){
+            val playlistId = intent.extras?.getString("playlistId")
+            val chatType = intent.extras?.getString("chat_type")
+            Log.d("MainActivity", "extras: ${intent.extras}")
+            Log.d("MainActivity", "playlistId: $playlistId")
+            Log.d("MainActivity", "chatType: $chatType")
+            BottomNavigationHelper(this).loadFragment(PlaylistSearchFragment())
+
+        }
+    }
+
 
     private fun initalizeNotificationsChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

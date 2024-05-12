@@ -102,6 +102,7 @@ object UserManager {
         signUpOrLoginButton.setOnClickListener {
             val intent = Intent(activity, LoginOrSignupActivity::class.java)
             activity.startActivity(intent)
+
             dialog.dismiss()
         }
         dialog.show()

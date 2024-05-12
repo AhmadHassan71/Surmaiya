@@ -7,6 +7,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -119,23 +120,26 @@ object NotificationsManager {
         }
     }
 
-    fun sendNotification(pTitle:String, message: String, artistId: String,otherUserToken:String,chatType:String, otherUserId:String)
+    fun sendCollaborationNotification(title: String,message :  String, otherUserFcm : String, playlistId:String)
     {
-        //userId, chatType, chatId, message, otherusertoken
-        UserManager.getCurrentUser()?.id?.let { it1 ->
+        UserManager.getCurrentUser()?.id?.let {
             val jsonObject = JSONObject()
             val jsonNotificationObject=JSONObject()
             val jsonDataObject=JSONObject()
-            jsonNotificationObject.put("title",pTitle )
+            jsonNotificationObject.put("title", title)
             jsonNotificationObject.put("body", message)
+            Log.d("Notification", "sendCollaborationNotification: ${jsonNotificationObject.toString()}")
 
-            jsonDataObject.put("userId",otherUserId)
-            jsonDataObject.put("chatType", chatType)
-            jsonDataObject.put("chatId", artistId)
+            jsonDataObject.put("playlistId", playlistId)
+            jsonDataObject.put("chat_type", "collaboration")
+
+            Log.d("Notification", "sendCollaborationNotification: ${jsonDataObject.toString()}")
 
             jsonObject.put("notification", jsonNotificationObject)
             jsonObject.put("data", jsonDataObject)
-            jsonObject.put("to", otherUserToken)
+            jsonObject.put("to", otherUserFcm)
+            Log.d("Notification", "sendCollaborationNotification: ${jsonObject.toString()}")
+
 
             callApi(jsonObject)
 
@@ -153,13 +157,16 @@ object NotificationsManager {
         } catch (e: IOException) {
             e.printStackTrace()
         }
+
         val serverKey = properties.getProperty("SERVER_KEY")
 
         val request: Request = Request.Builder()
             .url(url)
             .post(body)
-            .header("Authorization", serverKey)
+//            .header("Authorization", "key=$serverKey")
+            .header("Authorization", "Bearer AAAAH6rBws0:APA91bGt5JT-nDR2yRvC3lUJjiCOVpzSgB_ln-PFlKDi3zvjbynFTClJo88qdsqzm2B67woLwQw_q3j-bJvks3ojgVFqyx7KAUIvqX5TLqD2gkiPUEublDpwJYW2PRn1w2VwEsg4G1Xt")
             .build()
+
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 // Handle failure
@@ -167,6 +174,7 @@ object NotificationsManager {
 
             override fun onResponse(call: Call, response: Response) {
                 // Handle response
+                Log.d("Notification", "onResponse: ${response.body?.string()}")
             }
         })
 
