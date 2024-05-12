@@ -57,6 +57,12 @@ object MusicServiceManager {
 
     @RequiresApi(Build.VERSION_CODES.P)
     fun playSong(song: Song) {
+        // Check if the current song is the same as the song to be played and if it is already playing
+        if (songManager.currentSong == song && musicService?.exoPlayer?.isPlaying == true) {
+            // If the song is already playing, do nothing
+            return
+        }
+
         Log.d("playSong musicservice manager", "playSong: , ${song.songUrl.toString()}")
         musicService?.playSong(song)
         songManager.currentSong = song
