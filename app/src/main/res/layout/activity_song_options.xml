@@ -50,8 +50,7 @@
         android:layout_marginTop="20dp"
         android:columnCount="1"
         android:rowCount="6"
-        android:layout_marginStart="20dp"
-        app:layout_constraintEnd_toStartOf="@+id/artistNameTextView"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/artistNameTextView">
 
