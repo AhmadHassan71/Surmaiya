@@ -10,9 +10,6 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,20 +17,21 @@ import com.smd.surmaiya.HelperClasses.FragmentHelper
 import com.smd.surmaiya.HelperClasses.FragmentNavigationHelper
 import com.smd.surmaiya.HelperClasses.Navigator
 import com.smd.surmaiya.HelperClasses.SideBarNavigationHelper
+import com.smd.surmaiya.ManagerClasses.AlbumManager
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.PlaylistManager
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.activities.MonthlyRankingActivity
 import com.smd.surmaiya.activities.PopularPlaylistsActivity
-import com.smd.surmaiya.adapters.ListItemAdapter
+import com.smd.surmaiya.adapters.AlbumAdapter
+import com.smd.surmaiya.adapters.GenreAdapter
 import com.smd.surmaiya.adapters.PlaylistAdapter
 import com.smd.surmaiya.adapters.RecentlyPlayedAdapter
 import com.smd.surmaiya.adapters.TopGenresAdapter
+import com.smd.surmaiya.itemClasses.Genre
 import com.smd.surmaiya.itemClasses.ListItem
-import com.smd.surmaiya.itemClasses.Playlist
 import com.smd.surmaiya.itemClasses.Song
-import com.smd.surmaiya.itemClasses.TopGenres
 
 
 class HomeFragment : Fragment() {
@@ -63,10 +61,11 @@ class HomeFragment : Fragment() {
 
         prepareTopGenres()
 
-        if (UserManager.getCurrentUser() != null) {
+        if(UserManager.getCurrentUser() !=null){
             prepareYourPlaylists()
             prepareRecentlyPlayed()
-        } else {
+        }
+        else{
             handleGuests(view)
 
         }
@@ -100,7 +99,7 @@ class HomeFragment : Fragment() {
         requireActivity().findViewById<TextView>(R.id.welcomeTextView).text = "Welcome Guest"
     }
 
-    fun initalizeViews() {
+    fun initalizeViews(){
         PlaylistManager.removePlaylist()
         topGenresTextView = view?.findViewById(R.id.topGenresTextView)!!
         topPlaylistTextView = view?.findViewById(R.id.topPlaylistsTextView)!!
@@ -181,6 +180,7 @@ class HomeFragment : Fragment() {
     }
 
 
+
     private fun prepareTopAlbums() {
 
         topAlbumsRecyclerView.layoutManager = LinearLayoutManager(
@@ -188,11 +188,26 @@ class HomeFragment : Fragment() {
             LinearLayoutManager.HORIZONTAL, false
         )
 
-        val listData = prepareListData() // Replace with your data loading logic
+        FirebaseDatabaseManager.getAllAlbums { albums ->
+            val topAlbums = albums.sortedByDescending { it.releaseDate }
+            val topAlbumsList = topAlbums.subList(0, minOf(4, topAlbums.size))
+            topAlbumsRecyclerView.adapter =
+                AlbumAdapter(topAlbumsList, object : AlbumAdapter.OnItemClickListener {
+                    override fun onItemClick(position: Int) {
+                        AlbumManager.addAlbum(topAlbums[position])
+                        val fragmentManager = requireActivity().supportFragmentManager
+                        fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, AlbumDetailFragment())
+                            .addToBackStack(null)
+                            .commit()
+                    }
 
+                    override fun onItemChanged(position: Int) {
+                        // Do nothing
+                    }
+                })
+        }
 
-        val listItemAdapter = ListItemAdapter(listData)
-        topAlbumsRecyclerView.adapter = listItemAdapter
     }
 
     private fun prepareTopPlaylists() {
@@ -239,22 +254,29 @@ class HomeFragment : Fragment() {
 
     private fun prepareTopGenres() {
 
-        val layoutManager = GridLayoutManager(this.context, 2, GridLayoutManager.VERTICAL, false)
+        val layoutManager =
+            GridLayoutManager(this.context, 2, GridLayoutManager.VERTICAL, false)
         topGenresRecyclerView.layoutManager = layoutManager
-
-        val genreDataList = prepareGenreData()
-        val genreAdapter = TopGenresAdapter(genreDataList)
-        topGenresRecyclerView.adapter = genreAdapter
-    }
-
-    private fun prepareGenreData(): List<TopGenres> {
-        val genres = mutableListOf<TopGenres>()
-        genres.add(TopGenres(R.drawable.genre_image, "Rock"))
-        genres.add(TopGenres(R.drawable.genre_image, "Pop"))
-        genres.add(TopGenres(R.drawable.genre_image, "Metal"))
-        genres.add(TopGenres(R.drawable.genre_image, "R&B"))
-
-        return genres
+        val genresList = mutableListOf<Genre>()
+        val genreslistAdapter = GenreAdapter(genresList)
+        topGenresRecyclerView.adapter = TopGenresAdapter(genresList)
+        FirebaseDatabaseManager.getAllGenres { genres ->
+            for (i in 0 until minOf(4, genres.size)) {
+                val newGenre = Genre(genres[i], "")
+                genresList.add(newGenre)
+            }
+        }
+        FirebaseDatabaseManager.getAllSongs { songs ->
+            for (song in songs) {
+                for (genre in genresList) {
+                    if (song.genres.contains(genre.name)) {
+                        genre.imageUrl = song.coverArtUrl
+                    }
+                }
+            }
+            topGenresRecyclerView.adapter = TopGenresAdapter(genresList)
+            genreslistAdapter.notifyDataSetChanged()
+        }
     }
 
     private fun prepareRecentlyPlayed() {
@@ -268,66 +290,27 @@ class HomeFragment : Fragment() {
 
     private fun prepareSongData(): List<Song> {
         val songs = mutableListOf<Song>()
-        songs.add(
-            Song(
-                "id",
-                "Song Name",
-                "Artist",
-                "Album",
-                "Duration",
-                "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg",
-                "songUrl",
-                "releaseDate",
-                0,
-                listOf("genre"),
-                "Album Name"
-            )
-        )
-        songs.add(
-            Song(
-                "id",
-                "Song Name",
-                "Artist",
-                "Album",
-                "Duration",
-                "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg",
-                "songUrl",
-                "releaseDate",
-                0,
-                listOf("genre"),
-                "Album Name"
-            )
-        )
-        songs.add(
-            Song(
-                "id",
-                "Song Name",
-                "Artist",
-                "Album",
-                "Duration",
-                "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg",
-                "songUrl",
-                "releaseDate",
-                0,
-                listOf("genre"),
-                "Album Name"
-            )
-        )
-        songs.add(
-            Song(
-                "id",
-                "Song Name",
-                "Artist",
-                "Album",
-                "Duration",
-                "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg",
-                "songUrl",
-                "releaseDate",
-                0,
-                listOf("genre"),
-                "Album Name"
-            )
-        )
+
+        FirebaseDatabaseManager.getRecentlyPlayedSongs {
+
+            //if a song is repeated exclude it
+            Log.d("Recently Played", "prepareSongData: $it")
+            val uniqueSongs = it.distinctBy { it.id }
+
+            songs.addAll(uniqueSongs)
+
+            //reverse order and only show top 5 if there are 5 otherwise till size
+
+            songs.reverse()
+
+            if(songs.size > 5){
+                songs.subList(0,5)
+            }
+
+
+            recentlyPlayedRecyclerView.adapter?.notifyDataSetChanged()
+
+        }
 
         return songs
     }

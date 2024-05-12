@@ -35,6 +35,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.smd.surmaiya.HelperClasses.ConnectedAudioDevice
+import com.smd.surmaiya.HelperClasses.FragmentHelper
 import com.smd.surmaiya.ManagerClasses.MusicServiceManager
 import com.smd.surmaiya.ManagerClasses.SongManager
 import com.smd.surmaiya.R
@@ -187,7 +188,22 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
                 progressBar.post(updateProgressRunnable)
             }
         })
+
+        threeDots?.setOnClickListener {
+
+            Log.d("Three Dots", "Three Dots Clicked")
+
+            val optionsFragment = SongOptionsFragment().apply {
+                // pass song as parcelable to the fragment
+                arguments = Bundle().apply {
+                    putParcelable("song", song)
+                }
+            }
+
+            FragmentHelper(requireActivity().supportFragmentManager, requireContext()).loadFragment(SongOptionsFragment())
+        }
     }
+
 
     fun refreshPage()
     {
