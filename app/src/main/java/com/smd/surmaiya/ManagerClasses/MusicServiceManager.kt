@@ -21,6 +21,7 @@ object MusicServiceManager {
     var musicService: MusicService? = null
     private var isBound = false
     private lateinit var serviceConnection: ServiceConnection
+    var isRepeatMode = false
     private val songManager = SongManager.getInstance()
 
     fun bindService(context: Context) {
@@ -85,6 +86,12 @@ object MusicServiceManager {
                     // When the song ends, send a broadcast
                     val intent = Intent("com.smd.surmaiya.ACTION_SONG_ENDED")
                     musicService?.sendBroadcast(intent)
+
+                    // If repeat mode is on, replay the song
+                    if (isRepeatMode) {
+                        playSong(song)
+
+                    }
                 }
             }
         })

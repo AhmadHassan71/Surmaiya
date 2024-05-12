@@ -24,6 +24,7 @@ import android.view.*
 import android.view.animation.LinearInterpolator
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.registerReceiver
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
@@ -55,6 +56,7 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
     private var threeDots:Button? = null
     private var closeArrow:ImageView? = null
     private var playerBarLinearLayout: LinearLayout? = null
+    private var repeatButton: ImageView? = null
 
     private var lastClickTime: Long = 0
 
@@ -118,6 +120,8 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
         threeDots = view.findViewById(R.id.threedots)
         closeArrow = view.findViewById(R.id.closeButton)
         playerBarLinearLayout = view.findViewById(R.id.playerBarLinearLayout)
+        repeatButton = view.findViewById(R.id.repeatButton)
+
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
@@ -134,6 +138,17 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
             pauseButton.visibility = View.GONE
             playButton.visibility = View.VISIBLE
             MusicServiceManager.pauseMusicAndBroadcast()
+        }
+
+        repeatButton?.setOnClickListener {
+            MusicServiceManager.isRepeatMode = !MusicServiceManager.isRepeatMode
+            if (MusicServiceManager.isRepeatMode) {
+                // If repeat mode is on, set the button background tint to green
+                repeatButton?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.bottom_nav_primary))
+            } else {
+                // If repeat mode is off, set the button background tint to white
+                repeatButton?.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white))
+            }
         }
 
 
