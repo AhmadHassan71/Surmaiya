@@ -170,7 +170,7 @@ class PlaylistSearchFragment : Fragment() {
 
 
     private fun setupAdapter(newSongsList: MutableList<SongNew>) {
-        playlistAdapter = AlbumAddSongAdapter(newSongsList)
+        playlistAdapter = AlbumAddSongAdapter(newSongsList,songsList)
         playlistRecyclerView.adapter = playlistAdapter
         playlistAdapter.notifyDataSetChanged()
     }
