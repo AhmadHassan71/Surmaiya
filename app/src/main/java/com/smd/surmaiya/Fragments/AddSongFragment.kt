@@ -129,9 +129,8 @@ class AddSongFragment : Fragment() {
             CustomToastMaker().showToast(requireContext(), "Please enter a song name and artist")
             return
         }
-
         val songNameText = songName?.text.toString()
-        val songArtistText = UserManager.getCurrentUser()!!.name + songArtist?.text.toString()
+        val songArtistText = UserManager.getCurrentUser()!!.name + "," +songArtist?.text.toString()
         val genreText = requireView().findViewById<EditText>(R.id.songGenre)
         val songUrlText = songUrl
         val coverArtUrlText = coverArtUrl
@@ -206,7 +205,6 @@ class AddSongFragment : Fragment() {
                 CustomToastMaker().showToast(requireContext(), "Please enter a song name")
                 return
             }
-
             // Upload the image to Firebase Storage
 //            coverArtUrl = uploadToFirebaseStorage(filePath, "Songs/${UserManager.getCurrentUser()!!.id}/Song/${songName?.text.toString()}/$imageFileName")
             coverArtUrl = filePath

@@ -36,8 +36,8 @@ object NotificationsManager {
     private var instance: NotificationsManager? = null
 
     @JvmStatic
-    fun  getInstance(): NotificationsManager {
-        if(instance == null) {
+    fun getInstance(): NotificationsManager {
+        if (instance == null) {
             instance = NotificationsManager
         }
         return NotificationsManager
@@ -58,7 +58,6 @@ object NotificationsManager {
             notificationManager.createNotificationChannel(channel)
         }
     }
-
 
 
     @JvmStatic
@@ -120,15 +119,22 @@ object NotificationsManager {
         }
     }
 
-    fun sendCollaborationNotification(title: String,message :  String, otherUserFcm : String, playlistId:String)
-    {
+    fun sendCollaborationNotification(
+        title: String,
+        message: String,
+        otherUserFcm: String,
+        playlistId: String
+    ) {
         UserManager.getCurrentUser()?.id?.let {
             val jsonObject = JSONObject()
-            val jsonNotificationObject=JSONObject()
-            val jsonDataObject=JSONObject()
+            val jsonNotificationObject = JSONObject()
+            val jsonDataObject = JSONObject()
             jsonNotificationObject.put("title", title)
             jsonNotificationObject.put("body", message)
-            Log.d("Notification", "sendCollaborationNotification: ${jsonNotificationObject.toString()}")
+            Log.d(
+                "Notification",
+                "sendCollaborationNotification: ${jsonNotificationObject.toString()}"
+            )
 
             jsonDataObject.put("playlistId", playlistId)
             jsonDataObject.put("chat_type", "collaboration")
@@ -140,11 +146,45 @@ object NotificationsManager {
             jsonObject.put("to", otherUserFcm)
             Log.d("Notification", "sendCollaborationNotification: ${jsonObject.toString()}")
 
-
             callApi(jsonObject)
+        }
+    }
+
+    fun sendAlbumCreateNotification(
+        title: String,
+        message: String,
+        userIds: List<String>,
+        AlbumId: String
+    ) {
+        FirebaseDatabaseManager.getAllUsers { users ->
+            for (user in users) {
+                if (user.id in userIds) {
+                    val jsonObject = JSONObject()
+                    val jsonNotificationObject = JSONObject()
+                    val jsonDataObject = JSONObject()
+                    jsonNotificationObject.put("title", title)
+                    jsonNotificationObject.put("body", message)
+                    Log.d(
+                        "Notification",
+                        "sendCollaborationNotification: ${jsonNotificationObject.toString()}"
+                    )
+
+                    jsonDataObject.put("albumId", AlbumId)
+                    jsonDataObject.put("chat_type", "Album")
+
+                    Log.d("Notification", "sendAlbumNotification: ${jsonDataObject.toString()}")
+                    jsonObject.put("notification", jsonNotificationObject)
+                    jsonObject.put("data", jsonDataObject)
+                    jsonObject.put("to", user.fcmToken)
+                    Log.d("Notification", "sendAlbumNotification: ${jsonObject.toString()}")
+                    callApi(jsonObject)
+
+                }
+            }
 
         }
     }
+
 
     fun callApi(jsonObject: JSONObject) {
         val JSON: MediaType = "application/json; charset=utf-8".toMediaType()
@@ -164,7 +204,10 @@ object NotificationsManager {
             .url(url)
             .post(body)
 //            .header("Authorization", "key=$serverKey")
-            .header("Authorization", "Bearer AAAAH6rBws0:APA91bGt5JT-nDR2yRvC3lUJjiCOVpzSgB_ln-PFlKDi3zvjbynFTClJo88qdsqzm2B67woLwQw_q3j-bJvks3ojgVFqyx7KAUIvqX5TLqD2gkiPUEublDpwJYW2PRn1w2VwEsg4G1Xt")
+            .header(
+                "Authorization",
+                "Bearer AAAAH6rBws0:APA91bGt5JT-nDR2yRvC3lUJjiCOVpzSgB_ln-PFlKDi3zvjbynFTClJo88qdsqzm2B67woLwQw_q3j-bJvks3ojgVFqyx7KAUIvqX5TLqD2gkiPUEublDpwJYW2PRn1w2VwEsg4G1Xt"
+            )
             .build()
 
         client.newCall(request).enqueue(object : Callback {

@@ -100,6 +100,7 @@ class YourUserFragment : Fragment() {
         playlistRecyclerView.layoutManager = LinearLayoutManager(this.context,
             LinearLayoutManager.HORIZONTAL,false)
 
+
         FirebaseDatabaseManager.getPlaylists { playlists ->
 
             val yourPlaylists = playlists.filter { UserManager.getCurrentUser()?.id in it.userIds }

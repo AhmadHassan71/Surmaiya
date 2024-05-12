@@ -1,11 +1,13 @@
 package com.smd.surmaiya.Fragments
 
-import android.net.Uri
 import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,15 +20,16 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
-import com.smd.surmaiya.ManagerClasses.FirebaseStorageManager
-import com.smd.surmaiya.ManagerClasses.UserManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.smd.surmaiya.HelperClasses.CustomToastMaker
 import com.smd.surmaiya.HelperClasses.FragmentHelper
+import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
+import com.smd.surmaiya.ManagerClasses.FirebaseStorageManager
+import com.smd.surmaiya.ManagerClasses.NotificationsManager
+import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.AlbumAddSongAdapter
 import com.smd.surmaiya.itemClasses.Album
@@ -35,6 +38,7 @@ import com.smd.surmaiya.itemClasses.SongNew
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.UUID
+import java.util.concurrent.Delayed
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -46,14 +50,14 @@ private const val ARG_PARAM2 = "param2"
  * Use the [AddAlbumFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
+class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var cancelButton: Button
     private lateinit var albumAddSongRecyclerView: RecyclerView
     private val songList = mutableListOf<SongNew>()
-    private var songsToSendFirebase= mutableListOf<Song>()
+    private var songsToSendFirebase = mutableListOf<Song>()
     private lateinit var albumAddSongAdapter: AlbumAddSongAdapter
     private lateinit var albumNameEditText: EditText
     private lateinit var albumArtworkImageView: ImageView
@@ -113,19 +117,29 @@ class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
                 FirebaseStorageManager.uploadToFirebaseStorage(
                     Uri.parse(song.songUrl),
                     "Albums/${UserManager.getCurrentUser()!!.id}/${album.id}/Songs/${song.id}.mp3"
-                ){ uri ->
+                ) { uri ->
                     // Set the coverArtUrl of the song
                     song.coverArtUrl = album.coverArtUrl
                     song.album = album.id
                     song.songUrl = uri.toString()
                     album.songIds.add(song.id)
-                    song.albumName= album.name
+                    song.albumName = album.name
                     // Increment the counter
                     completedTasks++
                     // Check if all tasks are completed
                     if (completedTasks == songs.size) {
                         // Upload the album and songs to Firebase Database
                         FirebaseDatabaseManager.uploadAlbumAndSongs(album, songs)
+                        FirebaseDatabaseManager.sendNotificationsToListOfUsers(
+                            UserManager.getCurrentUser()?.followers!!,
+                            "${UserManager.getCurrentUser()?.name} has added a new album",
+                            "Album",
+                        )
+                        NotificationsManager.sendAlbumCreateNotification("${UserManager.getCurrentUser()?.name} has added a new album", "${UserManager.getCurrentUser()?.name} has added a new album ${album.name}",UserManager.getCurrentUser()?.followers!!,album.id)
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            CustomToastMaker().showToast(requireActivity(), "Album created successfully")
+                            requireActivity().supportFragmentManager.popBackStack()
+                        }, 3000) // Delay of 3 seconds
                     }
                 }
             }
@@ -173,7 +187,6 @@ class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
     }
 
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -201,34 +214,39 @@ class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback  {
         val createButton = view?.findViewById<Button>(R.id.button_create)
         if (createButton != null) {
             createButton.setOnClickListener {
+                CustomToastMaker().showToast(requireActivity(), "Creating Album...")
+
                 uploadSongs()
+
             }
         }
 
         addSongButton.setOnClickListener {
-            val addSongFragment = AddSongFragment.newInstance("", "", object : AddSongFragment.OnSongCreatedCallback {
-                override fun onSongCreated(song: Song) {
-                    // Convert the Song object to SongNew object
-                    val songNew = SongNew(
-                        songName = song.songName,
-                        artistName = song.artist,
-                        songCoverImageResource = song.coverArtUrl,
-                        songId = song.id
-                    )
+            val addSongFragment =
+                AddSongFragment.newInstance("", "", object : AddSongFragment.OnSongCreatedCallback {
+                    override fun onSongCreated(song: Song) {
+                        // Convert the Song object to SongNew object
+                        val songNew = SongNew(
+                            songName = song.songName,
+                            artistName = song.artist,
+                            songCoverImageResource = song.coverArtUrl,
+                            songId = song.id
+                        )
 
-                    songsToSendFirebase.add(song)
+                        songsToSendFirebase.add(song)
 
-                    // Add the created song to the songList
-                    songList.add(songNew)
+                        // Add the created song to the songList
+                        songList.add(songNew)
 
-                    // Notify the adapter that the data set has changed
-                    albumAddSongAdapter.notifyDataSetChanged()
+                        // Notify the adapter that the data set has changed
+                        albumAddSongAdapter.notifyDataSetChanged()
 
-                    requireActivity().supportFragmentManager.popBackStack()
+                        requireActivity().supportFragmentManager.popBackStack()
 
-                }
-            })
-            val fragmentHelper = FragmentHelper(requireActivity().supportFragmentManager,requireContext())
+                    }
+                })
+            val fragmentHelper =
+                FragmentHelper(requireActivity().supportFragmentManager, requireContext())
             fragmentHelper.loadFragment(addSongFragment)
         }
 
