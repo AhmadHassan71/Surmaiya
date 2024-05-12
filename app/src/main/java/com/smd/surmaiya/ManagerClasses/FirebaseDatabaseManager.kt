@@ -10,6 +10,7 @@ import com.google.firebase.database.ValueEventListener
 import com.smd.surmaiya.itemClasses.Album
 import com.smd.surmaiya.itemClasses.Playlist
 import com.smd.surmaiya.itemClasses.Song
+import com.smd.surmaiya.itemClasses.SongNew
 import com.smd.surmaiya.itemClasses.User
 import java.security.MessageDigest
 import java.util.UUID
@@ -37,7 +38,7 @@ object FirebaseDatabaseManager {
     }
 
 
-    fun signUpUser(user: User, activity:AppCompatActivity, Callback: (Boolean) -> Unit){
+    fun signUpUser(user: User, activity: AppCompatActivity, Callback: (Boolean) -> Unit) {
 
         val myRef = database.getReference("users")
         val userId = myRef.push().key
@@ -97,6 +98,7 @@ object FirebaseDatabaseManager {
             }
         }
     }
+
     fun getPlaylists(callback: (List<Playlist>) -> Unit) {
         val playlistRef = database.getReference("Playlist")
         playlistRef.get().addOnSuccessListener { snapshot ->
@@ -115,7 +117,7 @@ object FirebaseDatabaseManager {
                     playlistMap["followers"] as Long,
                     playlistMap["followerIds"] as List<String>,
                     playlistMap["visibility"] as String,
-                    playlistMap["playlistDescription"]as String,
+                    playlistMap["playlistDescription"] as String,
                 )
                 playlists.add(playlist)
                 Log.d("FirebasePlaylist", "Fetched playlist with ID: ${playlist.playlsitId}")
@@ -131,7 +133,10 @@ object FirebaseDatabaseManager {
         playlist.playlsitId = playlistId
         playlistRef.setValue(playlist)
             .addOnSuccessListener {
-                Log.d("FirebasePlaylist", "Playlist uploaded successfully with ID: ${playlist.playlsitId}")
+                Log.d(
+                    "FirebasePlaylist",
+                    "Playlist uploaded successfully with ID: ${playlist.playlsitId}"
+                )
             }
             .addOnFailureListener { e ->
                 Log.e(ContentValues.TAG, "Error uploading playlist: ${e.message}")
@@ -142,7 +147,10 @@ object FirebaseDatabaseManager {
         val playlistRef = database.getReference("Playlist").child(playlist.playlsitId)
         playlistRef.setValue(playlist)
             .addOnSuccessListener {
-                Log.d("FirebasePlaylist", "Playlist updated successfully with ID: ${playlist.playlsitId}")
+                Log.d(
+                    "FirebasePlaylist",
+                    "Playlist updated successfully with ID: ${playlist.playlsitId}"
+                )
                 callback(true)
             }
             .addOnFailureListener { e ->
@@ -193,6 +201,7 @@ object FirebaseDatabaseManager {
             callback(songs)
         }
     }
+
     fun getAllGenres(callback: (List<String>) -> Unit) {
         val myRef = database.getReference("Genres")
         val genreList = mutableListOf<String>()
@@ -213,6 +222,7 @@ object FirebaseDatabaseManager {
             }
         })
     }
+
     fun getAllSongs(callback: (List<Song>) -> Unit) {
         val myRef = database.getReference("Songs")
         val songList = mutableListOf<Song>()
@@ -233,6 +243,7 @@ object FirebaseDatabaseManager {
             }
         })
     }
+
     fun getPlaylistsByUserId(userId: String, callback: (List<Playlist>) -> Unit) {
         val playlistsRef = database.getReference("Playlist")
         playlistsRef.get().addOnSuccessListener { snapshot ->
@@ -255,7 +266,10 @@ object FirebaseDatabaseManager {
                         playlistMap["playlistDescription"] as String
                     )
                     playlists.add(playlist)
-                    Log.d("FirebasePlaylist", "Fetched playlist with ID: ${playlist.playlsitId} for user ID: $userId")
+                    Log.d(
+                        "FirebasePlaylist",
+                        "Fetched playlist with ID: ${playlist.playlsitId} for user ID: $userId"
+                    )
                 }
             }
             callback(playlists)
@@ -264,6 +278,7 @@ object FirebaseDatabaseManager {
             callback(emptyList())
         }
     }
+
     fun getUsersByIds(userIds: List<String>, callback: (List<User>) -> Unit) {
         val usersRef = database.getReference("users")
         val users = mutableListOf<User>()
@@ -283,6 +298,7 @@ object FirebaseDatabaseManager {
             }
         }
     }
+
     fun followUser(currentUser: User, otherUser: User, callback: (Boolean) -> Unit) {
         // Add the other user's ID to the current user's following list
         currentUser.following.add(otherUser.id)
@@ -301,7 +317,59 @@ object FirebaseDatabaseManager {
                 callback(false)
             }
         }
+
     }
+
+    fun updateSongInFirebase(song: SongNew, callback: (Boolean) -> Unit) {
+        val userId = UserManager.getCurrentUser()!!.id
+        val songRef = database.getReference("LikedSongs").child(userId)
+
+        songRef.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val snapshot = task.result
+                val likedSongs = snapshot.value as? MutableList<String> ?: mutableListOf()
+                if (!likedSongs.contains(song.songId)) {
+                    likedSongs.add(song.songId)
+                } else {
+                    likedSongs.remove(song.songId)
+                }
+
+                songRef.setValue(likedSongs)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Log.d(
+                                "FirebaseSong",
+                                "Song updated successfully with ID: ${song.songId}"
+                            )
+                            callback(true)
+                        } else {
+                            Log.e(
+                                ContentValues.TAG,
+                                "Error updating song: ${task.exception?.message}"
+                            )
+                            callback(false)
+                        }
+                    }
+            } else {
+                Log.e(
+                    ContentValues.TAG,
+                    "Error fetching liked songs: ${task.exception?.message}"
+                )
+                callback(false)
+            }
+        }
+    }
+
+
+    fun getLikedSongsFromFirebase(callback: (List<String>) -> Unit) {
+        val userId = UserManager.getCurrentUser()!!.id
+        val songRef = database.getReference("LikedSongs").child(userId)
+        songRef.get().addOnSuccessListener { snapshot ->
+            val likedSongs = snapshot.value as? List<String> ?: listOf()
+            callback(likedSongs)
+        }
+    }
+
     fun unfollowUser(currentUser: User, otherUser: User, callback: (Boolean) -> Unit) {
         // Remove the other user's ID from the current user's following list
         currentUser.following.remove(otherUser.id)
@@ -321,6 +389,7 @@ object FirebaseDatabaseManager {
             }
         }
     }
+
     fun getAllAlbums(callback: (List<Album>) -> Unit) {
         val myRef = database.getReference("Albums")
         val albumList = mutableListOf<Album>()
@@ -341,6 +410,7 @@ object FirebaseDatabaseManager {
             }
         })
     }
+
     fun getAllUsers(callback: (List<User>) -> Unit) {
         val myRef = database.getReference("users")
         val userList = mutableListOf<User>()
