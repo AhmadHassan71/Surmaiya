@@ -10,8 +10,10 @@ import android.os.IBinder
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.FirebaseDatabase
 import com.smd.surmaiya.Fragments.EditProfileFragment
 import com.smd.surmaiya.HelperClasses.Navigator
+import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.NotificationsManager
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.ManagerClasses.MusicServiceManager
@@ -23,6 +25,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
 
         if (UserManager.getInstance().getUserLoggedInSP(getSharedPreferences("USER_LOGIN", MODE_PRIVATE))) {
 

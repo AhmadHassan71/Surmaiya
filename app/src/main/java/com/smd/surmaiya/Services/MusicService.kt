@@ -28,6 +28,11 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.smd.surmaiya.ManagerClasses.SongManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.itemClasses.Song
+import android.content.Context
+import com.google.firebase.storage.FirebaseStorage
+
+import java.io.File
+import java.io.FileInputStream
 
 
 class MusicService : Service() {
@@ -75,8 +80,19 @@ class MusicService : Service() {
                 })
             }
 
-            Log.d("playSong musicservice", "progress 1 is $progresss")
-            val mediaItem = MediaItem.fromUri(song.songUrl)
+            val musicCache = MusicCache(this)
+            val cachedFile = musicCache.getCachedFile(song.songUrl)
+
+            val mediaItem = if (cachedFile != null) {
+                // If the song is in the cache, use the cached file
+                MediaItem.fromUri(Uri.fromFile(cachedFile))
+            } else {
+                // If the song is not in the cache, download and cache the song
+                musicCache.cacheSong(song.songUrl)?.let { cachedSong ->
+                    MediaItem.fromUri(Uri.fromFile(cachedSong))
+                } ?: MediaItem.fromUri(song.songUrl)
+            }
+
             SongManager.getInstance().currentSong = song
             exoPlayer?.setMediaItem(mediaItem)
             exoPlayer?.prepare()
@@ -234,4 +250,47 @@ class MusicService : Service() {
         const val NOTIFICATION_ID = 1
     }
 
+}
+
+class MusicCache(private val context: Context) {
+
+    private val cacheDirectory: File by lazy {
+        File(context.cacheDir, "music_cache").apply { mkdirs() }
+    }
+
+    fun getCachedFile(songUrl: String): File? {
+        val cachedFileName = getCacheFileName(songUrl)
+        return File(cacheDirectory, cachedFileName).takeIf { it.exists() }
+    }
+
+    fun cacheSong(songUrl: String): File? {
+        val cachedFileName = getCacheFileName(songUrl)
+        val cachedFile = File(cacheDirectory, cachedFileName)
+        if (cachedFile.exists()) {
+            Log.d("MusicCache", "Song already cached: $cachedFileName")
+            return cachedFile
+        }
+
+        try {
+            val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(songUrl)
+            val localFile = File.createTempFile("songs", "mp3")
+            storageReference.getFile(localFile).addOnSuccessListener {
+                FileInputStream(localFile).use { input ->
+                    cachedFile.outputStream().use { output ->
+                        input.copyTo(output)
+                        Log.d("MusicCache", "Song cached successfully: $cachedFileName")
+                    }
+                }
+            }.addOnFailureListener {
+                Log.e("MusicCache", "Error caching song: ${it.message}")
+            }
+        } catch (e: Exception) {
+            Log.e("MusicCache", "Error caching song: ${e.message}")
+        }
+        return null
+    }
+
+    private fun getCacheFileName(songUrl: String): String {
+        return songUrl.substringAfterLast("/")
+    }
 }
