@@ -27,6 +27,7 @@ import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.FirebaseStorageManager
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
+import com.smd.surmaiya.itemClasses.UserType
 import java.io.ByteArrayOutputStream
 import java.util.Collections
 import java.util.Locale
@@ -67,6 +68,12 @@ class EditProfileFragment : Fragment() {
         imageView17 = view.findViewById(R.id.imageView17)
         userProfilePicture=view.findViewById(R.id.imageView16)
         saveChangesButton=view.findViewById(R.id.loginButton)
+
+        if(UserManager.getCurrentUser()!!.userType == UserType.ARTIST)
+        {
+            nameEditText.visibility=View.GONE
+            view.findViewById<TextView>(R.id.name_text).visibility=View.GONE
+        }
     }
 
     private fun setUserDetails()
@@ -142,7 +149,7 @@ class EditProfileFragment : Fragment() {
 
         var changesMade = false
 
-        if (user?.name != newName && newName.isNotEmpty() && !newName.matches(Regex(".*\\d.*"))) {
+        if (user?.name != newName && newName.isNotEmpty() && !newName.matches(Regex(".*\\d.*")) ) {
             user?.name = newName
             changesMade = true
         }

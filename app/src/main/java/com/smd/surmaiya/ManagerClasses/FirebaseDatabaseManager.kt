@@ -27,7 +27,7 @@ object FirebaseDatabaseManager {
     fun getInstance(): FirebaseDatabaseManager {
         if (instance == null) {
             instance = FirebaseDatabaseManager
-            database.setPersistenceEnabled(true)
+//            database.setPersistenceEnabled(true)
         }
         return instance!!
     }
