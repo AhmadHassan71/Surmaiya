@@ -17,7 +17,9 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.smd.surmaiya.HelperClasses.FragmentHelper
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager.fetchSongFromFirebase
+import com.smd.surmaiya.ManagerClasses.MusicServiceManager
 import com.smd.surmaiya.ManagerClasses.PlaylistManager
+import com.smd.surmaiya.ManagerClasses.SongManager
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.AlbumAddSongAdapter
@@ -54,7 +56,8 @@ class PlaylistSearchFragment : Fragment() {
     private lateinit var downloadPlaylist: ImageView
     private var isLiked: Boolean = false
     private lateinit var playlistAuthorRecyclerView: RecyclerView
-
+    private lateinit var playlistPlayButton: ImageView
+    private var songsList = mutableListOf<Song>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -67,6 +70,7 @@ class PlaylistSearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
 
         return inflater.inflate(R.layout.fragment_playlist_search, container, false)
     }
@@ -136,7 +140,7 @@ class PlaylistSearchFragment : Fragment() {
 //    }
 
     private fun setupSongsListForPlaylist(playlist: Playlist?) {
-        val songsList = mutableListOf<Song>()
+
         val songIds = playlist?.let { extractSongIdsFromPlaylist(it) } ?: listOf()
 
         playlistRecyclerView = view?.findViewById(R.id.playlistRecyclerView)!!
@@ -171,6 +175,7 @@ class PlaylistSearchFragment : Fragment() {
         playlistAdapter.notifyDataSetChanged()
     }
 
+
     private fun extractSongIdsFromPlaylist(playlist: Playlist?): List<String> {
         val songIds = mutableListOf<String>()
         if (playlist != null) {
@@ -189,6 +194,7 @@ class PlaylistSearchFragment : Fragment() {
         addUserToPlaylist = view?.findViewById(R.id.addUserToPlaylist)!!
         downloadPlaylist = view?.findViewById(R.id.downloadPlaylist)!!
         playlistAuthorRecyclerView = view?.findViewById(R.id.playlistAuthorsRecyclerView)!!
+        playlistPlayButton = view?.findViewById(R.id.playImageView)!!
 
         if(getPlaylist()!!.followers > 0) {
             followImage.setImageResource(R.drawable.heart_filled)
@@ -239,6 +245,12 @@ class PlaylistSearchFragment : Fragment() {
         downloadPlaylist.setOnClickListener {
 //            downloadPlaylist.setImageResource(R.drawable.ic_baseline_cloud_download_24)
 
+        }
+
+        playlistPlayButton.setOnClickListener {
+            Log.d("PlaylistSearchFragment", "Play button clicked")
+            SongManager.getInstance().addSongsFromPlaylistToQueue(songsList)
+            MusicServiceManager.broadCastSongSelected(songsList[0])
         }
 
     }

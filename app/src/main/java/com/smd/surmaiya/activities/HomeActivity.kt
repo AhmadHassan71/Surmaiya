@@ -49,6 +49,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var albumImageView: ImageView
     private lateinit var viewBackGround: LinearLayout
     private lateinit var progressBar: ProgressBar
+    private var currentSong: Song? = null
 
 
 
@@ -94,6 +95,9 @@ class HomeActivity : AppCompatActivity() {
         albumImageView = findViewById(R.id.albumImageView)
         viewBackGround = findViewById(R.id.viewBackGround)
         progressBar = findViewById(R.id.progressBar)
+
+        if(!MusicServiceManager.isPlaying())
+            viewBackGround.visibility = View.GONE
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -101,8 +105,13 @@ class HomeActivity : AppCompatActivity() {
         musicPlayer = findViewById(R.id.music_player)
         musicPlayer.setOnClickListener {
 
-            Log.d("HomeActivity", "initializeOnClickListeners: Music player clicked")
-            showPlayerBottomSheetDialog()
+            if(currentSong!=null){
+                val playerBottomSheetDialogFragment = PlayerBottomSheetDialogFragment()
+                val bundle = Bundle()
+                bundle.putParcelable("song", currentSong)
+                playerBottomSheetDialogFragment.arguments = bundle
+                playerBottomSheetDialogFragment.show(supportFragmentManager, playerBottomSheetDialogFragment.tag)
+            }
         }
 
         playButton.setOnClickListener {
@@ -116,6 +125,8 @@ class HomeActivity : AppCompatActivity() {
             playButton.visibility = View.VISIBLE
             MusicServiceManager.pauseMusicAndBroadcast()
         }
+
+
 
     }
 
@@ -184,11 +195,6 @@ class HomeActivity : AppCompatActivity() {
 
 
 
-        val playerBottomSheetDialogFragment = PlayerBottomSheetDialogFragment()
-        val bundle = Bundle()
-        bundle.putParcelable("song", song)
-        playerBottomSheetDialogFragment.arguments = bundle
-        playerBottomSheetDialogFragment.show(supportFragmentManager, playerBottomSheetDialogFragment.tag)
     }
 
     override fun onResume() {
@@ -197,6 +203,7 @@ class HomeActivity : AppCompatActivity() {
                 addAction("com.smd.surmaiya.ACTION_PLAY")
                 addAction("com.smd.surmaiya.ACTION_PAUSE")
                 addAction("com.smd.surmaiya.ACTION_SONG_ENDED") // Add this line
+                addAction("com.smd.surmaiya.ACTION_SONG_SELECTED")
 
             }
             registerReceiver(playPauseReceiver, intentFilter)
@@ -209,24 +216,107 @@ class HomeActivity : AppCompatActivity() {
 
 
     private val playPauseReceiver = object : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.S)
         override fun onReceive(context: Context?, intent: Intent?) {
             val action = intent?.action
+            Log.d("HomeActivity", "onReceive: Action: $action")
             when (action) {
                 "com.smd.surmaiya.ACTION_PLAY" -> {
                     playButton.visibility = View.GONE
                     pauseButton.visibility = View.VISIBLE
                 }
+
                 "com.smd.surmaiya.ACTION_PAUSE" -> {
                     pauseButton.visibility = View.GONE
                     playButton.visibility = View.VISIBLE
                 }
+
                 "com.smd.surmaiya.ACTION_SONG_ENDED" -> { // Add this case
                     pauseButton.visibility = View.GONE
                     playButton.visibility = View.VISIBLE
                 }
 
+                "com.smd.surmaiya.ACTION_SONG_SELECTED" -> {
+                    val song = intent.getParcelableExtra<Song>("song")
+                    Log.d("HomeActivity", "onReceive: Song selected: $song")
+                    song?.let {
+
+                        setSongOnPlayer(song)
+
+//                        val playerBottomSheetDialogFragment = PlayerBottomSheetDialogFragment()
+//                        SongManager.getInstance().currentSong = song
+//                        //if song is already playing we need to stop it and play the new song
+//                        MusicServiceManager.playThisSongInstantly(song)
+//                        val bundle = Bundle()
+//                        bundle.putParcelable("song", song)
+//                        playerBottomSheetDialogFragment.arguments = bundle
+//                        playerBottomSheetDialogFragment.show(supportFragmentManager, playerBottomSheetDialogFragment.tag)
+
+
+                    }
+
+                }
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun setSongOnPlayer(song: Song) {
+
+        SongManager.getInstance().currentSong = song
+        SongManager.getInstance().addToQueue(song)
+        MusicServiceManager.playSong(song)
+        songNameTextView.text = song.songName
+        songNameTextView.requestFocus()
+        viewBackGround.visibility = View.VISIBLE
+
+
+        val connectedAudioDevice = ConnectedAudioDevice()
+        playingDeviceTextView.text = connectedAudioDevice.getConnectedAudioDevice(this).first
+        deviceImage.setImageResource(connectedAudioDevice.getConnectedAudioDevice(this).second)
+
+        // Load album image
+        Glide.with(this)
+            .load(song.coverArtUrl)
+            .into(albumImageView)
+
+        var albumArtBitmap: Bitmap? = null
+
+        Glide.with(this)
+            .asBitmap()
+            .load(song.coverArtUrl)
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    Palette.from(resource).generate { palette ->
+                        // Get the muted color from the palette
+                        val mutedColor = palette?.mutedSwatch?.rgb ?: Color.parseColor("#550A1C")
+                        albumArtBitmap = resource
+
+                        Log.d("HomeActivity", "album art bitmap : $albumArtBitmap")
+
+                        albumArtBitmap?.let {
+                            Log.d("HomeActivity", "showPlayerBottomSheetDialog: Album art bitmap is not null")
+                            MusicServiceManager.showNotification(song, it) }
+
+                        // Set the background color of the viewBackGround
+                        viewBackGround.setBackgroundColor(mutedColor)
+                    }
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {
+                    // Handle case where the Bitmap load is cleared
+                }
+            })
+
+
+
+        progressBar.post(updateProgressRunnable)
+
+        MusicServiceManager.playThisSongInstantly(song)
+
+        currentSong = song
+
+
     }
 
 

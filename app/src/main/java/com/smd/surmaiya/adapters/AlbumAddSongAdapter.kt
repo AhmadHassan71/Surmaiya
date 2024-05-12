@@ -71,6 +71,7 @@ class AlbumAddSongAdapter(private val myDataset: MutableList<SongNew>) :
             likeOption(likedImageView, holder)
         }
 
+
         textView2.setOnClickListener {
             val artists = myDataset[position].artistName.split(",")
             Log.d("ArtistName", artists[0])

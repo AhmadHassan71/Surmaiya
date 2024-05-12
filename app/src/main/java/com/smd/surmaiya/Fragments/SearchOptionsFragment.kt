@@ -66,7 +66,7 @@ class SearchOptionsFragment : Fragment() {
                     }
                 }
             }
-        })
+        },requireActivity().supportFragmentManager)
         searchSongRecyclerView.adapter = searchSongAdapter
         searchSongRecyclerView.layoutManager = LinearLayoutManager(context)
     }

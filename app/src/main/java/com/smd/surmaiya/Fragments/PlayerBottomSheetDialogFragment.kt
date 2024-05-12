@@ -151,6 +151,15 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
             }
         }
 
+        // In PlayerBottomSheetDialogFragment.kt
+        nextButton?.setOnClickListener {
+            MusicServiceManager.playNextSong()
+        }
+
+        previousButton?.setOnClickListener {
+            MusicServiceManager.playPreviousSong()
+        }
+
 
         dropDownButton?.setOnClickListener {
             dismiss() // This will close the bottom sheet when the dropdown button is clicked

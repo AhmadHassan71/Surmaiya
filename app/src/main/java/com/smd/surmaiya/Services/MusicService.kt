@@ -161,8 +161,8 @@ class MusicService : Service() {
         val notificationBuilder = NotificationCompat.Builder(this, getString(R.string.music_channel_id))
             .setSmallIcon(R.drawable.logo_home)
             .setStyle(mediaStyle)
-            .setContentText(song.songName)
-            .setContentTitle(song.artist)
+            .setContentText(song.artist)
+            .setContentTitle(song.songName)
             .setLargeIcon(albumArtBitmap)
 
         val playIntent = Intent("com.smd.surmaiya.ACTION_PLAY")
