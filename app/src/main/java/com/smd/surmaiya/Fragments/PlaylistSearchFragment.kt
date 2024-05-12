@@ -177,6 +177,7 @@ class PlaylistSearchFragment : Fragment() {
     fun setUpOnClickListeners() {
 
         backButton.setOnClickListener {
+            PlaylistManager.removePlaylist()
             requireActivity().supportFragmentManager.popBackStack()
         }
         editPlaylist.setOnClickListener {

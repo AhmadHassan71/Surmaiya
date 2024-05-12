@@ -97,6 +97,7 @@ class HomeFragment : Fragment() {
     }
 
     fun initalizeViews(){
+        PlaylistManager.removePlaylist()
         topGenresTextView = view?.findViewById(R.id.topGenresTextView)!!
         topPlaylistTextView = view?.findViewById(R.id.topPlaylistsTextView)!!
         yourPlaylistTextView = view?.findViewById(R.id.yourPlaylistsTextView)!!

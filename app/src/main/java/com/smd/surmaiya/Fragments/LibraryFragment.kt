@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.smd.surmaiya.HelperClasses.SideBarNavigationHelper
+import com.smd.surmaiya.ManagerClasses.PlaylistManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.LibraryFilterAdapter
 import com.smd.surmaiya.adapters.SearchItemAdapter
@@ -54,6 +55,8 @@ class LibraryFragment : Fragment() {
 
     fun initializeViews() {
 //        backButton = view?.findViewById(R.id.backButton)!!
+
+        PlaylistManager.removePlaylist()
         addToPlaylist = view?.findViewById(R.id.addToPlaylist)!!
         filterRecyclerView = view?.findViewById(R.id.searchFilterRecyclerView)!!
 
