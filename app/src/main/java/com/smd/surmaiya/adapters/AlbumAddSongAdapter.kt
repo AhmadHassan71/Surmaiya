@@ -21,6 +21,7 @@ import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.MusicServiceManager
 import com.smd.surmaiya.ManagerClasses.OtherUserManager
 import com.smd.surmaiya.ManagerClasses.PlaylistManager
+import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.itemClasses.Playlist
 import com.smd.surmaiya.itemClasses.Song
@@ -59,6 +60,9 @@ class AlbumAddSongAdapter(private val myDataset: MutableList<SongNew>, songsList
             deleteOption(optionsImageView, holder)
         }
         val likedImageView = holder.itemView.findViewById<ImageView>(R.id.likeImageView)
+        if(UserManager.getCurrentUser() == null){
+            likedImageView.visibility = View.GONE
+        }
         FirebaseDatabaseManager.getLikedSongsFromFirebase { likedSongs ->
             // Check if the current song is in the list of liked songs
             if (myDataset[position].songId in likedSongs) {

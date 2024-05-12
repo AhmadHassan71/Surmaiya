@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -23,6 +24,7 @@ import com.smd.surmaiya.HelperClasses.FragmentHelper
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.MusicServiceManager
 import com.smd.surmaiya.ManagerClasses.OtherUserManager
+import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.interfaces.OnArtistClickListener
 import com.smd.surmaiya.itemClasses.Song
@@ -73,6 +75,9 @@ class SearchItemAdapter(
             showOptions(optionsImageView, holder)
         }
         val likedImageView = holder.itemView.findViewById<ImageView>(R.id.likeImageView)
+        if(UserManager.getCurrentUser() == null){
+            likedImageView.visibility = View.GONE
+        }
         FirebaseDatabaseManager.getLikedSongsFromFirebase { likedSongs ->
             // Check if the current song is in the list of liked songs
             if (searchItems[position].id in likedSongs) {
