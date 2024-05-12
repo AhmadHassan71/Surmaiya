@@ -172,7 +172,7 @@ class HomeFragment : Fragment() {
 
         FirebaseDatabaseManager.getPlaylists { playlists ->
 
-            val yourPlaylists = playlists.filter { "public" in it.visibility && UserManager.getCurrentUser()?.id !in it.userIds}
+            val yourPlaylists = playlists.filter { "public" in it.visibility ||"Public" in it.visibility && UserManager.getCurrentUser()?.id !in it.userIds}
 
 
             val playlistAdapter = PlaylistAdapter(yourPlaylists, object : PlaylistAdapter.OnItemClickListener {

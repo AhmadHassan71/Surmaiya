@@ -70,8 +70,6 @@ class AddToPlaylistFragment : Fragment() {
 
     private fun setUpRecyclerView() {
         // Create dummy data for testing
-
-
         playlistSearchRecyclerView = view?.findViewById(R.id.playlistSearchRecyclerView)!!
         playlistSearchRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
