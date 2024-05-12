@@ -126,6 +126,7 @@ object MusicServiceManager {
     }
 
     fun pauseMusicAndBroadcast() {
+        
         musicService?.progress = musicService?.getProgress()?.toFloat() ?: 0f
         musicService?.exoPlayer?.stop()
 

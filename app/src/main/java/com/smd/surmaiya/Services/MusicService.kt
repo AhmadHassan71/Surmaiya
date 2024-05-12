@@ -127,6 +127,7 @@ class MusicService : Service() {
     fun getProgress(): Int {
         val duration = exoPlayer?.duration ?: 0
         val position = exoPlayer?.currentPosition ?: 0
+
         val progress = (position * 100 / duration).toInt()
         SongManager.getInstance().currentProgress = progress.toFloat()
         return progress
