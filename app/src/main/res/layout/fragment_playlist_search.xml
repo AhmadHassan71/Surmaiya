@@ -94,21 +94,14 @@
                     android:id="@+id/followers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
                     android:text="1,629,592 followers "
                     android:textColor="#000000"
                     android:textSize="13sp"
-                    app:layout_constraintStart_toStartOf="@+id/shapeableImageView"
-                    app:layout_constraintTop_toBottomOf="@+id/shapeableImageView" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/playlistAuthorsRecyclerView"
+                    tools:layout_editor_absoluteY="487dp" />
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/shapeableImageView2"
-                    android:layout_width="35dp"
-                    android:layout_height="34dp"
-                    android:layout_marginStart="3dp"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/singer2"
-                    app:layout_constraintStart_toEndOf="@+id/shapeableImageView"
-                    app:layout_constraintTop_toTopOf="@+id/shapeableImageView" />
 
                 <TextView
                     android:id="@+id/playlistDescription"
@@ -160,12 +153,13 @@
                     android:textColor="#000000"
                     android:textSize="13sp"
                     app:layout_constraintStart_toEndOf="@+id/followers"
-                    app:layout_constraintTop_toBottomOf="@+id/shapeableImageView2" />
+                    app:layout_constraintTop_toBottomOf="@+id/playlistAuthorsRecyclerView"
+                     />
 
                 <LinearLayout
                     android:id="@+id/linearLayout7"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_height="40dp"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
                     android:orientation="horizontal"
@@ -176,7 +170,7 @@
                         android:id="@+id/likeImageView"
                         android:layout_width="20dp"
                         android:layout_height="19dp"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/heart_empty"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -186,18 +180,27 @@
                         android:layout_width="20dp"
                         android:layout_height="19dp"
                         android:layout_marginHorizontal="5dp"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/options1"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
                         android:id="@+id/downloadPlaylist"
-                        android:layout_width="20dp"
-                        android:layout_height="19dp"
+                        android:layout_width="19dp"
+                        android:layout_height="22dp"
                         android:layout_marginHorizontal="5dp"
-                        android:scaleType="fitXY"
                         android:src="@drawable/download"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/addUserToPlaylist"
+                        android:layout_width="21dp"
+                        android:layout_height="20dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/add_user"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -206,10 +209,11 @@
                         android:layout_width="20dp"
                         android:layout_height="19dp"
                         android:layout_marginHorizontal="5dp"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/plus"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
                 </LinearLayout>
 
 
@@ -217,22 +221,21 @@
                     android:id="@+id/playlistRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/linearLayout7"
                     app:layout_constraintVertical_bias="0.0" />
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/shapeableImageView"
-                    android:layout_width="35dp"
-                    android:layout_height="34dp"
-                    android:layout_marginTop="3dp"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/your_library"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/playlistAuthorsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     app:layout_constraintStart_toStartOf="@+id/playlistDescription"
-                    app:layout_constraintTop_toBottomOf="@+id/playlistDescription" />
+                    app:layout_constraintTop_toBottomOf="@id/playlistDescription" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 

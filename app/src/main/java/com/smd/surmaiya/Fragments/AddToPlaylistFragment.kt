@@ -9,9 +9,14 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.smd.surmaiya.HelperClasses.CustomToastMaker
+import com.smd.surmaiya.HelperClasses.FragmentHelper
+import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
+import com.smd.surmaiya.ManagerClasses.PlaylistManager
 import com.smd.surmaiya.R
-import com.smd.surmaiya.adapters.PlaylistSearchItemAdapter
-import com.smd.surmaiya.itemClasses.PlaylistSearchItem
+import com.smd.surmaiya.adapters.AddToPlaylistAdapter
+import com.smd.surmaiya.itemClasses.Song
+import com.smd.surmaiya.itemClasses.SongNew
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,11 +36,14 @@ class AddToPlaylistFragment : Fragment() {
     private lateinit var createNewPlaylist: LinearLayout
     private lateinit var searchPlaylist: LinearLayout
     private lateinit var playlistSearchRecyclerView: RecyclerView
+    private var songsList = mutableListOf<Song>()
+    private var newSongsList = mutableListOf<SongNew>()
+    private var selectedPlaylistId: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            selectedPlaylistId = it.getString("selectedPlaylistId")
         }
     }
 
@@ -62,27 +70,26 @@ class AddToPlaylistFragment : Fragment() {
 
     private fun setUpRecyclerView() {
         // Create dummy data for testing
-        val playlistSearchItems = mutableListOf(
-            PlaylistSearchItem(
-                "https://preview.redd.it/the-full-key-visual-for-bleach-tybw-the-separation-v0-ifguzaidwgkb1.jpg?auto=webp&s=c3c7385837b8d5f1f449a989320cd15cc4eef49e",
-                "title1",
-                "subtitle1"
-            ), PlaylistSearchItem(
-                "https://preview.redd.it/the-full-key-visual-for-bleach-tybw-the-separation-v0-ifguzaidwgkb1.jpg?auto=webp&s=c3c7385837b8d5f1f449a989320cd15cc4eef49e",
-                "title2",
-                "subtitle2"
-            ), PlaylistSearchItem(
-                "https://preview.redd.it/the-full-key-visual-for-bleach-tybw-the-separation-v0-ifguzaidwgkb1.jpg?auto=webp&s=c3c7385837b8d5f1f449a989320cd15cc4eef49e",
-                "title3",
-                "subtitle3"
-            )
-        )
 
-        // Set the adapter for the RecyclerView
-        playlistSearchRecyclerView.adapter = PlaylistSearchItemAdapter(playlistSearchItems)
-        // Set the layout manager for the RecyclerView
-        playlistSearchRecyclerView.layoutManager = LinearLayoutManager(context)
+
+        playlistSearchRecyclerView = view?.findViewById(R.id.playlistSearchRecyclerView)!!
+        playlistSearchRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        FirebaseDatabaseManager.fetchAllSongsFromFirebase { songs ->
+            songsList.addAll(songs)
+            val newSongsList = createNewSongsList(songsList)
+            val adapter = AddToPlaylistAdapter(newSongsList)
+            playlistSearchRecyclerView.adapter = adapter
+            adapter.notifyDataSetChanged()
+        }
     }
+    private fun createNewSongsList(songsList: MutableList<Song>): MutableList<SongNew> {
+        for (song in songsList) {
+            newSongsList.add(SongNew(song.coverArtUrl, song.songName, song.artist, song.id))
+        }
+        return newSongsList
+    }
+
 
     fun setUpOnClickListeners() {
 
@@ -90,15 +97,62 @@ class AddToPlaylistFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
         }
         createNewPlaylist.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, CreateNewPlaylistFragment()).addToBackStack(null)
-                .commit()
+            val selectedNewSongs: List<SongNew> = newSongsList.filter { it.isSelected }
+            val selectedSongIds = mutableListOf<String>()
+
+            getSelectedSongIds(selectedNewSongs, selectedSongIds)
+
+            val selectedPlaylist = PlaylistManager.getPlaylists()
+
+            // Add the selected songs to the playlist
+            if (selectedPlaylist != null) {
+                val updatedSongsList = selectedPlaylist.songIds + selectedSongIds
+                selectedPlaylist.songIds = updatedSongsList
+                // Update the playlist in Firebase
+                FirebaseDatabaseManager.updatePlaylistInFirebase(selectedPlaylist) { success ->
+                    if (success) {
+                        CustomToastMaker().showToast(requireContext(), "Songs Added Successfully")
+                        FragmentHelper(requireActivity().supportFragmentManager, requireContext()).loadFragment(PlaylistSearchFragment())
+                    } else {
+                        CustomToastMaker().showToast(requireContext(), "Error adding songs to playlist")
+                    }
+                }
+            }
+            else {
+                openCreateNewPlaylistFragment(selectedSongIds)
+            }
+
         }
         searchPlaylist.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, PlaylistSearchFragment()).addToBackStack(null)
                 .commit()
         }
+    }
+
+    private fun getSelectedSongIds(
+        selectedNewSongs: List<SongNew>,
+        selectedSongIds: MutableList<String>
+    ) {
+        for (newSong in selectedNewSongs) {
+            val song = songsList.find { it.songName == newSong.songName }
+            if (song != null) {
+                selectedSongIds.add(song.id)
+            }
+        }
+    }
+
+    private fun openCreateNewPlaylistFragment(selectedSongIds: MutableList<String>) {
+        val bundle = Bundle()
+        bundle.putStringArrayList("selectedSongs", ArrayList(selectedSongIds))
+
+        val nextFragment = CreateNewPlaylistFragment() // Replace 'NextFragment' with the actual class name of your next fragment
+        nextFragment.arguments = bundle
+
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, nextFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     companion object {

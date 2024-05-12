@@ -27,7 +27,7 @@ class PopularPlaylistAdapter(private val playlists: List<Playlist>) :
             .into(holder.playlistCoverImageView)
 
         holder.playlistNameTextView.text = currentPlaylist.playlistName
-        val songsNumber = currentPlaylist.songids.size
+        val songsNumber = currentPlaylist.songIds.size
         holder.songsNumberTextView.text = "${songsNumber} songs"
     }
 

@@ -1,24 +1,27 @@
 package com.smd.surmaiya.Fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
-import com.google.firebase.database.FirebaseDatabase
+import com.smd.surmaiya.HelperClasses.FragmentHelper
+import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager.fetchSongFromFirebase
 import com.smd.surmaiya.ManagerClasses.PlaylistManager
+import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.AlbumAddSongAdapter
-import com.smd.surmaiya.adapters.AlbumSongAdapter
-import com.smd.surmaiya.adapters.PlaylistAdapter
+import com.smd.surmaiya.adapters.PlaylistAuthorAdapter
 import com.smd.surmaiya.itemClasses.Playlist
 import com.smd.surmaiya.itemClasses.Song
 import com.smd.surmaiya.itemClasses.SongNew
@@ -37,13 +40,20 @@ class PlaylistSearchFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private lateinit var editPlaylist: ImageView
     private lateinit var playlistSearch: ImageView
     private lateinit var playlistRecyclerView: RecyclerView
     private lateinit var playlistAdapter: AlbumAddSongAdapter
     private lateinit var playlistCover: ShapeableImageView
     private lateinit var playlistName: TextView
     private lateinit var followers: TextView
+    private lateinit var followImage: ImageView
+    private lateinit var playlistDescription: TextView
+    private lateinit var addSong: ImageView
+    private lateinit var addUserToPlaylist: ImageView
+    private lateinit var editPlaylist: ImageView
+    private lateinit var downloadPlaylist: ImageView
+    private var isLiked: Boolean = false
+    private lateinit var playlistAuthorRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +67,7 @@ class PlaylistSearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_playlist_search, container, false)
     }
 
@@ -67,60 +77,118 @@ class PlaylistSearchFragment : Fragment() {
         setUpOnClickListeners()
         setupRecyclerView()
     }
-
     private fun setupRecyclerView() {
-        val playlist = PlaylistManager.getPlaylists()
+        val playlist = getPlaylist()
+        setupPlaylistDetails(playlist)
+        setupSongsListForPlaylist(playlist)
+        playlistAuthorRecyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        playlistAuthorRecyclerView.adapter = PlaylistAuthorAdapter(listOf())
+        playlist?.userIds.let {
+            if (it != null) {
+                Log.d("PlaylistSearchFragment", "UserIds: $it")
+                FirebaseDatabaseManager.getUsersByIds(it) { users ->
+                    Log.d("PlaylistSearchFragment", "Users: $users")
+                    val playlistAuthorAdapter = PlaylistAuthorAdapter(users)
+                    playlistAuthorRecyclerView.adapter = playlistAuthorAdapter
+                    playlistAuthorAdapter.notifyDataSetChanged()
+                }
+            }
+        }
 
+    }
+
+    private fun getPlaylist(): Playlist? {
+        return PlaylistManager.getPlaylists()
+    }
+
+    private fun setupPlaylistDetails(playlist: Playlist?) {
         if (playlist != null) {
             playlistCover = view?.findViewById(R.id.playlistCover)!!
             playlistName = view?.findViewById(R.id.playlistName)!!
             followers = view?.findViewById<TextView>(R.id.followers)!!
+            playlistDescription = view?.findViewById(R.id.playlistDescription)!!
 
             Glide.with(this)
                 .load(playlist.coverArtUrl)
                 .into(playlistCover)
             playlistName.text = playlist.playlistName
-            followers.text = playlist.followers.toString() + " Followers"
-        }
+            playlistDescription.text = playlist.playlistDescription
+            "${playlist.followers} Followers".also { followers.text = it }
 
+        }
+    }
+
+
+//    private fun setupSongsListForPlaylist(playlist: Playlist?) {
+//        val songsList = mutableListOf<Song>()
+//        val songIds = playlist?.let { extractSongIdsFromPlaylist(it) } ?: listOf()
+//
+//        playlistRecyclerView = view?.findViewById(R.id.playlistRecyclerView)!!
+//        playlistRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+//
+//        fetchAllSongsFromFirebase { allSongs ->
+//            val songsInPlaylist = allSongs.filter { it.id in songIds }
+//            songsList.addAll(songsInPlaylist)
+//            val newSongsList = createNewSongsList(songsList)
+//            setupAdapter(newSongsList)
+//        }
+//    }
+
+    private fun setupSongsListForPlaylist(playlist: Playlist?) {
         val songsList = mutableListOf<Song>()
-        val songIds = extractSongIdsFromPlaylist(playlist)
+        val songIds = playlist?.let { extractSongIdsFromPlaylist(it) } ?: listOf()
 
         playlistRecyclerView = view?.findViewById(R.id.playlistRecyclerView)!!
-        playlistRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        playlistRecyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         for (songId in songIds) {
-            fetchSongFromFirebase(songId.toString()) { song ->
-                songsList.add(song)
-                val newSongsList = mutableListOf<SongNew>()
-                for (song in songsList) {
-                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
-                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
-                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
-                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
-                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
-                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
-                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
-                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
-                    newSongsList.add(SongNew(song.coverArtUrl,song.songName,song.artist))
-
+            if (songId != null) {
+                fetchSongFromFirebase(songId) { song ->
+                    song?.let {
+                        songsList.add(it)
+                        val newSongsList = createNewSongsList(songsList)
+                        setupAdapter(newSongsList)
+                    }
                 }
-                playlistAdapter = AlbumAddSongAdapter(newSongsList)
-                playlistRecyclerView.adapter = playlistAdapter
-                playlistAdapter.notifyDataSetChanged()
             }
         }
     }
 
-    private fun extractSongIdsFromPlaylist(playlist: Playlist?): List<Any> {
-        return playlist?.songids?.values?.toList() ?: listOf()
+    private fun createNewSongsList(songsList: MutableList<Song>): MutableList<SongNew> {
+        val newSongsList = mutableListOf<SongNew>()
+        for (song in songsList) {
+            newSongsList.add(SongNew(song.coverArtUrl, song.songName, song.artist, song.id))
+        }
+        return newSongsList
     }
 
+
+    private fun setupAdapter(newSongsList: MutableList<SongNew>) {
+        playlistAdapter = AlbumAddSongAdapter(newSongsList)
+        playlistRecyclerView.adapter = playlistAdapter
+        playlistAdapter.notifyDataSetChanged()
+    }
+
+    private fun extractSongIdsFromPlaylist(playlist: Playlist?): List<String> {
+        val songIds = mutableListOf<String>()
+        if (playlist != null) {
+            songIds.addAll(playlist.songIds)
+        }
+        return songIds
+    }
 
     private lateinit var backButton: ImageView
     fun initializeViews() {
         backButton = view?.findViewById(R.id.backButton)!!
         editPlaylist = view?.findViewById(R.id.editPlaylist)!!
+        playlistDescription = view?.findViewById(R.id.playlistDescription)!!
+        followImage = view?.findViewById(R.id.likeImageView)!!
+        addSong = view?.findViewById(R.id.addToPlaylist)!!
+        addUserToPlaylist = view?.findViewById(R.id.addUserToPlaylist)!!
+        downloadPlaylist = view?.findViewById(R.id.downloadPlaylist)!!
+        playlistAuthorRecyclerView = view?.findViewById(R.id.playlistAuthorsRecyclerView)!!
     }
 
     fun setUpOnClickListeners() {
@@ -129,11 +197,67 @@ class PlaylistSearchFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
         }
         editPlaylist.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.fragment_container, EditPlaylistFragment()).addToBackStack(null).commit()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, EditPlaylistFragment()).addToBackStack(null)
+                .commit()
+        }
+        followImage.setOnClickListener {
+//            followImage.setImageResource(R.drawable.ic_baseline_favorite_24)
+            if (isLiked) {
+                followImage.setImageResource(R.drawable.heart)
+                isLiked = false
+            } else {
+                followImage.setImageResource(R.drawable.heart_filled)
+                isLiked = true
+            }
+
+        }
+        addSong.setOnClickListener {
+
+
+            val bundle = Bundle()
+            bundle.putString(
+                "selectedPlaylistId",
+                PlaylistManager.getPlaylists()!!.playlsitId
+            ) // Replace with the actual ID of the selected playlist
+
+            val addToPlaylistFragment = AddToPlaylistFragment()
+            addToPlaylistFragment.arguments = bundle
+
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, addToPlaylistFragment)
+                .addToBackStack(null)
+                .commit()
+            FragmentHelper(requireActivity().supportFragmentManager, requireContext()).loadFragment(
+                AddToPlaylistFragment()
+            )
+        }
+        addUserToPlaylist.setOnClickListener {
+//            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.fragment_container, AddUserToPlaylistFragment()).addToBackStack(null).commit()
+            showEnterEmailDialog(requireView())
+        }
+        downloadPlaylist.setOnClickListener {
+//            downloadPlaylist.setImageResource(R.drawable.ic_baseline_cloud_download_24)
+
         }
 
     }
-        companion object {
+
+    private fun showEnterEmailDialog(view: View) {
+        val builder = AlertDialog.Builder(requireActivity())
+        val inflater = requireActivity().layoutInflater
+        val dialogView = inflater.inflate(R.layout.dialog_add_collaborator, null)
+        builder.setView(dialogView)
+        val dialog = builder.create()
+        dialog.window?.setBackgroundDrawableResource(R.drawable.dialog_round_corners)
+        val inviteButton = dialogView.findViewById<Button>(R.id.sendInviteButton)
+        inviteButton.setOnClickListener {
+
+        }
+        dialog.show()
+    }
+
+    companion object {
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.

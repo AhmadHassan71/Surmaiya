@@ -36,6 +36,10 @@ class BottomNavigationHelper(private val activity: AppCompatActivity) {
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.navigation_library -> {
+                    if(UserManager.getCurrentUser()== null){
+                        UserManager.showGuestDialog(activity)
+                        return@setOnNavigationItemSelectedListener false
+                    }
                     loadFragment(LibraryFragment())
                     Log.d("BottomNavigationHelper", "Library Fragment loaded")
                     return@setOnNavigationItemSelectedListener true

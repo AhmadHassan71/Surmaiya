@@ -59,11 +59,17 @@ class HomeFragment : Fragment() {
 
         initalizeViews()
 
-        prepareRecentlyPlayed()
 
         prepareTopGenres()
 
-        prepareYourPlaylists()
+        if(UserManager.getCurrentUser() !=null){
+            prepareYourPlaylists()
+            prepareRecentlyPlayed()
+        }
+        else{
+            handleGuests(view)
+
+        }
 
         prepareTopAlbums()
 
@@ -79,6 +85,15 @@ class HomeFragment : Fragment() {
 //        val drawerLayout = activity?.findViewById<DrawerLayout>(R.id.drawer_layout)
 
 
+    }
+
+    private fun handleGuests(view: View) {
+        yourPlaylistTextView.visibility = View.GONE
+        yourPlaylistsRecyclerView.visibility = View.GONE
+        recentlyPlayedRecyclerView.visibility = View.GONE
+        view.findViewById<TextView>(R.id.recentlyPlayedTextView).visibility = View.GONE
+        userName.visibility = View.GONE
+        requireActivity().findViewById<TextView>(R.id.welcomeTextView).text = "Welcome Guest"
     }
 
     fun initalizeViews(){
@@ -114,11 +129,15 @@ class HomeFragment : Fragment() {
             LinearLayoutManager.HORIZONTAL,false)
 
         FirebaseDatabaseManager.getPlaylists { playlists ->
-            val playlistAdapter = PlaylistAdapter(playlists, object : PlaylistAdapter.OnItemClickListener {
+
+            val yourPlaylists = playlists.filter { UserManager.getCurrentUser()?.id in it.userIds }
+
+
+            val playlistAdapter = PlaylistAdapter(yourPlaylists, object : PlaylistAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int) {
                     // Handle item click
                     // pass the playlist object to the next fragment
-                    val playlist = playlists[position]
+                    val playlist = yourPlaylists[position]
                     PlaylistManager.addPlaylist(playlist)
                     FragmentHelper(requireActivity().supportFragmentManager,requireContext()).loadFragment(PlaylistSearchFragment())
                 }

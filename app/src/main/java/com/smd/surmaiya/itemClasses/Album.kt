@@ -8,4 +8,6 @@ data class Album(
     val songIds: MutableList<String>,
     val songs: List<Song>?,
     val artists: List<String>
-)
+){
+    constructor(): this("","","","", mutableListOf(), mutableListOf(), mutableListOf())
+}

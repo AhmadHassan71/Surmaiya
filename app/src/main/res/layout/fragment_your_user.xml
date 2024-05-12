@@ -21,10 +21,11 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/materialCardView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/rounded_bottom"
             android:backgroundTint="@color/bottom_nav_primary"
-            android:paddingBottom="15dp"
+
+            app:contentPaddingBottom="20dp"
             app:cardCornerRadius="70dp"
             app:layout_constraintHeight_percent="0.44"
             app:cardPreventCornerOverlap="false"
@@ -46,6 +47,7 @@
                     android:text="Playlists"
                     android:textColor="@color/white"
                     android:textSize="18sp"
+                    android:layout_marginBottom="10dp"
                     app:layout_constraintEnd_toEndOf="@+id/playlistCount"
                     app:layout_constraintStart_toStartOf="@+id/playlistCount"
                     app:layout_constraintTop_toBottomOf="@+id/playlistCount" />
@@ -55,13 +57,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="63dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="28dp"
                     android:layout_marginEnd="94dp"
                     android:fontFamily="@font/satoshibold"
                     android:text="778"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="@+id/followersCount"
+                    app:layout_constraintHorizontal_bias="0.384"
                     app:layout_constraintStart_toEndOf="@+id/followingCount"
                     app:layout_constraintTop_toBottomOf="@+id/username" />
 
@@ -69,23 +72,25 @@
                     android:id="@+id/followersCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="64dp"
                     android:fontFamily="@font/satoshibold"
                     android:text="243"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    app:layout_constraintStart_toEndOf="@+id/username"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/followingCount" />
 
                 <TextView
                     android:id="@+id/followingCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="76dp"
+                    android:layout_marginTop="28dp"
                     android:fontFamily="@font/satoshibold"
                     android:text="778"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    app:layout_constraintEnd_toStartOf="@+id/username"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/username" />
 
                 <TextView
@@ -110,6 +115,7 @@
                     android:text="Followers"
                     android:textColor="@color/white"
                     android:textSize="18sp"
+                    android:layout_marginBottom="10dp"
                     app:layout_constraintEnd_toEndOf="@+id/followersCount"
                     app:layout_constraintStart_toStartOf="@+id/followersCount"
                     app:layout_constraintTop_toBottomOf="@+id/followersCount" />
@@ -209,7 +215,7 @@
             app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/PlaylistsReecylerView"
+            android:id="@+id/PlaylistsRecylerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
