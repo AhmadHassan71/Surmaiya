@@ -121,7 +121,7 @@ class SearchResultsFragment : Fragment() {
                     }
                 }
             }
-        })
+        },requireActivity().supportFragmentManager)
         searchSongRecyclerView.adapter = searchSongAdapter
         searchSongRecyclerView.layoutManager = LinearLayoutManager(context)
 

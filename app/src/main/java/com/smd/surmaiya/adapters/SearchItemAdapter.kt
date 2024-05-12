@@ -5,17 +5,26 @@ import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.content.Intent
+import android.os.Build
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.annotation.RequiresApi
+import androidx.fragment.app.FragmentManager
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.smd.surmaiya.Fragments.ArtistPageFragment
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.OtherUserManager
+import com.smd.surmaiya.Fragments.PlayerBottomSheetDialogFragment
+import com.smd.surmaiya.ManagerClasses.MusicServiceManager
+import com.smd.surmaiya.ManagerClasses.SongManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.interfaces.OnArtistClickListener
 import com.smd.surmaiya.itemClasses.Song
@@ -23,7 +32,9 @@ import com.smd.surmaiya.itemClasses.SongNew
 
 class SearchItemAdapter(
     private val searchItems: MutableList<Song>,
-    private val onArtistClickListener: OnArtistClickListener
+    private val onArtistClickListener: OnArtistClickListener,
+    private val fragmentManager: FragmentManager // Add this line
+
 ) :
     RecyclerView.Adapter<SearchItemAdapter.MyViewHolder>() {
 
@@ -37,6 +48,7 @@ class SearchItemAdapter(
         return MyViewHolder(linearLayout)
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val songNameTextView = holder.linearLayout.findViewById<TextView>(R.id.albumTextView1)
         val songArtistNameTextView = holder.linearLayout.findViewById<TextView>(R.id.albumTextView2)
@@ -96,6 +108,14 @@ class SearchItemAdapter(
                     }
                 }
             }
+        songImageView.setOnClickListener {
+            val song = searchItems[position]
+            MusicServiceManager.broadCastSongSelected(song)
+
+
+
+        }
+
 
         }
 

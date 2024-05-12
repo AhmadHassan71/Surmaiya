@@ -117,6 +117,9 @@ class LibraryFragment : Fragment() {
                 }
             }
         })
+        },requireActivity().supportFragmentManager)
+
+
         librarySongRecyclerView.adapter = librarySongAdapter
         librarySongRecyclerView.layoutManager = LinearLayoutManager(context)
 

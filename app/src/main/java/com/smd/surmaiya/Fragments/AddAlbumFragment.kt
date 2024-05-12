@@ -177,7 +177,7 @@ class AddAlbumFragment : Fragment(), AddSongFragment.OnSongCreatedCallback {
 
     fun setUpRecyclerView() {
         // Initialize the adapter with the songList
-        albumAddSongAdapter = AlbumAddSongAdapter(songList)
+        albumAddSongAdapter = AlbumAddSongAdapter(songList, mutableListOf())
 
         // Set the adapter for the RecyclerView
         albumAddSongRecyclerView.adapter = albumAddSongAdapter

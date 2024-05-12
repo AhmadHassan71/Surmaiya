@@ -139,7 +139,7 @@ class ArtistPageFragment : Fragment() {
                     }
                 }
             }
-        })
+        },requireActivity().supportFragmentManager)
         songsRecyclerView.adapter = songAdapter
         songsRecyclerView.layoutManager = LinearLayoutManager(context)
         albumAdapter = AlbumAdapter(mutableListOf(), object : AlbumAdapter.OnItemClickListener {
@@ -221,7 +221,7 @@ class ArtistPageFragment : Fragment() {
                             }
                         }
                     }
-                })
+                },requireActivity().supportFragmentManager)
                 songAdapter.notifyDataSetChanged()
                 songsRecyclerView.adapter = songAdapter
             }

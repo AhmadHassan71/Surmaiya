@@ -18,16 +18,19 @@ import com.bumptech.glide.Glide
 import com.smd.surmaiya.Fragments.ArtistPageFragment
 import com.smd.surmaiya.HelperClasses.CustomToastMaker
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
+import com.smd.surmaiya.ManagerClasses.MusicServiceManager
 import com.smd.surmaiya.ManagerClasses.OtherUserManager
 import com.smd.surmaiya.ManagerClasses.PlaylistManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.itemClasses.Playlist
+import com.smd.surmaiya.itemClasses.Song
 import com.smd.surmaiya.itemClasses.SongNew
 
-class AlbumAddSongAdapter(private val myDataset: MutableList<SongNew>) :
+class AlbumAddSongAdapter(private val myDataset: MutableList<SongNew>, songsList: MutableList<Song>) :
     RecyclerView.Adapter<AlbumAddSongAdapter.MyViewHolder>() {
 
     class MyViewHolder(val linearLayout: LinearLayout) : RecyclerView.ViewHolder(linearLayout)
+    private val songList: MutableList<Song> = songsList
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -69,6 +72,11 @@ class AlbumAddSongAdapter(private val myDataset: MutableList<SongNew>) :
 
         likedImageView.setOnClickListener {
             likeOption(likedImageView, holder)
+        }
+
+        imageView.setOnClickListener {
+            if(songList.isNotEmpty())
+                MusicServiceManager.broadCastSongSelected(songList[position])
         }
 
         textView2.setOnClickListener {

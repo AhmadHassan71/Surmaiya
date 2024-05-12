@@ -44,6 +44,12 @@ object MusicServiceManager {
         }
     }
 
+    fun broadCastSongSelected(song: Song){
+        val intent = Intent("com.smd.surmaiya.ACTION_SONG_SELECTED")
+        intent.putExtra("song", song)
+        musicService?.sendBroadcast(intent)
+    }
+
     fun unbindService(context: Context) {
         if (isBound) {
             context.unbindService(serviceConnection)
@@ -101,6 +107,22 @@ object MusicServiceManager {
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
+    fun playNextSong() {
+        val nextSong = SongManager.getInstance().nextSong()
+        if (nextSong != null) {
+            playSong(nextSong)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    fun playPreviousSong() {
+        val previousSong = SongManager.getInstance().previousSong()
+        if (previousSong != null) {
+            playSong(previousSong)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
     fun playCurrentSongWithDelay(delayMillis: Long) {
         val progress = musicService?.getProgress()?.toFloat() ?: 0f
         SongManager.getInstance().currentSong?.let { song ->
@@ -126,12 +148,31 @@ object MusicServiceManager {
     }
 
     fun pauseMusicAndBroadcast() {
-        
+        SongManager.getInstance().currentProgress = musicService?.getProgress()?.toFloat() ?: 0f
+        Log.d("Pausing music", "Pausing music " + musicService?.getProgress()?.toFloat())
         musicService?.progress = musicService?.getProgress()?.toFloat() ?: 0f
         musicService?.exoPlayer?.stop()
 
         val intent = Intent("com.smd.surmaiya.ACTION_PAUSE")
         musicService?.sendBroadcast(intent)
+    }
+
+     //if song is already playing we need to stop it and play the new song
+
+    fun isPlaying(): Boolean {
+        return musicService?.exoPlayer?.isPlaying ?: false
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    fun playThisSongInstantly(song: Song) {
+        if (isPlaying()) {
+            stopSong()
+        }
+        playSong(song)
+    }
+
+    fun stopSong() {
+        musicService?.exoPlayer?.stop()
     }
 
 
