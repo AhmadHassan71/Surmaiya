@@ -1,18 +1,11 @@
 package com.smd.surmaiya.Fragments
 
-import BottomNavigationHelper
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,14 +19,14 @@ import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.activities.MonthlyRankingActivity
 import com.smd.surmaiya.activities.PopularPlaylistsActivity
+import com.smd.surmaiya.adapters.GenreAdapter
 import com.smd.surmaiya.adapters.ListItemAdapter
 import com.smd.surmaiya.adapters.PlaylistAdapter
 import com.smd.surmaiya.adapters.RecentlyPlayedAdapter
 import com.smd.surmaiya.adapters.TopGenresAdapter
+import com.smd.surmaiya.itemClasses.Genre
 import com.smd.surmaiya.itemClasses.ListItem
-import com.smd.surmaiya.itemClasses.Playlist
 import com.smd.surmaiya.itemClasses.Song
-import com.smd.surmaiya.itemClasses.TopGenres
 
 
 class HomeFragment : Fragment() {
@@ -63,11 +56,10 @@ class HomeFragment : Fragment() {
 
         prepareTopGenres()
 
-        if(UserManager.getCurrentUser() !=null){
+        if (UserManager.getCurrentUser() != null) {
             prepareYourPlaylists()
             prepareRecentlyPlayed()
-        }
-        else{
+        } else {
             handleGuests(view)
 
         }
@@ -79,7 +71,11 @@ class HomeFragment : Fragment() {
         setUpOnClickListeners()
 
         SideBarNavigationHelper(requireActivity()).openDrawerOnMenuClick(view, requireActivity())
-        SideBarNavigationHelper(requireActivity()).setupNavigationView(requireActivity().findViewById(R.id.drawer_layout))
+        SideBarNavigationHelper(requireActivity()).setupNavigationView(
+            requireActivity().findViewById(
+                R.id.drawer_layout
+            )
+        )
         SideBarNavigationHelper(requireActivity()).prepareSideBar(requireActivity())
 //         use with these names
 //        val menuOpener = view.findViewById<ImageView>(R.id.menu_opener)
@@ -97,7 +93,7 @@ class HomeFragment : Fragment() {
         requireActivity().findViewById<TextView>(R.id.welcomeTextView).text = "Welcome Guest"
     }
 
-    fun initalizeViews(){
+    fun initalizeViews() {
         PlaylistManager.removePlaylist()
         topGenresTextView = view?.findViewById(R.id.topGenresTextView)!!
         topPlaylistTextView = view?.findViewById(R.id.topPlaylistsTextView)!!
@@ -111,82 +107,110 @@ class HomeFragment : Fragment() {
         userName.text = UserManager.getCurrentUser()?.userType.toString()
     }
 
-    fun setUpOnClickListeners(){
+    fun setUpOnClickListeners() {
         topGenresTextView.setOnClickListener {
-            this.context?.let { it1 -> Navigator.navigateToActivity(it1, MonthlyRankingActivity::class.java) }
+            this.context?.let { it1 ->
+                Navigator.navigateToActivity(
+                    it1,
+                    MonthlyRankingActivity::class.java
+                )
+            }
         }
 
         topPlaylistTextView.setOnClickListener {
-            this.context?.let { it1 -> Navigator.navigateToActivity(it1, PopularPlaylistsActivity::class.java) }
+            this.context?.let { it1 ->
+                Navigator.navigateToActivity(
+                    it1,
+                    PopularPlaylistsActivity::class.java
+                )
+            }
         }
 
         yourPlaylistTextView.setOnClickListener {
-            this.context?.let { it1 -> FragmentNavigationHelper(requireActivity()).loadFragment(AddAlbumFragment())}
+            this.context?.let { it1 ->
+                FragmentNavigationHelper(requireActivity()).loadFragment(
+                    AddAlbumFragment()
+                )
+            }
         }
 
     }
 
     private fun prepareYourPlaylists() {
-        yourPlaylistsRecyclerView.layoutManager = LinearLayoutManager(this.context,
-            LinearLayoutManager.HORIZONTAL,false)
+        yourPlaylistsRecyclerView.layoutManager = LinearLayoutManager(
+            this.context,
+            LinearLayoutManager.HORIZONTAL, false
+        )
 
         FirebaseDatabaseManager.getPlaylists { playlists ->
 
             val yourPlaylists = playlists.filter { UserManager.getCurrentUser()?.id in it.userIds }
 
 
-            val playlistAdapter = PlaylistAdapter(yourPlaylists, object : PlaylistAdapter.OnItemClickListener {
-                override fun onItemClick(position: Int) {
-                    // Handle item click
-                    // pass the playlist object to the next fragment
-                    val playlist = yourPlaylists[position]
-                    PlaylistManager.addPlaylist(playlist)
-                    FragmentHelper(requireActivity().supportFragmentManager,requireContext()).loadFragment(PlaylistSearchFragment())
-                }
-                override fun onItemChanged(position: Int) {
-                    // Handle item change
-                }
-            })
+            val playlistAdapter =
+                PlaylistAdapter(yourPlaylists, object : PlaylistAdapter.OnItemClickListener {
+                    override fun onItemClick(position: Int) {
+                        // Handle item click
+                        // pass the playlist object to the next fragment
+                        val playlist = yourPlaylists[position]
+                        PlaylistManager.addPlaylist(playlist)
+                        FragmentHelper(
+                            requireActivity().supportFragmentManager,
+                            requireContext()
+                        ).loadFragment(PlaylistSearchFragment())
+                    }
+
+                    override fun onItemChanged(position: Int) {
+                        // Handle item change
+                    }
+                })
             yourPlaylistsRecyclerView.adapter = playlistAdapter
         }
     }
 
 
-
     private fun prepareTopAlbums() {
 
-        topAlbumsRecyclerView.layoutManager = LinearLayoutManager(this.context,
-            LinearLayoutManager.HORIZONTAL,false)
+        topAlbumsRecyclerView.layoutManager = LinearLayoutManager(
+            this.context,
+            LinearLayoutManager.HORIZONTAL, false
+        )
 
         val listData = prepareListData() // Replace with your data loading logic
-
 
 
         val listItemAdapter = ListItemAdapter(listData)
         topAlbumsRecyclerView.adapter = listItemAdapter
     }
 
-    private fun prepareTopPlaylists(){
-        topPlaylistsRecyclerView.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+    private fun prepareTopPlaylists() {
+        topPlaylistsRecyclerView.layoutManager =
+            LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
 
 
         FirebaseDatabaseManager.getPlaylists { playlists ->
 
-            val yourPlaylists = playlists.filter { "public" in it.visibility && UserManager.getCurrentUser()?.id !in it.userIds}
+            val yourPlaylists =
+                playlists.filter { "public" in it.visibility && UserManager.getCurrentUser()?.id !in it.userIds }
 
 
-            val playlistAdapter = PlaylistAdapter(yourPlaylists, object : PlaylistAdapter.OnItemClickListener {
-                override fun onItemClick(position: Int) {
-                    // Handle item click
-                    // pass the playlist object to the next fragment
-                    val playlist = yourPlaylists[position]
-                    PlaylistManager.addPlaylist(playlist)
-                    FragmentHelper(requireActivity().supportFragmentManager,requireContext()).loadFragment(PlaylistSearchFragment())
-                }
-                override fun onItemChanged(position: Int) {
-                    // Handle item change
-                }
-            })
+            val playlistAdapter =
+                PlaylistAdapter(yourPlaylists, object : PlaylistAdapter.OnItemClickListener {
+                    override fun onItemClick(position: Int) {
+                        // Handle item click
+                        // pass the playlist object to the next fragment
+                        val playlist = yourPlaylists[position]
+                        PlaylistManager.addPlaylist(playlist)
+                        FragmentHelper(
+                            requireActivity().supportFragmentManager,
+                            requireContext()
+                        ).loadFragment(PlaylistSearchFragment())
+                    }
+
+                    override fun onItemChanged(position: Int) {
+                        // Handle item change
+                    }
+                })
             topPlaylistsRecyclerView.adapter = playlistAdapter
         }
 
@@ -205,24 +229,32 @@ class HomeFragment : Fragment() {
 
         val layoutManager = GridLayoutManager(this.context, 2, GridLayoutManager.VERTICAL, false)
         topGenresRecyclerView.layoutManager = layoutManager
-
-        val genreDataList = prepareGenreData()
-        val genreAdapter = TopGenresAdapter(genreDataList)
-        topGenresRecyclerView.adapter = genreAdapter
+        val genresList = mutableListOf<Genre>()
+        val genreslistAdapter = GenreAdapter(genresList)
+        topGenresRecyclerView.adapter = TopGenresAdapter(genresList)
+        FirebaseDatabaseManager.getAllGenres { genres ->
+            for (i in 0 until minOf(4, genres.size)) {
+                val newGenre = Genre(genres[i], "")
+                genresList.add(newGenre)
+            }
+        }
+        FirebaseDatabaseManager.getAllSongs { songs ->
+            for (song in songs) {
+                for (genre in genresList) {
+                    if (song.genres.contains(genre.name)) {
+                        genre.imageUrl = song.coverArtUrl
+                    }
+                }
+            }
+            topGenresRecyclerView.adapter = TopGenresAdapter(genresList)
+            genreslistAdapter.notifyDataSetChanged()
+        }
     }
 
-    private fun prepareGenreData(): List<TopGenres> {
-        val genres = mutableListOf<TopGenres>()
-        genres.add(TopGenres(R.drawable.genre_image, "Rock"))
-        genres.add(TopGenres(R.drawable.genre_image, "Pop"))
-        genres.add(TopGenres(R.drawable.genre_image, "Metal"))
-        genres.add(TopGenres(R.drawable.genre_image, "R&B"))
-
-        return genres
-    }
 
     private fun prepareRecentlyPlayed() {
-        recentlyPlayedRecyclerView.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+        recentlyPlayedRecyclerView.layoutManager =
+            LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
 
         val songList = prepareSongData()  // Replace with your data loading logic
         val songAdapter = RecentlyPlayedAdapter(songList)
@@ -231,10 +263,66 @@ class HomeFragment : Fragment() {
 
     private fun prepareSongData(): List<Song> {
         val songs = mutableListOf<Song>()
-        songs.add(Song("id", "Song Name", "Artist", "Album", "Duration", "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg", "songUrl", "releaseDate", 0, listOf("genre"),"Album Name"))
-        songs.add(Song("id", "Song Name", "Artist", "Album", "Duration", "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg", "songUrl", "releaseDate", 0, listOf("genre"),"Album Name"))
-        songs.add(Song("id", "Song Name", "Artist", "Album", "Duration", "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg", "songUrl", "releaseDate", 0, listOf("genre"),"Album Name"))
-        songs.add(Song("id", "Song Name", "Artist", "Album", "Duration", "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg", "songUrl", "releaseDate", 0, listOf("genre"), "Album Name"))
+        songs.add(
+            Song(
+                "id",
+                "Song Name",
+                "Artist",
+                "Album",
+                "Duration",
+                "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg",
+                "songUrl",
+                "releaseDate",
+                0,
+                listOf("genre"),
+                "Album Name"
+            )
+        )
+        songs.add(
+            Song(
+                "id",
+                "Song Name",
+                "Artist",
+                "Album",
+                "Duration",
+                "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg",
+                "songUrl",
+                "releaseDate",
+                0,
+                listOf("genre"),
+                "Album Name"
+            )
+        )
+        songs.add(
+            Song(
+                "id",
+                "Song Name",
+                "Artist",
+                "Album",
+                "Duration",
+                "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg",
+                "songUrl",
+                "releaseDate",
+                0,
+                listOf("genre"),
+                "Album Name"
+            )
+        )
+        songs.add(
+            Song(
+                "id",
+                "Song Name",
+                "Artist",
+                "Album",
+                "Duration",
+                "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg",
+                "songUrl",
+                "releaseDate",
+                0,
+                listOf("genre"),
+                "Album Name"
+            )
+        )
 
         return songs
     }

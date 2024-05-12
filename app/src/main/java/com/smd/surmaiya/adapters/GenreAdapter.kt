@@ -53,6 +53,7 @@ class GenreAdapter(private val genreList: List<Genre>) :
         }
     }
 
+
     private fun loadAndSetImage(holder: GenreViewHolder, currentItem: Genre) {
         Glide.with(holder.itemView.context)
             .asBitmap()
