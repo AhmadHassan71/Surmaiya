@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.smd.surmaiya.ManagerClasses.AlbumManager
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.OtherUserManager
 import com.smd.surmaiya.ManagerClasses.UserManager
@@ -175,7 +176,7 @@ class ArtistPageFragment : Fragment() {
                 albumList = mutableListOf()
                 var count = 0
                 for (album in albums) {
-                    if (album.artists.contains(artist!!.name)) {
+                    if (album.artists[0].split(",")[0]==(artist!!.name)) {
                         albumList.add(album)
                         count++
                     }
@@ -184,6 +185,12 @@ class ArtistPageFragment : Fragment() {
 
                 albumAdapter = AlbumAdapter(albumList, object : AlbumAdapter.OnItemClickListener {
                     override fun onItemClick(position: Int) {
+                        AlbumManager.addAlbum(albumList[position])
+                        val fragmentManager = requireActivity().supportFragmentManager
+                        fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, AlbumDetailFragment())
+                            .addToBackStack(null)
+                            .commit()
                     }
 
                     override fun onItemChanged(position: Int) {

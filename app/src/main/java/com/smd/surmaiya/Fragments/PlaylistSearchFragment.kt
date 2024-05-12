@@ -1,17 +1,17 @@
 package com.smd.surmaiya.Fragments
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -20,8 +20,8 @@ import com.smd.surmaiya.HelperClasses.CustomToastMaker
 import com.smd.surmaiya.HelperClasses.FragmentHelper
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager.fetchSongFromFirebase
-import com.smd.surmaiya.ManagerClasses.NotificationsManager
 import com.smd.surmaiya.ManagerClasses.MusicServiceManager
+import com.smd.surmaiya.ManagerClasses.NotificationsManager
 import com.smd.surmaiya.ManagerClasses.PlaylistManager
 import com.smd.surmaiya.ManagerClasses.SongManager
 import com.smd.surmaiya.ManagerClasses.UserManager
@@ -63,6 +63,7 @@ class PlaylistSearchFragment : Fragment() {
     private lateinit var playlistAuthorRecyclerView: RecyclerView
     private lateinit var playlistPlayButton: ImageView
     private var songsList = mutableListOf<Song>()
+    private lateinit var playlistSearchView: SearchView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -87,10 +88,11 @@ class PlaylistSearchFragment : Fragment() {
         initializeViews()
         setUpOnClickListeners()
         setupRecyclerView()
+        setUpSearchBar()
     }
 
     private fun handleCollaborationInvite() {
-        if(requireActivity().intent.extras != null) {
+        if (requireActivity().intent.extras != null) {
             val playlistId = requireActivity().intent.extras?.getString("playlistId")
             val chatType = requireActivity().intent.extras?.getString("chat_type")
             val playlist = requireActivity().intent.getParcelableExtra<Playlist>("playlist")
@@ -246,7 +248,7 @@ class PlaylistSearchFragment : Fragment() {
 
 
     private fun setupAdapter(newSongsList: MutableList<SongNew>) {
-        playlistAdapter = AlbumAddSongAdapter(newSongsList,songsList)
+        playlistAdapter = AlbumAddSongAdapter(newSongsList, songsList)
         playlistRecyclerView.adapter = playlistAdapter
         playlistAdapter.notifyDataSetChanged()
     }
@@ -271,17 +273,43 @@ class PlaylistSearchFragment : Fragment() {
         downloadPlaylist = view?.findViewById(R.id.downloadPlaylist)!!
         playlistAuthorRecyclerView = view?.findViewById(R.id.playlistAuthorsRecyclerView)!!
         playlistPlayButton = view?.findViewById(R.id.playImageView)!!
+        playlistSearchView = view?.findViewById(R.id.searchPlaylist)!!
 
-        if(getPlaylist()!!.followers > 0) {
+        if (getPlaylist()!!.followers > 0) {
             followImage.setImageResource(R.drawable.heart_filled)
         }
 
-        if(UserManager.getCurrentUser()?.id !in PlaylistManager.getPlaylists()!!.userIds){
+        if (UserManager.getCurrentUser()?.id !in PlaylistManager.getPlaylists()!!.userIds) {
             editPlaylist.visibility = View.GONE
             addUserToPlaylist.visibility = View.GONE
             addSong.visibility = View.GONE
         }
 
+
+
+    }
+
+    fun setUpSearchBar() {
+        playlistSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query!!.isEmpty()) {
+                    return false
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText!!.isNotEmpty()) {
+                    val filteredList = songsList.filter { song ->
+                        song.songName.contains(newText, ignoreCase = true)
+                    }
+                    setupAdapter(createNewSongsList(filteredList.toMutableList()))
+                } else {
+                    setupAdapter(createNewSongsList(songsList.toMutableList()))
+                }
+                return false
+            }
+        })
 
     }
 
@@ -382,11 +410,11 @@ class PlaylistSearchFragment : Fragment() {
         dialog.window?.setBackgroundDrawableResource(R.drawable.dialog_round_corners)
         val inviteButton = dialogView.findViewById<Button>(R.id.sendInviteButton)
         inviteButton.setOnClickListener {
-            val collaboratorEmail = dialogView.findViewById<TextView>(R.id.emailEditText).text.toString()
-            if(collaboratorEmail.isNotEmpty()){
+            val collaboratorEmail =
+                dialogView.findViewById<TextView>(R.id.emailEditText).text.toString()
+            if (collaboratorEmail.isNotEmpty()) {
                 sendInvitationNotification(collaboratorEmail)
-            }
-            else{
+            } else {
                 CustomToastMaker().showToast(requireContext(), "Please enter an email address")
             }
             dialog.dismiss()
@@ -394,11 +422,12 @@ class PlaylistSearchFragment : Fragment() {
         dialog.show()
     }
 
-    private fun sendInvitationNotification(collaboratorEmail: String){
+    private fun sendInvitationNotification(collaboratorEmail: String) {
 
         val title = "Invitation to Collaborate"
-        val message = "${UserManager.getCurrentUser()!!.name} has invited you to collaborate on ${getPlaylist()!!.playlistName}"
-        var colaborID : String? = null
+        val message =
+            "${UserManager.getCurrentUser()!!.name} has invited you to collaborate on ${getPlaylist()!!.playlistName}"
+        var colaborID: String? = null
         findCollaborator(collaboratorEmail) { collaborator ->
 
             colaborID = collaborator.id

@@ -13,14 +13,15 @@ import com.smd.surmaiya.HelperClasses.FragmentHelper
 import com.smd.surmaiya.HelperClasses.FragmentNavigationHelper
 import com.smd.surmaiya.HelperClasses.Navigator
 import com.smd.surmaiya.HelperClasses.SideBarNavigationHelper
+import com.smd.surmaiya.ManagerClasses.AlbumManager
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.PlaylistManager
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.activities.MonthlyRankingActivity
 import com.smd.surmaiya.activities.PopularPlaylistsActivity
+import com.smd.surmaiya.adapters.AlbumAdapter
 import com.smd.surmaiya.adapters.GenreAdapter
-import com.smd.surmaiya.adapters.ListItemAdapter
 import com.smd.surmaiya.adapters.PlaylistAdapter
 import com.smd.surmaiya.adapters.RecentlyPlayedAdapter
 import com.smd.surmaiya.adapters.TopGenresAdapter
@@ -176,11 +177,26 @@ class HomeFragment : Fragment() {
             LinearLayoutManager.HORIZONTAL, false
         )
 
-        val listData = prepareListData() // Replace with your data loading logic
+        FirebaseDatabaseManager.getAllAlbums { albums ->
+            val topAlbums = albums.sortedByDescending { it.releaseDate }
+            val topAlbumsList = topAlbums.subList(0, minOf(4, topAlbums.size))
+            topAlbumsRecyclerView.adapter =
+                AlbumAdapter(topAlbumsList, object : AlbumAdapter.OnItemClickListener {
+                    override fun onItemClick(position: Int) {
+                        AlbumManager.addAlbum(topAlbums[position])
+                        val fragmentManager = requireActivity().supportFragmentManager
+                        fragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, AlbumDetailFragment())
+                            .addToBackStack(null)
+                            .commit()
+                    }
 
+                    override fun onItemChanged(position: Int) {
+                        // Do nothing
+                    }
+                })
+        }
 
-        val listItemAdapter = ListItemAdapter(listData)
-        topAlbumsRecyclerView.adapter = listItemAdapter
     }
 
     private fun prepareTopPlaylists() {
@@ -227,7 +243,8 @@ class HomeFragment : Fragment() {
 
     private fun prepareTopGenres() {
 
-        val layoutManager = GridLayoutManager(this.context, 2, GridLayoutManager.VERTICAL, false)
+        val layoutManager =
+            GridLayoutManager(this.context, 2, GridLayoutManager.VERTICAL, false)
         topGenresRecyclerView.layoutManager = layoutManager
         val genresList = mutableListOf<Genre>()
         val genreslistAdapter = GenreAdapter(genresList)
@@ -250,7 +267,6 @@ class HomeFragment : Fragment() {
             genreslistAdapter.notifyDataSetChanged()
         }
     }
-
 
     private fun prepareRecentlyPlayed() {
         recentlyPlayedRecyclerView.layoutManager =

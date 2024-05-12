@@ -8,8 +8,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
 
         <ScrollView
@@ -66,22 +65,18 @@
                         android:paddingHorizontal="15dp"
                         android:paddingVertical="11dp">
 
-                        <ImageView
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_marginEnd="21dp"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/search_black" />
 
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                        <androidx.appcompat.widget.SearchView
+                            android:id="@+id/searchPlaylist"
+                            android:layout_width="296dp"
+                            android:layout_height="27dp"
                             android:layout_weight="1"
                             android:background="@null"
-                            android:text="Search"
+                            android:queryHint="Search"
                             android:textColor="#131313"
                             android:textSize="16sp"
                             android:textStyle="bold" />
+
                     </LinearLayout>
 
                     <ImageView
@@ -153,8 +148,7 @@
                     android:textColor="#000000"
                     android:textSize="13sp"
                     app:layout_constraintStart_toEndOf="@+id/followers"
-                    app:layout_constraintTop_toBottomOf="@+id/playlistAuthorsRecyclerView"
-                     />
+                    app:layout_constraintTop_toBottomOf="@+id/playlistAuthorsRecyclerView" />
 
                 <LinearLayout
                     android:id="@+id/linearLayout7"
@@ -238,7 +232,6 @@
                     app:layout_constraintTop_toBottomOf="@id/playlistDescription" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
