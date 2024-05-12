@@ -15,7 +15,7 @@ import com.smd.surmaiya.itemClasses.Song
 
 object MusicServiceManager {
 
-    private var musicService: MusicService? = null
+    var musicService: MusicService? = null
     private var isBound = false
     private lateinit var serviceConnection: ServiceConnection
     private val songManager = SongManager.getInstance()
@@ -53,21 +53,32 @@ object MusicServiceManager {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.P)
     fun playSong(song: Song) {
         Log.d("playSong musicservice manager", "playSong: , ${song.songUrl.toString()}")
         musicService?.playSong(song)
         songManager.currentSong = song
+
+        val intent = Intent("com.smd.surmaiya.ACTION_PLAY")
+        musicService?.sendBroadcast(intent)
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     fun pauseSong() {
         songManager.currentProgress = (musicService?.getProgress() ?: 0).toFloat()
         musicService?.pauseMusic()
+
+        val intent = Intent("com.smd.surmaiya.ACTION_PAUSE")
+        musicService?.sendBroadcast(intent)
     }
 
     fun resumeSong() {
 
         songManager.currentProgress = (musicService?.getProgress() ?: 0).toFloat()
         musicService?.resumeSong()
+
+        val intent = Intent("com.smd.surmaiya.ACTION_PLAY")
+        musicService?.sendBroadcast(intent)
     }
 
     fun getService(): MusicService? {

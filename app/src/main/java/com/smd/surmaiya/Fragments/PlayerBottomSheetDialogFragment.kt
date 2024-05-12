@@ -2,6 +2,10 @@ package com.smd.surmaiya.Fragments
 
 import android.animation.ObjectAnimator
 import android.app.Dialog
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -13,10 +17,14 @@ import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.*
 import android.view.animation.LinearInterpolator
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.registerReceiver
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -47,6 +55,8 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
     private var threeDots:Button? = null
     private var closeArrow:ImageView? = null
     private var playerBarLinearLayout: LinearLayout? = null
+
+    private var lastClickTime: Long = 0
 
     override fun getTheme(): Int = R.style.AppBottomSheetDialogTheme
 
@@ -110,17 +120,50 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
         playerBarLinearLayout = view.findViewById(R.id.playerBarLinearLayout)
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     private fun setUpOnClickListeners() {
         playButton.setOnClickListener {
-            MusicServiceManager.pauseSong()
-            playButton.visibility = View.GONE
-            pauseButton.visibility = View.VISIBLE
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastClickTime > 1000) {
+                Log.d("PlayerBottomSheetDialogFragment", "Play button clicked")
+                playButton.visibility = View.GONE
+                pauseButton.visibility = View.VISIBLE
+                val progress= MusicServiceManager.musicService?.getProgress()?.toFloat() ?: 0f
+                MusicServiceManager.getService()
+                    ?.playSong(song, progress)
+
+                //put a wait on this using delay
+
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    val duration = MusicServiceManager.getService()?.exoPlayer?.duration ?: 0
+                    Log.d("Progress percentage= ", "Progress percentage = " + progress/100)
+                    Log.d("DUration = ", "DUration = " + duration)
+                    Log.d("Progress = ", "Progress = " + progress)
+                    val newProgress = (progress/ 100.0) * duration
+                    MusicServiceManager.getService()?.exoPlayer?.seekTo(newProgress.toLong())
+                }, 1000) // Delay of 1 second
+
+                val intent = Intent("com.smd.surmaiya.ACTION_PLAY")
+                MusicServiceManager.musicService?.sendBroadcast(intent)
+            }
         }
 
         pauseButton.setOnClickListener {
-            MusicServiceManager.resumeSong()
-            pauseButton.visibility = View.GONE
-            playButton.visibility = View.VISIBLE
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastClickTime > 1000) {
+                Log.d("PlayerBottomSheetDialogFragment", "Pause button clicked")
+                MusicServiceManager.musicService?.progress =
+                    MusicServiceManager.getService()?.getProgress()?.toFloat()!!
+
+                Log.d("PlayerBottomSheetDialogFragment", "Progress is ${MusicServiceManager.musicService?.progress}")
+                pauseButton.visibility = View.GONE
+                playButton.visibility = View.VISIBLE
+                MusicServiceManager.musicService?.exoPlayer?.stop()
+
+                val intent = Intent("com.smd.surmaiya.ACTION_PAUSE")
+                MusicServiceManager.musicService?.sendBroadcast(intent)
+            }
         }
 
         dropDownButton?.setOnClickListener {
@@ -241,7 +284,6 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
                 playingDeviceTextView.compoundDrawableTintList = ColorStateList.valueOf(darkVibrantColor)
 
 
-
             }
         }
     }
@@ -268,12 +310,43 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     override fun onResume() {
         super.onResume()
+
+       val intentFilter = IntentFilter().apply {
+            addAction("com.smd.surmaiya.ACTION_PLAY")
+            addAction("com.smd.surmaiya.ACTION_PAUSE")
+        }
+        requireContext().registerReceiver(playPauseReceiver, intentFilter)
+
         progressBar.post(updateProgressRunnable)
     }
 
     override fun onPause() {
         super.onPause()
         progressBar.removeCallbacks(updateProgressRunnable)
+        requireContext().unregisterReceiver(playPauseReceiver)
+
+
+    }
+
+    private val playPauseReceiver = object : BroadcastReceiver() {
+    @RequiresApi(Build.VERSION_CODES.P)
+    override fun onReceive(context: Context?, intent: Intent?) {
+        val action = intent?.action
+        when (action) {
+            "com.smd.surmaiya.ACTION_PLAY" -> {
+                playButton.visibility = View.GONE
+                pauseButton.visibility = View.VISIBLE
+
+
+            }
+            "com.smd.surmaiya.ACTION_PAUSE" -> {
+                pauseButton.visibility = View.GONE
+                playButton.visibility = View.VISIBLE
+
+
+            }
+        }
+    }
     }
 
 

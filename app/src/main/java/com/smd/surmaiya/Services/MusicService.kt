@@ -36,6 +36,7 @@ class MusicService : Service() {
     private var mediaSession: MediaSessionCompat? = null
     private val songManager = SongManager.getInstance()
     private var albumArtBitmap: Bitmap? = null
+    var progress = 0f
 
     override fun onBind(intent: Intent): IBinder {
         return MusicBinder()
@@ -61,7 +62,8 @@ class MusicService : Service() {
 //    }
 
 
-    fun playSong(song: Song) {
+    @RequiresApi(Build.VERSION_CODES.P)
+    fun playSong(song: Song,progresss:Float=0f) {
         try {
             exoPlayer?.release()
             exoPlayer = SimpleExoPlayer.Builder(this).build().apply {
@@ -76,27 +78,53 @@ class MusicService : Service() {
                     }
                 })
             }
+
+            Log.d("playSong musicservice", "progress 1 is $progresss")
             val mediaItem = MediaItem.fromUri(song.songUrl)
             SongManager.getInstance().currentSong = song
             exoPlayer?.setMediaItem(mediaItem)
             exoPlayer?.prepare()
+
+            //wait until the player is ready
+            exoPlayer?.playWhenReady = true
+
+            Log.d("playSong musicservice", "progress is $progresss")
+            if(progresss!=0f){
+                val progressPosition = (exoPlayer?.duration ?: 0L) * (progress / 100)
+
+                Log.d("Progress percentage= ", "Progress percentage = " + progress/100)
+                Log.d("DUration = ", "DUration = " + exoPlayer?.duration)
+                Log.d("playSong musicservice", "progressPosition is $progressPosition")
+                Log.d("playsong musicserive ", "progress is $progress")
+                exoPlayer?.seekTo(progressPosition.toLong())
+            }
+
             exoPlayer?.play()
-            handler.post(updateProgressRunnable)
+
+            val intent = Intent("com.smd.surmaiya.ACTION_PLAY")
+            sendBroadcast(intent)
+            showNotification(song, albumArtBitmap ?: return)
+
         } catch (e: Exception) {
             Log.e("playSong musicservice", "Error playing song: ${e.message}")
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     fun pauseMusic() {
-        exoPlayer?.playWhenReady = false
         SongManager.getInstance().currentProgress = (exoPlayer?.currentPosition ?: 0f).toFloat()
-        handler.removeCallbacks(updateProgressRunnable)
+        exoPlayer?.stop()
+
+        val intent = Intent("com.smd.surmaiya.ACTION_PAUSE")
+        sendBroadcast(intent)
     }
 
     fun resumeSong() {
         exoPlayer?.playWhenReady = true
         SongManager.getInstance().currentProgress = (exoPlayer?.currentPosition ?: 0f).toFloat()
-        handler.post(updateProgressRunnable)
+
+        val intent = Intent("com.smd.surmaiya.ACTION_PLAY")
+        sendBroadcast(intent)
     }
 
     fun getProgress(): Int {
@@ -107,7 +135,7 @@ class MusicService : Service() {
         return progress
     }
 
-    @RequiresApi(Build.VERSION_CODES.P)
+        @RequiresApi(Build.VERSION_CODES.P)
     fun showNotification(song: Song, albumArtBitmap: Bitmap) {
         this.albumArtBitmap = albumArtBitmap
 
@@ -123,7 +151,6 @@ class MusicService : Service() {
         mediaSession?.setMetadata(mediaMetadataBuilder.build())
         val currentPosition = exoPlayer?.currentPosition?.toFloat() ?: 0f
         val playbackState = PlaybackStateCompat.Builder()
-            .setState(PlaybackStateCompat.STATE_PLAYING, currentPosition.toLong(), 1.0f)
             .setActions(PlaybackStateCompat.ACTION_PLAY or PlaybackStateCompat.ACTION_PAUSE or PlaybackStateCompat.ACTION_SKIP_TO_NEXT or PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)
             .build()
 
@@ -140,38 +167,48 @@ class MusicService : Service() {
             .setContentTitle(song.artist)
             .setLargeIcon(albumArtBitmap)
 
+        val playIntent = Intent("com.smd.surmaiya.ACTION_PLAY")
+        val pauseIntent = Intent("com.smd.surmaiya.ACTION_PAUSE")
 
-        val playIntent = PendingIntent.getBroadcast(this, REQUEST_CODE, Intent(ACTION_PLAY), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-        val pauseIntent = PendingIntent.getBroadcast(this, REQUEST_CODE, Intent(ACTION_PAUSE), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            val pendingPlayIntent: PendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.getBroadcast(this, REQUEST_CODE, playIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+            } else {
+                PendingIntent.getBroadcast(this, REQUEST_CODE, playIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            }
+
+            val pendingPauseIntent: PendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.getBroadcast(this, REQUEST_CODE, pauseIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+            } else {
+                PendingIntent.getBroadcast(this, REQUEST_CODE, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            }
+
+            notificationBuilder.addAction(NotificationCompat.Action(R.drawable.pause, "Pause", pendingPauseIntent))
+            notificationBuilder.addAction(NotificationCompat.Action(R.drawable.player_play, "Play", pendingPlayIntent))
+
+
         val nextIntent = PendingIntent.getBroadcast(this, REQUEST_CODE, Intent(ACTION_NEXT), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val previousIntent = PendingIntent.getBroadcast(this, REQUEST_CODE, Intent(ACTION_PREVIOUS), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         notificationBuilder.addAction(NotificationCompat.Action(R.drawable.previous, "Previous", previousIntent))
-        notificationBuilder.addAction(NotificationCompat.Action(R.drawable.pause, "Pause", pauseIntent))
-        notificationBuilder.addAction(NotificationCompat.Action(R.drawable.player_play, "Play", playIntent))
         notificationBuilder.addAction(NotificationCompat.Action(R.drawable.next, "Next", nextIntent))
 
-        // Add progress update logic here
-        val progress = getProgress()
-        notificationBuilder.setProgress(100, progress, false)
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.FOREGROUND_SERVICE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this as Activity, arrayOf(Manifest.permission.FOREGROUND_SERVICE), REQUEST_CODE)
-        }
-
-        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
-        handler.postDelayed(updateProgressRunnable, 10000) // Update progress every second
+        // Display the notification without starting the service in the foreground
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return
+            }
+            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
     }
 
 
-
-    private val updateProgressRunnable = object : Runnable {
-        @RequiresApi(Build.VERSION_CODES.P)
-        override fun run() {
-            songManager.currentSong?.let { showNotification(it, albumArtBitmap ?: return) }
-            handler.postDelayed(this, 5000) // Update progress every second
-        }
-    }
 
     fun stopMusic() {
         exoPlayer?.stop()
