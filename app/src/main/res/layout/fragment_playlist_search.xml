@@ -110,7 +110,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="10dp"
-                    android:fontFamily="@font/poppins_medium"
+                    android:fontFamily="@font/satoshi_regular"
+                    android:textFontWeight="600"
 
                     android:text="New and approved indie pop. Cover: No Rome"
                     android:textColor="#000000"

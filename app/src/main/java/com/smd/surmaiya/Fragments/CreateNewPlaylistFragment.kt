@@ -92,7 +92,7 @@ class   CreateNewPlaylistFragment : Fragment() {
             ): View {
                 val view = super.getDropDownView(position, convertView, parent)
 
-                view.isEnabled = position != 0 // Disable the first item
+                view.isEnabled = position >= 0 // Disable the first item
                 return view
             }
 
@@ -135,7 +135,7 @@ class   CreateNewPlaylistFragment : Fragment() {
         val dateAdded = mutableListOf<String>()
         dateAdded.add(currentDate)
         val followers = 0L
-        val visibility = "public"
+        val visibility = privacySpinner.selectedItem.toString()
         val followerList = mutableListOf<String>()
         followerList.add("Nobody")
         getCoverArtUrlAfterUpload { coverArtDownload ->
