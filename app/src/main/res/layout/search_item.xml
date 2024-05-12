@@ -13,7 +13,7 @@
         android:layout_width="47dp"
         android:layout_height="47dp"
         android:layout_marginEnd="9dp"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         android:src="@mipmap/one" />
 
     <LinearLayout
@@ -27,6 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="7dp"
+            android:fontFamily="@font/satoshi_bold"
             android:text="FKA twigs"
             android:textColor="#000000"
             android:textSize="15sp" />
@@ -36,6 +37,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Artist"
+            android:fontFamily="@font/satoshi_bold"
+
             android:textColor="#00A136"
             android:textSize="13sp" />
     </LinearLayout>

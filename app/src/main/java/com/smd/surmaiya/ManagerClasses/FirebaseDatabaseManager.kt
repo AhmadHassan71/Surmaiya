@@ -474,5 +474,7 @@ object FirebaseDatabaseManager {
             addNotificationToUser(userId, notification, notificationType)
         }
     }
+
+
 }
 
