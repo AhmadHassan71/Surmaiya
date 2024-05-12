@@ -12,7 +12,6 @@ enum class UserType {
     CONSUMER,
     GUEST
 }
-
 data class User(
     var id: String = "",
     var name: String = "",
@@ -22,9 +21,11 @@ data class User(
     var phone: String = "",
     var profilePictureUrl: String = "",
     var fcmToken: String = "",
-    var userType: UserType = UserType.GUEST
+    var userType: UserType = UserType.GUEST,
+    var following: MutableList<String> = mutableListOf(),
+    var followers: MutableList<String> = mutableListOf()
 ) {
-    constructor() : this("", "", "", "", "", "", "", "", UserType.GUEST)
+    constructor() : this("", "", "", "", "", "", "", "", UserType.GUEST, mutableListOf(), mutableListOf())
 }
 
 fun getUserWithEmail(email: String, completion: (User?) -> Unit) {

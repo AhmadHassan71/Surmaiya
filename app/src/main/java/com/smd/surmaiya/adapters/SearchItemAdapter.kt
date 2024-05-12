@@ -8,17 +8,20 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.smd.surmaiya.R
+import com.smd.surmaiya.interfaces.OnArtistClickListener
 import com.smd.surmaiya.itemClasses.Song
-import com.smd.surmaiya.itemClasses.SongNew
 
-class SearchItemAdapter(private val searchItems: MutableList<Song>) :
+class SearchItemAdapter(
+    private val searchItems: MutableList<Song>,
+    private val onArtistClickListener: OnArtistClickListener
+) :
     RecyclerView.Adapter<SearchItemAdapter.MyViewHolder>() {
 
     class MyViewHolder(val linearLayout: LinearLayout) : RecyclerView.ViewHolder(linearLayout)
 
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int
-    ): SearchItemAdapter.MyViewHolder {
+    ): MyViewHolder {
         val linearLayout = LayoutInflater.from(parent.context)
             .inflate(R.layout.search_item, parent, false) as LinearLayout
         return MyViewHolder(linearLayout)
@@ -34,6 +37,14 @@ class SearchItemAdapter(private val searchItems: MutableList<Song>) :
             Glide.with(holder.linearLayout.context)
                 .load(searchItems[position].coverArtUrl).into(songImageView)
         }
+
+        songArtistNameTextView.setOnClickListener {
+            val artists = searchItems[position].artist.split(",")
+            val firstArtist = artists[0]
+            onArtistClickListener.onArtistClick(firstArtist)
+        }
+
+
     }
 
     override fun getItemCount() = searchItems.size

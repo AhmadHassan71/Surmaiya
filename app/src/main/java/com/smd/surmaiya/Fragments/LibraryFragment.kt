@@ -1,24 +1,21 @@
 package com.smd.surmaiya.Fragments
 
-import android.app.AlertDialog
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.smd.surmaiya.HelperClasses.SideBarNavigationHelper
-import com.smd.surmaiya.ManagerClasses.UserManager
+import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
+import com.smd.surmaiya.ManagerClasses.OtherUserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.LibraryFilterAdapter
 import com.smd.surmaiya.adapters.SearchItemAdapter
+import com.smd.surmaiya.interfaces.OnArtistClickListener
 import com.smd.surmaiya.itemClasses.Song
-import com.smd.surmaiya.itemClasses.SongNew
-import com.smd.surmaiya.itemClasses.UserType
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,7 +34,7 @@ class LibraryFragment : Fragment() {
     private lateinit var filterRecyclerView: RecyclerView
     private lateinit var librarySongRecyclerView: RecyclerView
     private lateinit var librarySongAdapter: SearchItemAdapter
-    private var songList: MutableList<SongNew> = mutableListOf()
+    private var songList: MutableList<Song> = mutableListOf()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,7 +50,11 @@ class LibraryFragment : Fragment() {
         setUpRecyclerView()
 
         SideBarNavigationHelper(requireActivity()).openDrawerOnMenuClick(view, requireActivity())
-        SideBarNavigationHelper(requireActivity()).setupNavigationView(requireActivity().findViewById(R.id.drawer_layout))
+        SideBarNavigationHelper(requireActivity()).setupNavigationView(
+            requireActivity().findViewById(
+                R.id.drawer_layout
+            )
+        )
         SideBarNavigationHelper(requireActivity()).openDrawerOnMenuClick(view, requireActivity())
 
     }
@@ -77,8 +78,25 @@ class LibraryFragment : Fragment() {
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         librarySongRecyclerView = view?.findViewById(R.id.librarySongRecyclerView)!!
-        songList = mutableListOf()
-        librarySongAdapter = SearchItemAdapter(songList)
+        songList = mutableListOf<Song>()
+        librarySongAdapter = SearchItemAdapter(songList, object : OnArtistClickListener {
+            override fun onArtistClick(artistName: String) {
+                FirebaseDatabaseManager.getAllUsers { users ->
+                    for (user in users) {
+                        if (user.name == artistName) {
+                            OtherUserManager.addUser(user)
+                            val fragmentManager = requireActivity().supportFragmentManager
+                            fragmentManager.beginTransaction()
+                                .replace(R.id.fragment_container, ArtistPageFragment())
+                                .addToBackStack(null)
+                                .commit()
+                        }
+                    }
+                }
+            }
+        })
+
+
         librarySongRecyclerView.adapter = librarySongAdapter
         librarySongRecyclerView.layoutManager = LinearLayoutManager(context)
     }
@@ -87,9 +105,10 @@ class LibraryFragment : Fragment() {
 //        backButton.setOnClickListener {
 //            requireActivity().supportFragmentManager.popBackStack()
 //        }
+
         addToPlaylist.setOnClickListener {
 
-                requireActivity().supportFragmentManager.beginTransaction()
+            requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, AddToPlaylistFragment()).addToBackStack(null)
                 .commit()
 

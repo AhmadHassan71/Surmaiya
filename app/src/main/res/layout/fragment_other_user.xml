@@ -19,10 +19,11 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/materialCardView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/rounded_bottom"
             android:backgroundTint="@color/bottom_nav_primary"
-            android:paddingBottom="15dp"
+            android:paddingBottom="50dp"
+            app:contentPaddingBottom="30dp"
             app:cardCornerRadius="70dp"
             app:layout_constraintHeight_percent="0.44"
             app:cardPreventCornerOverlap="false"
@@ -33,7 +34,6 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
 
                 <TextView
                     android:id="@+id/playlistsTextView"
@@ -67,23 +67,25 @@
                     android:id="@+id/followersCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="60dp"
                     android:fontFamily="@font/satoshibold"
                     android:text="243"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    app:layout_constraintStart_toEndOf="@+id/username"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/followingCount" />
 
                 <TextView
                     android:id="@+id/followingCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="64dp"
+                    android:layout_marginTop="8dp"
                     android:fontFamily="@font/satoshibold"
                     android:text="778"
                     android:textColor="@color/white"
                     android:textSize="18sp"
-                    app:layout_constraintEnd_toStartOf="@+id/username"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/username" />
 
                 <TextView
@@ -131,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/satoshibold"
-                    android:text="Your Profile"
+                    android:text="User Profile"
                     android:textColor="@color/white"
                     android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -204,16 +206,33 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.056"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
+            app:layout_constraintTop_toBottomOf="@+id/follow_button" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/publicPlaylistsRecylerView"
+            android:id="@+id/publicPlaylistsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/artistNameTextView"
             tools:layout_editor_absoluteX="-76dp" />
+
+        <Button
+            android:id="@+id/follow_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/follow_button"
+            android:fontFamily="@font/satoshibold"
+            android:text="Follow"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:layout_constraintTop_toBottomOf="@id/materialCardView"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteX="19dp"
+            tools:layout_editor_absoluteY="374dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

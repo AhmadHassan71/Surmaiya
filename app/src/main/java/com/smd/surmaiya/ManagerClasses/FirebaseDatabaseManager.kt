@@ -250,7 +250,9 @@ object FirebaseDatabaseManager {
                         playlistUserIds,
                         playlistMap["dateAdded"] as List<String>,
                         playlistMap["followers"] as Long,
-                        playlistMap["visibility"] as String
+                        playlistMap["followerIds"] as List<String>,
+                        playlistMap["visibility"] as String,
+                        playlistMap["playlistDescription"] as String
                     )
                     playlists.add(playlist)
                     Log.d("FirebasePlaylist", "Fetched playlist with ID: ${playlist.playlsitId} for user ID: $userId")
@@ -261,6 +263,103 @@ object FirebaseDatabaseManager {
             Log.e("FirebasePlaylist", "Failed to fetch playlists for user ID: $userId", exception)
             callback(emptyList())
         }
+    }
+    fun getUsersByIds(userIds: List<String>, callback: (List<User>) -> Unit) {
+        val usersRef = database.getReference("users")
+        val users = mutableListOf<User>()
+        for (userId in userIds) {
+            usersRef.child(userId).get().addOnSuccessListener { snapshot ->
+                val user = snapshot.getValue(User::class.java)
+                if (user != null) {
+                    users.add(user)
+                    if (users.size == userIds.size) {
+                        callback(users)
+                    }
+                } else {
+                    Log.d("FirebaseUser", "No user found with ID: $userId")
+                }
+            }.addOnFailureListener { exception ->
+                Log.d("FirebaseUser", "Failed to fetch user with ID: $userId", exception)
+            }
+        }
+    }
+    fun followUser(currentUser: User, otherUser: User, callback: (Boolean) -> Unit) {
+        // Add the other user's ID to the current user's following list
+        currentUser.following.add(otherUser.id)
+
+        // Add the current user's ID to the other user's followers list
+        otherUser.followers.add(currentUser.id)
+
+        // Update the current user in the database
+        updateUser(currentUser) { success ->
+            if (success) {
+                // If the current user was updated successfully, update the other user
+                updateUser(otherUser) { success ->
+                    callback(success)
+                }
+            } else {
+                callback(false)
+            }
+        }
+    }
+    fun unfollowUser(currentUser: User, otherUser: User, callback: (Boolean) -> Unit) {
+        // Remove the other user's ID from the current user's following list
+        currentUser.following.remove(otherUser.id)
+
+        // Remove the current user's ID from the other user's followers list
+        otherUser.followers.remove(currentUser.id)
+
+        // Update the current user in the database
+        updateUser(currentUser) { success ->
+            if (success) {
+                // If the current user was updated successfully, update the other user
+                updateUser(otherUser) { success ->
+                    callback(success)
+                }
+            } else {
+                callback(false)
+            }
+        }
+    }
+    fun getAllAlbums(callback: (List<Album>) -> Unit) {
+        val myRef = database.getReference("Albums")
+        val albumList = mutableListOf<Album>()
+
+        myRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (postSnapshot in dataSnapshot.children) {
+                    val album = postSnapshot.getValue(Album::class.java)
+                    if (album != null) {
+                        albumList.add(album)
+                    }
+                }
+                callback(albumList)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(ContentValues.TAG, "Error fetching albums: ${databaseError.message}")
+            }
+        })
+    }
+    fun getAllUsers(callback: (List<User>) -> Unit) {
+        val myRef = database.getReference("users")
+        val userList = mutableListOf<User>()
+
+        myRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (postSnapshot in dataSnapshot.children) {
+                    val user = postSnapshot.getValue(User::class.java)
+                    if (user != null) {
+                        userList.add(user)
+                    }
+                }
+                callback(userList)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(ContentValues.TAG, "Error fetching users: ${databaseError.message}")
+            }
+        })
     }
 }
 

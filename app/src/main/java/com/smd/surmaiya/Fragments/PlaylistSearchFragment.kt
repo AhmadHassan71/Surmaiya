@@ -2,6 +2,7 @@ package com.smd.surmaiya.Fragments
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,10 +15,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.smd.surmaiya.HelperClasses.FragmentHelper
+import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager.fetchSongFromFirebase
 import com.smd.surmaiya.ManagerClasses.PlaylistManager
+import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.AlbumAddSongAdapter
+import com.smd.surmaiya.adapters.PlaylistAuthorAdapter
 import com.smd.surmaiya.itemClasses.Playlist
 import com.smd.surmaiya.itemClasses.Song
 import com.smd.surmaiya.itemClasses.SongNew
@@ -49,6 +53,7 @@ class PlaylistSearchFragment : Fragment() {
     private lateinit var editPlaylist: ImageView
     private lateinit var downloadPlaylist: ImageView
     private var isLiked: Boolean = false
+    private lateinit var playlistAuthorRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,11 +77,25 @@ class PlaylistSearchFragment : Fragment() {
         setUpOnClickListeners()
         setupRecyclerView()
     }
-
     private fun setupRecyclerView() {
         val playlist = getPlaylist()
         setupPlaylistDetails(playlist)
         setupSongsListForPlaylist(playlist)
+        playlistAuthorRecyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        playlistAuthorRecyclerView.adapter = PlaylistAuthorAdapter(listOf())
+        playlist?.userIds.let {
+            if (it != null) {
+                Log.d("PlaylistSearchFragment", "UserIds: $it")
+                FirebaseDatabaseManager.getUsersByIds(it) { users ->
+                    Log.d("PlaylistSearchFragment", "Users: $users")
+                    val playlistAuthorAdapter = PlaylistAuthorAdapter(users)
+                    playlistAuthorRecyclerView.adapter = playlistAuthorAdapter
+                    playlistAuthorAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+
     }
 
     private fun getPlaylist(): Playlist? {
@@ -96,8 +115,10 @@ class PlaylistSearchFragment : Fragment() {
             playlistName.text = playlist.playlistName
             playlistDescription.text = playlist.playlistDescription
             "${playlist.followers} Followers".also { followers.text = it }
+
         }
     }
+
 
 //    private fun setupSongsListForPlaylist(playlist: Playlist?) {
 //        val songsList = mutableListOf<Song>()
@@ -119,7 +140,8 @@ class PlaylistSearchFragment : Fragment() {
         val songIds = playlist?.let { extractSongIdsFromPlaylist(it) } ?: listOf()
 
         playlistRecyclerView = view?.findViewById(R.id.playlistRecyclerView)!!
-        playlistRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        playlistRecyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         for (songId in songIds) {
             if (songId != null) {
@@ -133,6 +155,7 @@ class PlaylistSearchFragment : Fragment() {
             }
         }
     }
+
     private fun createNewSongsList(songsList: MutableList<Song>): MutableList<SongNew> {
         val newSongsList = mutableListOf<SongNew>()
         for (song in songsList) {
@@ -165,6 +188,7 @@ class PlaylistSearchFragment : Fragment() {
         addSong = view?.findViewById(R.id.addToPlaylist)!!
         addUserToPlaylist = view?.findViewById(R.id.addUserToPlaylist)!!
         downloadPlaylist = view?.findViewById(R.id.downloadPlaylist)!!
+        playlistAuthorRecyclerView = view?.findViewById(R.id.playlistAuthorsRecyclerView)!!
     }
 
     fun setUpOnClickListeners() {
@@ -173,15 +197,16 @@ class PlaylistSearchFragment : Fragment() {
             requireActivity().supportFragmentManager.popBackStack()
         }
         editPlaylist.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.fragment_container, EditPlaylistFragment()).addToBackStack(null).commit()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, EditPlaylistFragment()).addToBackStack(null)
+                .commit()
         }
         followImage.setOnClickListener {
 //            followImage.setImageResource(R.drawable.ic_baseline_favorite_24)
-            if(isLiked) {
+            if (isLiked) {
                 followImage.setImageResource(R.drawable.heart)
                 isLiked = false
-            }
-            else {
+            } else {
                 followImage.setImageResource(R.drawable.heart_filled)
                 isLiked = true
             }
@@ -191,7 +216,10 @@ class PlaylistSearchFragment : Fragment() {
 
 
             val bundle = Bundle()
-            bundle.putString("selectedPlaylistId", PlaylistManager.getPlaylists()!!.playlsitId) // Replace with the actual ID of the selected playlist
+            bundle.putString(
+                "selectedPlaylistId",
+                PlaylistManager.getPlaylists()!!.playlsitId
+            ) // Replace with the actual ID of the selected playlist
 
             val addToPlaylistFragment = AddToPlaylistFragment()
             addToPlaylistFragment.arguments = bundle
@@ -200,7 +228,9 @@ class PlaylistSearchFragment : Fragment() {
                 .replace(R.id.fragment_container, addToPlaylistFragment)
                 .addToBackStack(null)
                 .commit()
-            FragmentHelper(requireActivity().supportFragmentManager,requireContext()).loadFragment(AddToPlaylistFragment())
+            FragmentHelper(requireActivity().supportFragmentManager, requireContext()).loadFragment(
+                AddToPlaylistFragment()
+            )
         }
         addUserToPlaylist.setOnClickListener {
 //            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.fragment_container, AddUserToPlaylistFragment()).addToBackStack(null).commit()
@@ -213,7 +243,7 @@ class PlaylistSearchFragment : Fragment() {
 
     }
 
-    private fun showEnterEmailDialog(view : View) {
+    private fun showEnterEmailDialog(view: View) {
         val builder = AlertDialog.Builder(requireActivity())
         val inflater = requireActivity().layoutInflater
         val dialogView = inflater.inflate(R.layout.dialog_add_collaborator, null)

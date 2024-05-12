@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
@@ -15,11 +14,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.internal.ViewUtils.showKeyboard
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
+import com.smd.surmaiya.ManagerClasses.OtherUserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.SearchFilterAdapter
 import com.smd.surmaiya.adapters.SearchItemAdapter
+import com.smd.surmaiya.interfaces.OnArtistClickListener
 import com.smd.surmaiya.itemClasses.FilterItem
 import com.smd.surmaiya.itemClasses.Song
 
@@ -97,7 +97,22 @@ class SearchResultsFragment : Fragment() {
         searchSongRecyclerView = view?.findViewById(R.id.searchResultsRecyclerView)!!
         songList = mutableListOf(
         )
-        searchSongAdapter = SearchItemAdapter(songList)
+        searchSongAdapter = SearchItemAdapter(songList, object : OnArtistClickListener {
+            override fun onArtistClick(artistName: String) {
+                FirebaseDatabaseManager.getAllUsers { users ->
+                    for (user in users) {
+                        if (user.name == artistName) {
+                            OtherUserManager.addUser(user)
+                            val fragmentManager = requireActivity().supportFragmentManager
+                            fragmentManager.beginTransaction()
+                                .replace(R.id.fragment_container, ArtistPageFragment())
+                                .addToBackStack(null)
+                                .commit()
+                        }
+                    }
+                }
+            }
+        })
         searchSongRecyclerView.adapter = searchSongAdapter
         searchSongRecyclerView.layoutManager = LinearLayoutManager(context)
 

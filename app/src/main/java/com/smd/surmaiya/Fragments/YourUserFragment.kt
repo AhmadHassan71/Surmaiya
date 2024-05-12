@@ -1,6 +1,7 @@
 package com.smd.surmaiya.Fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +11,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.smd.surmaiya.HelperClasses.FragmentHelper
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
+import com.smd.surmaiya.ManagerClasses.PlaylistManager
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.PlaylistAdapter
@@ -32,6 +35,8 @@ class YourUserFragment : Fragment() {
     private var param2: String? = null
     private lateinit var playlistAdapter: PlaylistAdapter
     private lateinit var playlistRecyclerView: RecyclerView
+    private lateinit var followersCountTextView: TextView
+    private lateinit var followingCountTextView: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -44,49 +49,23 @@ class YourUserFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_your_user, container, false)
         return view
     }
     private fun intializeViews(view: View) {
         playlistRecyclerView = view.findViewById(R.id.PlaylistsRecylerView)
+        followersCountTextView = view.findViewById(R.id.followersCount)
+        followingCountTextView = view.findViewById(R.id.followingCount)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         intializeViews(view)
         prepareClickListeners(view)
         prepareUserInformation(view)
-        setUpRecyclerView()
-
+        prepareYourPlaylists()
+        applyUserInfo()
     }
-
-    private fun setUpRecyclerView() {
-        val playlists = listOf<Playlist>()
-        playlistAdapter = PlaylistAdapter(playlists, object : PlaylistAdapter.OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                // Handle item click
-            }
-
-            override fun onItemChanged(position: Int) {
-                // Handle item changed
-            }
-        })
-        FirebaseDatabaseManager.getPlaylistsByUserId( UserManager.getCurrentUser()?.id.toString()){
-            playlistAdapter = PlaylistAdapter(it, object : PlaylistAdapter.OnItemClickListener {
-                override fun onItemClick(position: Int) {
-
-                }
-
-                override fun onItemChanged(position: Int) {
-                    // Handle item changed
-                }
-            })
-        }
-
-        playlistRecyclerView.layoutManager = LinearLayoutManager(context)
-        playlistRecyclerView.adapter = playlistAdapter
-    }
-
 
     private fun prepareClickListeners(view: View) {
         val backButton = view.findViewById<ImageView>(R.id.backButton)
@@ -112,10 +91,35 @@ class YourUserFragment : Fragment() {
 
         val username = view.findViewById<TextView>(R.id.username)
         username.text = UserManager.getCurrentUser()?.name
-
+        Log.d("heh","User name is ${UserManager.getCurrentUser()?.name}")
         val email = view.findViewById<TextView>(R.id.userEmail)
         email.text = UserManager.getCurrentUser()?.email
 
+    }
+    private fun prepareYourPlaylists() {
+        playlistRecyclerView.layoutManager = LinearLayoutManager(this.context,
+            LinearLayoutManager.HORIZONTAL,false)
+
+        FirebaseDatabaseManager.getPlaylists { playlists ->
+
+            val yourPlaylists = playlists.filter { UserManager.getCurrentUser()?.id in it.userIds }
+
+            val playlistAdapter = PlaylistAdapter(yourPlaylists, object : PlaylistAdapter.OnItemClickListener {
+                override fun onItemClick(position: Int) {
+                    val playlist = yourPlaylists[position]
+                    PlaylistManager.addPlaylist(playlist)
+                    FragmentHelper(requireActivity().supportFragmentManager,requireContext()).loadFragment(PlaylistSearchFragment())
+                }
+                override fun onItemChanged(position: Int) {
+                    // Handle item change
+                }
+            })
+            playlistRecyclerView.adapter = playlistAdapter
+        }
+    }
+    private fun applyUserInfo() {
+        followingCountTextView.text = UserManager.getCurrentUser()?.following?.size.toString()
+        followersCountTextView.text = UserManager.getCurrentUser()?.followers?.size.toString()
     }
 
     companion object {

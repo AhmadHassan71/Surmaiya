@@ -121,6 +121,15 @@ class SideBarNavigationHelper(private val activity: Activity) {
             .load(UserManager.getCurrentUser()?.profilePictureUrl)
             .into(profilePicture)
 
+        profilePicture.setOnClickListener{
+            val fragmentHelper = FragmentHelper((activity as AppCompatActivity).supportFragmentManager, activity)
+            fragmentHelper.closeDrawerWithDelay(activity.findViewById<DrawerLayout>(R.id.drawer_layout), 300)
+            Handler(Looper.getMainLooper()).postDelayed({
+
+                fragmentHelper.loadFragment(YourUserFragment())
+            }, 300)
+        }
+
     }
     private fun handleViewProfile(activity: Activity){
         val viewProfile = activity.findViewById<TextView>(R.id.viewProfile)

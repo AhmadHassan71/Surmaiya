@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/playlistAuthorImage"
+        android:layout_width="35dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginStart="10dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/your_library" />
+</LinearLayout>
