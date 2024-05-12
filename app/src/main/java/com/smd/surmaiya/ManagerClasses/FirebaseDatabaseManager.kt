@@ -7,9 +7,11 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.smd.surmaiya.HelperClasses.CustomToastMaker
 import com.smd.surmaiya.itemClasses.Album
 import com.smd.surmaiya.itemClasses.Playlist
 import com.smd.surmaiya.itemClasses.Song
+import com.smd.surmaiya.itemClasses.SongNew
 import com.smd.surmaiya.itemClasses.User
 import java.security.MessageDigest
 import java.util.UUID
@@ -286,6 +288,46 @@ object FirebaseDatabaseManager {
     fun followUser(currentUser: User, otherUser: User, callback: (Boolean) -> Unit) {
         // Add the other user's ID to the current user's following list
         currentUser.following.add(otherUser.id)
+
+    fun updateSongInFirebase(song: SongNew, callback: (Boolean) -> Unit) {
+        val userId = UserManager.getCurrentUser()!!.id
+        val songRef = database.getReference("LikedSongs").child(userId)
+
+        songRef.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val snapshot = task.result
+                val likedSongs = snapshot.value as? MutableList<String> ?: mutableListOf()
+                if (!likedSongs.contains(song.songId)) {
+                    likedSongs.add(song.songId)
+                } else {
+                    likedSongs.remove(song.songId)
+                }
+
+                songRef.setValue(likedSongs)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Log.d("FirebaseSong", "Song updated successfully with ID: ${song.songId}")
+                            callback(true)
+                        } else {
+                            Log.e(ContentValues.TAG, "Error updating song: ${task.exception?.message}")
+                            callback(false)
+                        }
+                    }
+            } else {
+                Log.e(ContentValues.TAG, "Error fetching liked songs: ${task.exception?.message}")
+                callback(false)
+            }
+        }
+    }
+
+    fun getLikedSongsFromFirebase(callback: (List<String>) -> Unit) {
+        val userId = UserManager.getCurrentUser()!!.id
+        val songRef = database.getReference("LikedSongs").child(userId)
+        songRef.get().addOnSuccessListener { snapshot ->
+            val likedSongs = snapshot.value as? List<String> ?: listOf()
+            callback(likedSongs)
+        }
+    }
 
         // Add the current user's ID to the other user's followers list
         otherUser.followers.add(currentUser.id)

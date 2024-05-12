@@ -189,11 +189,17 @@ class PlaylistSearchFragment : Fragment() {
         addUserToPlaylist = view?.findViewById(R.id.addUserToPlaylist)!!
         downloadPlaylist = view?.findViewById(R.id.downloadPlaylist)!!
         playlistAuthorRecyclerView = view?.findViewById(R.id.playlistAuthorsRecyclerView)!!
+
+        if(getPlaylist()!!.followers > 0) {
+            followImage.setImageResource(R.drawable.heart_filled)
+        }
+
     }
 
     fun setUpOnClickListeners() {
 
         backButton.setOnClickListener {
+            PlaylistManager.removePlaylist()
             requireActivity().supportFragmentManager.popBackStack()
         }
         editPlaylist.setOnClickListener {
@@ -201,16 +207,10 @@ class PlaylistSearchFragment : Fragment() {
                 .replace(R.id.fragment_container, EditPlaylistFragment()).addToBackStack(null)
                 .commit()
         }
-        followImage.setOnClickListener {
-//            followImage.setImageResource(R.drawable.ic_baseline_favorite_24)
-            if (isLiked) {
-                followImage.setImageResource(R.drawable.heart)
-                isLiked = false
-            } else {
-                followImage.setImageResource(R.drawable.heart_filled)
-                isLiked = true
-            }
 
+        followImage.setOnClickListener {
+
+            updatePlaylistFollower()
         }
         addSong.setOnClickListener {
 
@@ -241,6 +241,41 @@ class PlaylistSearchFragment : Fragment() {
 
         }
 
+    }
+
+    private fun updatePlaylistFollower() {
+        val playlist = getPlaylist()
+        val userId =
+            UserManager.getCurrentUser()?.id // Replace with the actual ID of the current user
+        val followerIds = playlist?.followerIds?.toMutableList() ?: mutableListOf()
+        val followersCount = playlist?.followers ?: 0
+
+        if (userId in followerIds) {
+            // The user is already a follower, so remove them from the followers list
+            followerIds.remove(userId)
+            playlist?.followers = followersCount - 1
+            followImage.setImageResource(R.drawable.heart_empty)
+        } else {
+            // The user is not a follower, so add them to the followers list
+            if (userId != null) {
+                followerIds.add(userId)
+            }
+            playlist?.followers = followersCount + 1
+            followImage.setImageResource(R.drawable.heart_filled)
+        }
+
+        playlist?.followerIds = followerIds
+
+        // Update the playlist in Firebase
+        FirebaseDatabaseManager.updatePlaylistInFirebase(playlist!!) { success ->
+            if (success) {
+                // Update the followers TextView
+                "${playlist.followers} Followers".also { followers.text = it }
+                isLiked = true
+            } else {
+                // Handle the error
+            }
+        }
     }
 
     private fun showEnterEmailDialog(view: View) {
