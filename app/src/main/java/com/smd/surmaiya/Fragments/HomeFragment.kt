@@ -231,10 +231,27 @@ class HomeFragment : Fragment() {
 
     private fun prepareSongData(): List<Song> {
         val songs = mutableListOf<Song>()
-        songs.add(Song("id", "Song Name", "Artist", "Album", "Duration", "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg", "songUrl", "releaseDate", 0, listOf("genre"),"Album Name"))
-        songs.add(Song("id", "Song Name", "Artist", "Album", "Duration", "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg", "songUrl", "releaseDate", 0, listOf("genre"),"Album Name"))
-        songs.add(Song("id", "Song Name", "Artist", "Album", "Duration", "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg", "songUrl", "releaseDate", 0, listOf("genre"),"Album Name"))
-        songs.add(Song("id", "Song Name", "Artist", "Album", "Duration", "https://upload.wikimedia.org/wikipedia/en/2/2a/2014ForestHillsDrive.jpg", "songUrl", "releaseDate", 0, listOf("genre"), "Album Name"))
+
+        FirebaseDatabaseManager.getRecentlyPlayedSongs {
+
+            //if a song is repeated exclude it
+            Log.d("Recently Played", "prepareSongData: $it")
+            val uniqueSongs = it.distinctBy { it.id }
+
+            songs.addAll(uniqueSongs)
+
+            //reverse order and only show top 5 if there are 5 otherwise till size
+
+            songs.reverse()
+
+            if(songs.size > 5){
+                songs.subList(0,5)
+            }
+
+
+            recentlyPlayedRecyclerView.adapter?.notifyDataSetChanged()
+
+        }
 
         return songs
     }

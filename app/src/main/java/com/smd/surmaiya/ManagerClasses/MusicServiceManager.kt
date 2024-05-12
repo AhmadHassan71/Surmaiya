@@ -104,6 +104,8 @@ object MusicServiceManager {
 
         val intent = Intent("com.smd.surmaiya.ACTION_PLAY")
         musicService?.sendBroadcast(intent)
+
+        FirebaseDatabaseManager.addSongToRecentlyPlayed(song)
     }
 
     @RequiresApi(Build.VERSION_CODES.P)

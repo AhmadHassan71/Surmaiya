@@ -476,6 +476,30 @@ object FirebaseDatabaseManager {
         }
     }
 
+    fun addSongToRecentlyPlayed(song: Song) {
+        val userId = UserManager.getCurrentUser()?.id ?: return
+        val recentlyPlayedRef = database.getReference("users").child(userId).child("recentlyPlayed")
+        val key = recentlyPlayedRef.push().key ?: return
+        recentlyPlayedRef.child(key).setValue(song)
+    }
+
+    fun getRecentlyPlayedSongs(callback: (List<Song>) -> Unit) {
+        val userId = UserManager.getCurrentUser()?.id ?: return
+        val recentlyPlayedRef = database.getReference("users").child(userId).child("recentlyPlayed")
+        recentlyPlayedRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                Log.d("FirebaseDatabaseManager", "Fetched recently played songs")
+                Log.d("FirebaseDatabaseManager", "DataSnapshot: $dataSnapshot")
+                val recentlyPlayedSongs = dataSnapshot.children.mapNotNull { it.getValue(Song::class.java) }
+                callback(recentlyPlayedSongs)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle error
+            }
+        })
+    }
+
 
 }
 
