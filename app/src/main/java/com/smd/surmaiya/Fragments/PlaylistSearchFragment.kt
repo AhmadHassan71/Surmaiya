@@ -270,6 +270,13 @@ class PlaylistSearchFragment : Fragment() {
             followImage.setImageResource(R.drawable.heart_filled)
         }
 
+        if(UserManager.getCurrentUser()?.id !in PlaylistManager.getPlaylists()!!.userIds){
+            editPlaylist.visibility = View.GONE
+            addUserToPlaylist.visibility = View.GONE
+            addSong.visibility = View.GONE
+        }
+
+
     }
 
     fun setUpOnClickListeners() {

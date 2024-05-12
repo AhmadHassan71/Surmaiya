@@ -159,6 +159,9 @@ class HomeFragment : Fragment() {
             LinearLayoutManager.HORIZONTAL,false)
 
         val listData = prepareListData() // Replace with your data loading logic
+
+
+
         val listItemAdapter = ListItemAdapter(listData)
         topAlbumsRecyclerView.adapter = listItemAdapter
     }
@@ -166,9 +169,27 @@ class HomeFragment : Fragment() {
     private fun prepareTopPlaylists(){
         topPlaylistsRecyclerView.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
 
-        val listData = prepareListData()
-        val listItemAdapter = ListItemAdapter(listData)
-        topPlaylistsRecyclerView.adapter = listItemAdapter
+
+        FirebaseDatabaseManager.getPlaylists { playlists ->
+
+            val yourPlaylists = playlists.filter { "public" in it.visibility && UserManager.getCurrentUser()?.id !in it.userIds}
+
+
+            val playlistAdapter = PlaylistAdapter(yourPlaylists, object : PlaylistAdapter.OnItemClickListener {
+                override fun onItemClick(position: Int) {
+                    // Handle item click
+                    // pass the playlist object to the next fragment
+                    val playlist = yourPlaylists[position]
+                    PlaylistManager.addPlaylist(playlist)
+                    FragmentHelper(requireActivity().supportFragmentManager,requireContext()).loadFragment(PlaylistSearchFragment())
+                }
+                override fun onItemChanged(position: Int) {
+                    // Handle item change
+                }
+            })
+            topPlaylistsRecyclerView.adapter = playlistAdapter
+        }
+
     }
 
     private fun prepareListData(): List<ListItem> {

@@ -15,7 +15,8 @@ data class Song(
     val releaseDate: String,
     val numListeners: Int,
     val genres: List<String>,
-    var albumName: String
+    var albumName: String,
+    var isLiked: Boolean = false
 ): Parcelable{
     constructor() : this("", "", "", "", "", "", "", "", 0, listOf(), "")
 
