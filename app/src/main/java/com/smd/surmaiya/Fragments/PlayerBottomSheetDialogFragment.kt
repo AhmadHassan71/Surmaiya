@@ -154,10 +154,13 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
         // In PlayerBottomSheetDialogFragment.kt
         nextButton?.setOnClickListener {
             MusicServiceManager.playNextSong()
+            refreshPage()
         }
 
         previousButton?.setOnClickListener {
+            Log.d("Previous Button", "Previous Button Clicked")
             MusicServiceManager.playPreviousSong()
+            refreshPage()
         }
 
 
@@ -186,6 +189,15 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
         })
     }
 
+    fun refreshPage()
+    {
+        song = SongManager.getInstance().currentSong ?: return
+        songNameTextView.text = song.songName
+        artistNameTextView.text = song.artist
+        loadSongCoverImage(song.coverArtUrl)
+
+    }
+
     private fun loadSongCoverImage(coverArtUrl: String?) {
         Glide.with(requireContext())
             .asBitmap()
@@ -201,6 +213,8 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
                         // Set colors based on palette
                         setPaletteColors(dominantColor, palette)
                     }
+
+                    MusicServiceManager.showNotification(song,resource)
                 }
 
                 override fun onLoadCleared(placeholder: Drawable?) {

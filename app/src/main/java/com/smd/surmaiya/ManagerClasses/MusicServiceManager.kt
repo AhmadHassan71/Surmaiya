@@ -110,15 +110,18 @@ object MusicServiceManager {
     fun playNextSong() {
         val nextSong = SongManager.getInstance().nextSong()
         if (nextSong != null) {
-            playSong(nextSong)
+            playThisSongInstantly(nextSong)
+            broadCastSongSelected(nextSong)
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
     fun playPreviousSong() {
+        Log.d("playPreviousSong", "playPreviousSong: ")
         val previousSong = SongManager.getInstance().previousSong()
         if (previousSong != null) {
-            playSong(previousSong)
+            playThisSongInstantly(previousSong)
+            broadCastSongSelected(previousSong)
         }
     }
 

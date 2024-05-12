@@ -2,6 +2,7 @@ package com.smd.surmaiya.Fragments
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -80,6 +82,7 @@ class PlaylistSearchFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_playlist_search, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -285,6 +288,7 @@ class PlaylistSearchFragment : Fragment() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     fun setUpOnClickListeners() {
 
         backButton.setOnClickListener {
@@ -333,7 +337,7 @@ class PlaylistSearchFragment : Fragment() {
         playlistPlayButton.setOnClickListener {
             Log.d("PlaylistSearchFragment", "Play button clicked")
             SongManager.getInstance().addSongsFromPlaylistToQueue(songsList)
-            MusicServiceManager.broadCastSongSelected(songsList[0])
+            MusicServiceManager.playNextSong()
         }
 
     }

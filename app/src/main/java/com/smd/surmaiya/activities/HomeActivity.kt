@@ -260,6 +260,7 @@ class HomeActivity : AppCompatActivity() {
                 "com.smd.surmaiya.ACTION_PLAY" -> {
                     playButton.visibility = View.GONE
                     pauseButton.visibility = View.VISIBLE
+
                 }
 
                 "com.smd.surmaiya.ACTION_PAUSE" -> {

@@ -10,14 +10,13 @@ class SongManager private constructor() {
     var currentSong: Song? = null
     var currentProgress: Float = 0.0f
     var songQueue: MutableList<Song> = mutableListOf()
+    var previousSongs: MutableList<Song> = mutableListOf()
 
     @RequiresApi(Build.VERSION_CODES.P)
     fun addToQueue(song: Song) {
         songQueue.add(song)
 
         Log.d("SongManager", "Added song to queue")
-
-
         Log.d("SongManager", "Playing song")
         Log.d("SongManager", "Song name: ${song.songName}")
         Log.d("SongManager", "Song artist: ${song.songUrl}")
@@ -34,7 +33,13 @@ class SongManager private constructor() {
         songQueue.remove(song)
     }
 
+
     fun nextSong(): Song? {
+        currentSong?.let { song ->
+            if (previousSongs.isEmpty() || previousSongs.first() != song) {
+                previousSongs.add(0, song)
+            }
+        }
         if (songQueue.isNotEmpty()) {
             currentSong = songQueue.removeAt(0)
         } else {
@@ -52,11 +57,13 @@ class SongManager private constructor() {
     }
 
     fun previousSong(): Song? {
-        val currentIndex = songQueue.indexOf(currentSong)
-        return if (currentIndex > 0) {
-            currentSong = songQueue[currentIndex - 1]
-            currentSong
-        } else null
+        if (previousSongs.isNotEmpty()) {
+            currentSong?.let { songQueue.add(0, it) }
+            currentSong = previousSongs.removeAt(0)
+        } else {
+            currentSong = null
+        }
+        return currentSong
     }
 
     companion object {
