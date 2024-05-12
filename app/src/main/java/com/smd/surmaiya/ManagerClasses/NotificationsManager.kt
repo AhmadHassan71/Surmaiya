@@ -20,7 +20,9 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
 import org.json.JSONObject
+import java.io.FileInputStream
 import java.io.IOException
+import java.util.Properties
 
 
 object NotificationsManager {
@@ -145,10 +147,18 @@ object NotificationsManager {
         val client = OkHttpClient()
         val url = "https://fcm.googleapis.com/fcm/send"
         val body: RequestBody = RequestBody.create(JSON, jsonObject.toString())
+        val properties = Properties()
+        try {
+            properties.load(FileInputStream("local.properties"))
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        val serverKey = properties.getProperty("SERVER_KEY")
+
         val request: Request = Request.Builder()
             .url(url)
             .post(body)
-            .header("Authorization", System.getProperty("SERVER_KEY")!!)
+            .header("Authorization", serverKey)
             .build()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
