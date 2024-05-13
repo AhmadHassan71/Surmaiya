@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
+import com.smd.surmaiya.ManagerClasses.PlaylistManager
+import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.TopSongsAdapter
 import com.smd.surmaiya.itemClasses.Playlist
@@ -46,14 +48,15 @@ class PopularPlaylistsFragment: Fragment() {
     private fun prepareMonthlyRanking() {
         monthlyRankingRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        //fetch playlists, get the playlistname, artist, coverArtUrl and playlistId
+        //fetch playlists, get the playlistname, artist, coverArtUrl and playlistI
+
         val playlists = preparePlaylistData(){
             val songData = mutableListOf<Song>()
             for (playlist in it){
                 songData.add(Song(playlist.playlsitId,playlist.playlistName,
-                    playlist.userIds.toString(),playlist.coverArtUrl,"00:00",playlist.playlistName,playlist.playlistName,"00:00",5,listOf(),"",false,0))
+                    playlist.userIds[0],"","00:00",playlist.coverArtUrl,playlist.playlistName,"00:00",5,listOf(),"",false,0))
             }
-            val songAdapter = TopSongsAdapter(songData,false, playlistIds = it.map { it.playlsitId })
+            val songAdapter = TopSongsAdapter(songData,false, playlists = it)
             monthlyRankingRecyclerView.adapter = songAdapter
         }
 
@@ -64,7 +67,14 @@ class PopularPlaylistsFragment: Fragment() {
 
         FirebaseDatabaseManager.getInstance().getPlaylists {
             playlists.addAll(it)
-            Callback(playlists)
+
+            //if playlist.visibility==private don't pass
+
+            val yourPlaylists =
+                playlists.filter { "public" in it.visibility || "Public" in it.visibility }
+
+
+            Callback(yourPlaylists)
         }
 
 

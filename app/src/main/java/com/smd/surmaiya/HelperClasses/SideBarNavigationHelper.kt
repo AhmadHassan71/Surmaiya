@@ -29,6 +29,8 @@ import com.smd.surmaiya.activities.LoginActivity
 import com.smd.surmaiya.activities.LoginOrSignupActivity
 import com.smd.surmaiya.activities.NotificationsActivity
 import com.smd.surmaiya.activities.PopularPlaylistsActivity
+import com.smd.surmaiya.fragments.MonthlyRankingsFragment
+import com.smd.surmaiya.fragments.PopularPlaylistsFragment
 import com.smd.surmaiya.itemClasses.User
 import com.smd.surmaiya.itemClasses.UserType
 

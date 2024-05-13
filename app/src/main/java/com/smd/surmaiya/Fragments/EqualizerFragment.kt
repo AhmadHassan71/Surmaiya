@@ -9,7 +9,6 @@ import android.widget.ImageView
 import com.smd.surmaiya.HelperClasses.FragmentNavigationHelper
 import com.smd.surmaiya.HelperClasses.Navigator
 import com.smd.surmaiya.R
-import com.smd.surmaiya.activities.MonthlyRankingActivity
 import com.smd.surmaiya.activities.PopularPlaylistsActivity
 
 // TODO: Rename parameter arguments, choose names that match

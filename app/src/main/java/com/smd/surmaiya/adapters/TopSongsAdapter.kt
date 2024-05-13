@@ -5,12 +5,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.smd.surmaiya.Fragments.ArtistPageFragment
+import com.smd.surmaiya.Fragments.PlaylistSearchFragment
+import com.smd.surmaiya.HelperClasses.FragmentHelper
+import com.smd.surmaiya.ManagerClasses.PlaylistManager
 import com.smd.surmaiya.R
+import com.smd.surmaiya.itemClasses.Playlist
 import com.smd.surmaiya.itemClasses.Song
 
-class TopSongsAdapter(private val songs: List<Song>, private val isMonthlyRanking: Boolean, private val playlistIds: List<String>?) : RecyclerView.Adapter<TopSongsAdapter.SongViewHolder>() {
+class TopSongsAdapter(private val songs: List<Song>, private val isMonthlyRanking: Boolean, private val playlists: List<Playlist>) : RecyclerView.Adapter<TopSongsAdapter.SongViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongViewHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -37,8 +44,21 @@ class TopSongsAdapter(private val songs: List<Song>, private val isMonthlyRankin
             holder.artistNameTextView.text = currentSong.artist
 
             // Set the playlist ID for each item
-            val playlistId = playlistIds?.get(position)
             // Use the playlistId as needed
+
+            //if user clicks on image
+            holder.songImageView.setOnClickListener {
+
+                PlaylistManager.addPlaylist(playlists[position])
+
+                val fragmentManager =
+                    (holder.itemView.context as AppCompatActivity).supportFragmentManager
+                fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, PlaylistSearchFragment())
+                    .addToBackStack(null)
+                    .commit()
+
+            }
         }
     }
 

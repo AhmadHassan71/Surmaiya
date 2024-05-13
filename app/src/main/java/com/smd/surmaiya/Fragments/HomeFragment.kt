@@ -22,7 +22,6 @@ import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.PlaylistManager
 import com.smd.surmaiya.ManagerClasses.UserManager
 import com.smd.surmaiya.R
-import com.smd.surmaiya.activities.MonthlyRankingActivity
 import com.smd.surmaiya.activities.PopularPlaylistsActivity
 import com.smd.surmaiya.adapters.AlbumAdapter
 import com.smd.surmaiya.adapters.GenreAdapter
@@ -119,31 +118,8 @@ class HomeFragment : Fragment() {
     }
 
     fun setUpOnClickListeners() {
-        topGenresTextView.setOnClickListener {
-            this.context?.let { it1 ->
-                Navigator.navigateToActivity(
-                    it1,
-                    MonthlyRankingActivity::class.java
-                )
-            }
-        }
 
-        topPlaylistTextView.setOnClickListener {
-            this.context?.let { it1 ->
-                Navigator.navigateToActivity(
-                    it1,
-                    PopularPlaylistsActivity::class.java
-                )
-            }
-        }
-
-        yourPlaylistTextView.setOnClickListener {
-            this.context?.let { it1 ->
-                FragmentNavigationHelper(requireActivity()).loadFragment(
-                    AddAlbumFragment()
-                )
-            }
-        }
+        Log.d("HomeFragment", "setUpOnClickListeners: ${UserManager.getCurrentUser()}")
 
     }
 

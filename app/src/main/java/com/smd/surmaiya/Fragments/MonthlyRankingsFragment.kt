@@ -10,9 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.TopSongsAdapter
+import com.smd.surmaiya.itemClasses.Playlist
 import com.smd.surmaiya.itemClasses.Song
 
-class MonthlyRankingFragment : Fragment() {
+class MonthlyRankingsFragment : Fragment() {
 
     private lateinit var backButton: ImageView
     private lateinit var monthlyRankingRecyclerView: RecyclerView
@@ -45,7 +46,7 @@ class MonthlyRankingFragment : Fragment() {
         monthlyRankingRecyclerView.layoutManager = LinearLayoutManager(context)
 
         val songData = prepareSongData()
-        val songAdapter = TopSongsAdapter(songData,true, null)
+        val songAdapter = TopSongsAdapter(songData,true, playlists = listOf<Playlist>())
         monthlyRankingRecyclerView.adapter = songAdapter
     }
 
