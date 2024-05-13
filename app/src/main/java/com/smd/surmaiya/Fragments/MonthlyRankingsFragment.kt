@@ -8,6 +8,7 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.adapters.TopSongsAdapter
 import com.smd.surmaiya.itemClasses.Playlist
@@ -45,15 +46,33 @@ class MonthlyRankingsFragment : Fragment() {
     private fun prepareMonthlyRanking() {
         monthlyRankingRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        val songData = prepareSongData()
-        val songAdapter = TopSongsAdapter(songData,true, playlists = listOf<Playlist>())
-        monthlyRankingRecyclerView.adapter = songAdapter
+        prepareSongData()
+        {
+            val songAdapter = TopSongsAdapter(it, true, playlists = listOf<Playlist>())
+            monthlyRankingRecyclerView.adapter = songAdapter
+        }
+
     }
 
-    private fun prepareSongData(): List<Song> {
+    private fun prepareSongData(Callback: (List<Song>) -> Unit) {
         val songs = mutableListOf<Song>()
-        // Add your songs here
-        // ... add more songs
-        return songs
+
+        FirebaseDatabaseManager.getInstance().getAllSongs {
+            //sort by number of listens
+
+            songs.addAll(it)
+
+            songs.sortByDescending { it.numberOfListens }
+
+            //if songs are more than 10, get the first 10
+
+            if (songs.size > 10) {
+                songs.subList(0, 10)
+            }
+
+
+           Callback(songs)
+        }
+
     }
 }

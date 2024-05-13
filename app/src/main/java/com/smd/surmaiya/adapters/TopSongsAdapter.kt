@@ -1,10 +1,12 @@
 package com.smd.surmaiya.adapters
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.smd.surmaiya.Fragments.ArtistPageFragment
 import com.smd.surmaiya.Fragments.PlaylistSearchFragment
 import com.smd.surmaiya.HelperClasses.FragmentHelper
+import com.smd.surmaiya.ManagerClasses.MusicServiceManager
 import com.smd.surmaiya.ManagerClasses.PlaylistManager
 import com.smd.surmaiya.R
 import com.smd.surmaiya.itemClasses.Playlist
@@ -25,6 +28,7 @@ class TopSongsAdapter(private val songs: List<Song>, private val isMonthlyRankin
         return SongViewHolder(itemView)
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
         val currentSong = songs[position]
 
@@ -35,6 +39,13 @@ class TopSongsAdapter(private val songs: List<Song>, private val isMonthlyRankin
                 .into(holder.songImageView)
             holder.songNameTextView.text = currentSong.songName
             holder.artistNameTextView.text = currentSong.artist
+
+            holder.songImageView.setOnClickListener {
+                MusicServiceManager.broadCastSongSelected(currentSong)
+
+            }
+
+
         } else {
             // Load the playlist image and set the playlist name and description for popular playlists
             Glide.with(holder.itemView.context)
