@@ -58,6 +58,7 @@ class HomeActivity : AppCompatActivity() {
 
 
 
+
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -162,6 +163,22 @@ class HomeActivity : AppCompatActivity() {
             MusicServiceManager.pauseMusicAndBroadcast()
         }
 
+        likeButton.setOnClickListener {
+
+            var isLiked= SongManager.getInstance().currentSong?.isLiked ?: false
+
+            if (isLiked) {
+                // If the song is liked, set the like button image to the filled heart
+                SongManager.getInstance().currentSong?.isLiked = false
+                likeButton.setImageResource(R.drawable.heart_filled)
+            } else {
+                // If the song is not liked, set the like button image to the empty heart
+                SongManager.getInstance().currentSong?.isLiked = true
+                likeButton.setImageResource(R.drawable.heart_empty)
+            }
+
+        }
+
 
 
     }
@@ -261,16 +278,43 @@ class HomeActivity : AppCompatActivity() {
                     playButton.visibility = View.GONE
                     pauseButton.visibility = View.VISIBLE
 
+                    if(SongManager.getInstance().currentSong?.isLiked == true)
+                    {
+                        likeButton.setImageResource(R.drawable.heart_empty)
+                    }
+                    else
+                    {
+                        likeButton.setImageResource(R.drawable.heart_filled)
+                    }
+
                 }
 
                 "com.smd.surmaiya.ACTION_PAUSE" -> {
                     pauseButton.visibility = View.GONE
                     playButton.visibility = View.VISIBLE
+
+                    if(SongManager.getInstance().currentSong?.isLiked == true)
+                    {
+                        likeButton.setImageResource(R.drawable.heart_empty)
+                    }
+                    else
+                    {
+                        likeButton.setImageResource(R.drawable.heart_filled)
+                    }
                 }
 
                 "com.smd.surmaiya.ACTION_SONG_ENDED" -> { // Add this case
                     pauseButton.visibility = View.GONE
                     playButton.visibility = View.VISIBLE
+
+                    if(SongManager.getInstance().currentSong?.isLiked == true)
+                    {
+                        likeButton.setImageResource(R.drawable.heart_empty)
+                    }
+                    else
+                    {
+                        likeButton.setImageResource(R.drawable.heart_filled)
+                    }
                 }
 
                 "com.smd.surmaiya.ACTION_SONG_SELECTED" -> {
@@ -312,6 +356,8 @@ class HomeActivity : AppCompatActivity() {
         playingDeviceTextView.text = connectedAudioDevice.getConnectedAudioDevice(this).first
         deviceImage.setImageResource(connectedAudioDevice.getConnectedAudioDevice(this).second)
 
+
+
         // Load album image
         Glide.with(this)
             .load(song.coverArtUrl)
@@ -344,6 +390,16 @@ class HomeActivity : AppCompatActivity() {
                     // Handle case where the Bitmap load is cleared
                 }
             })
+
+
+        if(SongManager.getInstance().currentSong?.isLiked == true)
+        {
+            likeButton.setImageResource(R.drawable.heart_empty)
+        }
+        else
+        {
+            likeButton.setImageResource(R.drawable.heart_filled)
+        }
 
 
 

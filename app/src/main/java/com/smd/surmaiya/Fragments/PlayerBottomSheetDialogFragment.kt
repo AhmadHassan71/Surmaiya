@@ -36,6 +36,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.smd.surmaiya.HelperClasses.ConnectedAudioDevice
 import com.smd.surmaiya.HelperClasses.FragmentHelper
+import com.smd.surmaiya.ManagerClasses.FirebaseDatabaseManager
 import com.smd.surmaiya.ManagerClasses.MusicServiceManager
 import com.smd.surmaiya.ManagerClasses.SongManager
 import com.smd.surmaiya.R
@@ -58,8 +59,9 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
     private var closeArrow:ImageView? = null
     private var playerBarLinearLayout: LinearLayout? = null
     private var repeatButton: ImageView? = null
-
+    private lateinit var likeButton:ImageView
     private var lastClickTime: Long = 0
+
 
     override fun getTheme(): Int = R.style.AppBottomSheetDialogTheme
 
@@ -122,6 +124,17 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
         closeArrow = view.findViewById(R.id.closeButton)
         playerBarLinearLayout = view.findViewById(R.id.playerBarLinearLayout)
         repeatButton = view.findViewById(R.id.repeatButton)
+        likeButton = view.findViewById(R.id.likeButton)
+
+        if(SongManager.getInstance().currentSong?.isLiked == true)
+        {
+            likeButton.setImageResource(R.drawable.heart_empty)
+        }
+        else
+        {
+            likeButton.setImageResource(R.drawable.heart_filled)
+        }
+
 
     }
 
@@ -202,6 +215,24 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
             FragmentHelper(requireActivity().supportFragmentManager, requireContext()).loadFragment(SongOptionsFragment())
         }
+
+        likeButton.setOnClickListener {
+
+            var isLiked= SongManager.getInstance().currentSong?.isLiked ?: false
+
+            if (isLiked) {
+                // If the song is liked, set the like button image to the filled heart
+                SongManager.getInstance().currentSong?.isLiked = false
+                likeButton.setImageResource(R.drawable.heart_filled)
+            } else {
+                // If the song is not liked, set the like button image to the empty heart
+                SongManager.getInstance().currentSong?.isLiked = true
+                likeButton.setImageResource(R.drawable.heart_empty)
+            }
+
+        }
+
+
     }
 
 

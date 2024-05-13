@@ -44,6 +44,7 @@ class HomeFragment : Fragment() {
     private lateinit var recentlyPlayedRecyclerView: RecyclerView
     private lateinit var userName: TextView
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

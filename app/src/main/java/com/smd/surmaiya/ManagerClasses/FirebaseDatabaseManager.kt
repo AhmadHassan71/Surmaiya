@@ -1,13 +1,19 @@
 package com.smd.surmaiya.ManagerClasses
 
 import android.content.ContentValues
+import android.graphics.drawable.Drawable
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.smd.surmaiya.R
+import com.smd.surmaiya.adapters.AlbumAddSongAdapter
 import com.smd.surmaiya.itemClasses.Album
 import com.smd.surmaiya.itemClasses.Playlist
 import com.smd.surmaiya.itemClasses.Song
@@ -499,6 +505,8 @@ object FirebaseDatabaseManager {
             }
         })
     }
+
+
 
 
 }

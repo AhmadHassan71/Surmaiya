@@ -79,6 +79,11 @@ class RecentlyPlayedAdapter(private val songs: List<Song>) : RecyclerView.Adapte
                 }
             })
 
+        holder.songCoverImageView.setOnClickListener {
+            MusicServiceManager.broadCastSongSelected(currentSong)
+
+        }
+
         // Create a zoom in animation
         val zoomInX = android.animation.ObjectAnimator.ofFloat(holder.songCoverImageView, View.SCALE_X, 1.2f)
         val zoomInY = android.animation.ObjectAnimator.ofFloat(holder.songCoverImageView, View.SCALE_Y, 1.2f)
