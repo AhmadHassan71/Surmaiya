@@ -236,8 +236,6 @@ class SignUpActivity : AppCompatActivity() {
 
         FirebaseAuthManager(this).checkEmailAvailability(email) { isEmailAvailable ->
             if (!isEmailAvailable) {
-                emailEditText.error = "Email is already in use"
-                emailEditText.requestFocus()
                 CallBack(false)
             }
             return@checkEmailAvailability
@@ -245,8 +243,6 @@ class SignUpActivity : AppCompatActivity() {
 
         FirebaseAuthManager(this).checkPhoneAvailability(phoneNumber) { isPhoneAvailable->
             if (!isPhoneAvailable) {
-                phoneNumberEditText.error = "Phone number is already in use"
-                phoneNumberEditText.requestFocus()
                 CallBack(false)
 
             }

@@ -89,7 +89,7 @@ class FirebaseAuthManager(private val activity: AppCompatActivity) {
                             Log.d("MyToken", msg)
                             addFcmTokenToUser(UserManager.getCurrentUser()?.id.toString(), "users", token)
                             UserManager.getCurrentUser()?.fcmToken = token.toString()
-                            CustomToastMaker().showToast(activity, "User logged in successfully")
+
                             Callback(true)
                         }
 
