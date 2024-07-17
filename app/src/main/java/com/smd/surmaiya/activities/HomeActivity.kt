@@ -250,6 +250,7 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onResume() {
             super.onResume()
             val intentFilter = IntentFilter().apply {
@@ -259,7 +260,7 @@ class HomeActivity : AppCompatActivity() {
                 addAction("com.smd.surmaiya.ACTION_SONG_SELECTED")
 
             }
-            registerReceiver(playPauseReceiver, intentFilter)
+            registerReceiver(playPauseReceiver, intentFilter, RECEIVER_EXPORTED)
         }
 
         override fun onPause() {

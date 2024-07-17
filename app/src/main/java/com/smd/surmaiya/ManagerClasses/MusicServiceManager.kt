@@ -46,6 +46,7 @@ object MusicServiceManager {
 
     fun broadCastSongSelected(song: Song){
         val intent = Intent("com.smd.surmaiya.ACTION_SONG_SELECTED")
+        Log.d("broadCastSongSelected", "broadCastSongSelected: " + song.songUrl.toString())
         intent.putExtra("song", song)
         musicService?.sendBroadcast(intent)
     }
