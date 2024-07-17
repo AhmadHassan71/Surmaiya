@@ -364,18 +364,15 @@ class PlayerBottomSheetDialogFragment : BottomSheetDialogFragment() {
         bottomSheetBehavior.peekHeight = resources.displayMetrics.heightPixels
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onResume() {
         super.onResume()
-
-       val intentFilter = IntentFilter().apply {
-            addAction("com.smd.surmaiya.ACTION_PLAY")
-            addAction("com.smd.surmaiya.ACTION_PAUSE")
-           addAction("com.smd.surmaiya.ACTION_SONG_ENDED") // Add this line
-
-       }
-        requireContext().registerReceiver(playPauseReceiver, intentFilter)
-
-        progressBar.post(updateProgressRunnable)
+        requireContext().registerReceiver(playPauseReceiver, IntentFilter("com.smd.surmaiya.ACTION_PLAY"),
+            Context.RECEIVER_NOT_EXPORTED)
+        requireContext().registerReceiver(playPauseReceiver, IntentFilter("com.smd.surmaiya.ACTION_PAUSE"),
+            Context.RECEIVER_NOT_EXPORTED)
+        requireContext().registerReceiver(playPauseReceiver, IntentFilter("com.smd.surmaiya.ACTION_SONG_ENDED"),
+            Context.RECEIVER_NOT_EXPORTED)
     }
 
     override fun onPause() {
